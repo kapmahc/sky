@@ -1,0 +1,135 @@
+languages:
+  en-US: English
+  zh-Hans: 简体中文
+  zh-Hant: 繁體中文
+currencies:
+  rmb: Renminbi
+  usd: United States Dollar
+messages:
+  are-you-sure: Are you sure?
+  success: Successful!
+  fail: Failed!
+buttons:
+  submit: Submit
+  manage: Manage
+  edit: Edit
+  new: New
+  add: Add
+  remove: Remove
+  upload: Upload
+  confirm: Confirm
+  apply: Apply
+  cancel: Cancel
+  ok: OK
+  close: Close
+  show: Show
+  view: View
+attributes:
+  email: Email
+  user: User
+  username: Username
+  phone: Phone
+  password: Password
+  currentPassword: Current password
+  newPassword: New password
+  passwordConfirmation: Password confirmation
+  createdAt: Created at
+  updatedAt: Updated at
+  description: Description
+  content: Content
+  size: Size
+  name: Name
+  host: Host
+  port: Port
+  ssl: Enable SSL?
+  title: Title
+  body: Body
+  logo: Logo
+  sortOrder: Sort order
+  loc: Location
+  href: Href
+  label: Label
+  summary: Summary
+  action: Action
+  deadline: Deadline
+  value: Value
+  type: Type
+  currency: Currency
+  address: Address
+helps:
+  email: We will not public your email address.
+  can-markdown: Support MARKDOWN
+  no-match: No match.
+  please-sign-in-first: Please sign in at first.
+  not-empty: Must not empty.
+  password: Password length between 6 & 32 characters
+  passwordConfirmation: Password Confirmation (shall be identical)
+  not-valid-email: Not a valid email address.
+errors:
+  in-use: In using
+  forbidden: Forbidden
+  bad-action: Bad action
+  not-allow: Not allowed
+auth:
+  errors:
+    please-sign-in: Please sign in at first.
+    user:
+      email-already-exist: Email was already exist.
+      email-password-not-match: Email and password not matched.
+      already-confirm: User already confirm.
+      not-lock: User not locked.
+      bad-password: Bad password.
+      not-confirm: User not confirmed.
+      is-lock: User is locked.
+  logs:
+    user:
+      sign-up: Create an account.
+      confirm: Confirm your account.
+      lock: Lock your account.
+      unlock: Unlock your account.
+      reset-password: Reset your password.
+      change-password: Change your password.
+      sign-out: Sign out successful.
+      sign-in:
+        failed: Sign in failed.
+        success: Sign in successful.
+  emails:
+    confirm:
+      subject: Confirm message
+      body: You can confirm your email via the following link.<br/> <a href="{{.Backend}}/users/confirm/{{.Token}}">{{.Backend}}/users/confirm/{{.Token}}</a>
+    unlock:
+      subject: unlock message
+      body: Click the following link to unlock your account <br/> <a href="{{.Backend}}/users/unlock/{{.Token}}">{{.Backend}}/users/unlock/{{.Token}}</a>
+    reset-password:
+      subject: Reset password message
+      body:  Please use the following link <br/> <a href="{{.Frontend}}/users/reset-password/{{.Token}}">{{.Frontend}}/users/reset-password/{{.Token}}</a><br/>please ignore/discard, if you don't want reset password. <br/> If you did not visit the link, your password will not be changed.
+survey:
+  emails:
+    apply:
+      subject: Apply
+      body: You apply {{.Title}}, you can click <a href="{{.Home}}{{.Cancel}}">{{.Home}}{{.Cancel}}</a> to cancel it.
+    cancel:
+      subject: Cancel
+      body: You cancel {{.Title}}
+  errors:
+    expired: Expired
+    already-apply: Already apply
+  attributes:
+    record:
+      email: Email
+      phone: Phone
+      username: Username
+ops:
+  mail:
+    errors:
+      user:
+        email-password-not-match: Email and password not matched.
+  vpn:
+    errors:
+      user:
+        not-available: User not available.
+        email-password-not-match: Email and password not matched.
+mall:
+  logs:
+    apply-manager: apply manager [%s] to store [%d]
+    deny-manager: deny manager [%s] from store [%d]
