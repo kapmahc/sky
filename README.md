@@ -1,7 +1,9 @@
 # sky
-A complete open source e-commerce solution by Go language and next.js(STILL IN DEVELOPMENT).
+
+A complete open source e-commerce solution by Go language(STILL IN DEVELOPMENT).
 
 ## Install nodejs
+
 ```bash
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | zsh
 nvm install node
@@ -9,6 +11,7 @@ nvm alias default node
 ```
 
 ## Install go
+
 ```bash
 zsh < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
 gvm install go1.9rc1 -B
@@ -26,6 +29,7 @@ cd dashboard && npm start # start frontend server
 will listen at <http://localhost:8080>
 
 ## Deployment
+
 ```bash
 cd $GOPATH/src/github.com/kapmahc/sky
 make
@@ -42,6 +46,7 @@ GRANT ALL PRIVILEGES ON DATABASE db-name TO user-name;
 ```
 
 ## Issues
+
 - Chrome browser: F12 => Console settings => Log XMLHTTPRequests
 
 - Rabbitmq Management Plugin(<http://localhost:15612>)
@@ -95,4 +100,3 @@ GRANT ALL PRIVILEGES ON DATABASE db-name TO user-name;
 
 - [gorm](http://jinzhu.me/gorm/)
 - [nginx](https://www.nginx.com/resources/deployment-guides/load-balance-apache-tomcat/)
-- [antd](https://ant.design/docs/react/introduce)
