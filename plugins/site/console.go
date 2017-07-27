@@ -628,12 +628,12 @@ func (p *Plugin) runServer(c *cli.Context, _ *inject.Graph) error {
 	}
 
 	// ---------------
+	// TODO
 	return p.listen(
 		rt,
 		viper.GetInt("server.port"),
 		web.IsProduction(),
 		cors.Options{
-			AllowedOrigins:   []string{web.Frontend()},
 			AllowedHeaders:   []string{"Authorization", "Cache-Control", "X-Requested-With"},
 			AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodPatch},
 			AllowCredentials: true,
@@ -681,7 +681,7 @@ func (p *Plugin) listen(rt http.Handler, port int, grace bool, cro cors.Options)
 
 func (p *Plugin) writeSitemap(root string) error {
 	sm := stm.NewSitemap()
-	sm.SetDefaultHost(web.Frontend())
+	sm.SetDefaultHost(web.Home())
 	sm.SetPublicPath(root)
 	sm.SetCompress(true)
 	sm.SetSitemapsPath("/")
@@ -719,7 +719,7 @@ func (p *Plugin) writeRssAtom(root string, lang string) error {
 		},
 		Entry: make([]*atom.Entry, 0),
 	}
-	home := web.Frontend()
+	home := web.Home()
 	if err := web.Walk(func(en web.Plugin) error {
 		items, err := en.Atom(lang)
 		if err != nil {
@@ -762,7 +762,7 @@ func (p *Plugin) writeRobotsTxt(root string) error {
 	}
 	return tpl.Execute(fd, struct {
 		Home string
-	}{Home: web.Frontend()})
+	}{Home: web.Home()})
 }
 
 func (p *Plugin) writeGoogleVerify(root string) error {

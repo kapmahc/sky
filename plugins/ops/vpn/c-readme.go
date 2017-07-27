@@ -14,7 +14,7 @@ func (p *Plugin) getReadme(c *gin.Context) error {
 	data := gin.H{}
 	data["user"] = c.MustGet(auth.CurrentUser)
 	data["name"] = viper.Get("server.name")
-	data["home"] = web.Backend()
+	data["home"] = web.Home()
 	data["port"] = 1194
 	data["network"] = "10.18.0"
 

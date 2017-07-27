@@ -11,14 +11,16 @@ func Name() string {
 	return viper.GetString("server.name")
 }
 
-// Frontend frontend home
-func Frontend() string {
-	return viper.GetString("server.frontend")
-}
-
-// Backend backend home
-func Backend() string {
-	return viper.GetString("server.backend")
+// Home home url
+func Home() string {
+	if IsProduction() {
+		scheme := "http"
+		if viper.GetBool("server.ssl") {
+			scheme = "https"
+		}
+		return scheme + "://" + Name()
+	}
+	return fmt.Sprintf("http://localhost:%d", viper.GetInt("server.port"))
 }
 
 // IsProduction production mode ?

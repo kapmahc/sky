@@ -292,5 +292,5 @@ func (p *Plugin) indexUsers(c *gin.Context) error {
 }
 
 func (p *Plugin) _signInURL() string {
-	return web.Frontend() + "/users/sign-in"
+	return web.Home() + "/users/sign-in"
 }

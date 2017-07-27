@@ -46,13 +46,11 @@ func (p *Plugin) sendEmail(lng string, user *User, act string) {
 	}
 
 	obj := struct {
-		Backend  string
-		Frontend string
-		Token    string
+		Home  string
+		Token string
 	}{
-		Backend:  web.Backend(),
-		Frontend: web.Frontend(),
-		Token:    string(tkn),
+		Home:  web.Home(),
+		Token: string(tkn),
 	}
 	subject, err := p.I18n.F(lng, fmt.Sprintf("auth.emails.%s.subject", act), obj)
 	if err != nil {

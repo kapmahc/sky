@@ -11,8 +11,8 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/kapmahc/sky/web"
 	"github.com/kapmahc/epub"
+	"github.com/kapmahc/sky/web"
 )
 
 func (p *Plugin) indexBooks(c *gin.Context) error {
@@ -52,7 +52,7 @@ func (p *Plugin) showBook(c *gin.Context) error {
 	// c.Writer.Header().Set("Content-Type", "text/html; charset=utf-8")
 	p.writePoints(
 		&buf,
-		fmt.Sprintf("%s/reading/pages/%d", web.Backend(), it.ID),
+		fmt.Sprintf("%s/reading/pages/%d", web.Home(), it.ID),
 		bk.Ncx.Points,
 	)
 	data["homeage"] = buf.String()

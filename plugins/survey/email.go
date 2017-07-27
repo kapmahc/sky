@@ -22,7 +22,7 @@ func (p *Plugin) _sendEmail(lng string, form *Form, record *Record, act string) 
 		Apply  string
 		Cancel string
 	}{
-		Home:   web.Frontend(),
+		Home:   web.Home(),
 		Title:  form.Title,
 		Apply:  fmt.Sprintf("/survey/apply/%d", form.ID),
 		Cancel: fmt.Sprintf("/survey/cancel/%d", form.ID),

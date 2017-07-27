@@ -58,6 +58,7 @@ func (p *Plugin) Open(g *inject.Graph) error {
 		&inject.Object{Value: db},
 		&inject.Object{Value: p.openRedis()},
 		&inject.Object{Value: up},
+		&inject.Object{Value: p.openRender(viper.GetString("server.theme"))},
 
 		&inject.Object{Value: &redis.Store{}},
 		&inject.Object{Value: rabbitmq.New(
