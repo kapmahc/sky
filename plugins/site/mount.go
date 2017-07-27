@@ -2,12 +2,14 @@ package site
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/kapmahc/sky/plugins/auth"
 	"github.com/kapmahc/sky/web"
 )
 
 // Mount mount web points
 func (p *Plugin) Mount(rt *gin.Engine) {
 	rt.GET("/", p.Wrapper.HTML(web.LayoutApplication, "site/home", p.getHome))
+	rt.GET("/install", web.Wrap(p.mustDatabaseEmpty), p.Wrapper.HTML(auth.LayoutNonSignIn, "site/install", p.getInstall))
 	// --------------
 
 	rt.POST("/install", web.Wrap(p.mustDatabaseEmpty), web.Wrap(p.postInstall))

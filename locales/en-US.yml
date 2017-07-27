@@ -24,6 +24,8 @@ buttons:
   close: Close
   show: Show
   view: View
+  search: Search
+  reset: Reset
 attributes:
   email: Email
   user: User
@@ -57,7 +59,7 @@ attributes:
   currency: Currency
   address: Address
 helps:
-  email: We will not public your email address.
+  email: We'll never share your email with anyone else.
   can-markdown: Support MARKDOWN
   no-match: No match.
   please-sign-in-first: Please sign in at first.
@@ -70,7 +72,41 @@ errors:
   forbidden: Forbidden
   bad-action: Bad action
   not-allow: Not allowed
+personal-bar:
+  sign-in-or-up: Sign in/up
+  welcome: Welcome, {name}
+  sign-out: Sign out
+footer:
+  other-languages: This site in other languages
 auth:
+  profile:
+    title: Account
+  attachments:
+    index:
+      title: Attachments
+  users:
+    logs:
+      title: Logs
+    info:
+      title: Info
+    change-password:
+      title: Change password
+    sign-in:
+      title: Sign in
+    sign-up:
+      title: Sign up
+    forgot-password:
+      title: Forgot your password？
+      success: You will receive an email to reset password.
+    confirm:
+      title: Do you receive confirmation email?
+      success: You will receive an email to confirm your account.
+    unlock:
+      title: Do you receive unlock email？
+      success: You will receive an email to unlock your account.
+    reset-password:
+      title: Reset password
+      success: Reset password successful.
   errors:
     please-sign-in: Please sign in at first.
     user:
@@ -103,6 +139,9 @@ auth:
     reset-password:
       subject: Reset password message
       body:  Please use the following link <br/> <a href="{{.Home}}/users/reset-password/{{.Token}}">Reset Password</a><br/>please ignore/discard, if you don't want reset password. <br/> If you did not visit the link, your password will not be changed.
+site:
+  install:
+    title: Install
 survey:
   emails:
     apply:

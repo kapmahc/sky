@@ -17,6 +17,9 @@ type fmInstall struct {
 	PasswordConfirmation string `json:"passwordConfirmation" binding:"eqfield=Password"`
 }
 
+func (p *Plugin) getInstall(c *gin.Context) error {
+	return nil
+}
 func (p *Plugin) postInstall(c *gin.Context) error {
 	var fm fmInstall
 	if err := c.BindJSON(&fm); err != nil {

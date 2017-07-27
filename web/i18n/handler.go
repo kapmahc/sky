@@ -32,6 +32,7 @@ func (p *I18n) Middleware() (gin.HandlerFunc, error) {
 			c.SetCookie(LOCALE, lang, 1<<32-1, "", "", false, false)
 		}
 		c.Set(LOCALE, lang)
+		c.Set("languages", langs)
 	}, nil
 }
 

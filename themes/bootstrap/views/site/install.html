@@ -1,0 +1,24 @@
+<h2>{{t .locale "site.install.title"}}</h2>
+<hr/>
+<form id="fm-install" method="post" data-next="/users/sign-in">
+  <div class="form-group">
+    <label for="name">{{t .locale "attributes.username"}}</label>
+    <input type="text" class="form-control" id="name" name="name">
+  </div>
+  <div class="form-group">
+    <label for="email">{{t .locale "attributes.email"}}</label>
+    <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
+    <small id="emailHelp" class="form-text text-muted">{{t .locale "helps.email"}}</small>
+  </div>
+  <div class="form-group">
+    <label for="password">{{t .locale "attributes.password"}}</label>
+    <input type="password" class="form-control" id="password" name="password" aria-describedby="passwordHelp">
+    <small id="passwordHelp" class="form-text text-muted">{{t .locale "helps.password"}}</small>
+  </div>
+  <div class="form-group">
+    <label for="passwordConfirmation">{{t .locale "attributes.passwordConfirmation"}}</label>
+    <input type="password" class="form-control" id="passwordConfirmation" name="passwordConfirmation" aria-describedby="passwordConfirmationHelp">
+    <small id="passwordConfirmationHelp" class="form-text text-muted">{{t .locale "helps.passwordConfirmation"}}</small>
+  </div>
+  {{template "layouts/application/form-buttons" .}}
+</form>

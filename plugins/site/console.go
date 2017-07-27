@@ -642,6 +642,7 @@ func (p *Plugin) runServer(c *cli.Context, _ *inject.Graph) error {
 		[]byte(viper.GetString("secrets.csrf")),
 		csrf.RequestHeader("Authenticity-Token"),
 		csrf.FieldName("authenticity_token"),
+		csrf.Secure(viper.GetBool("server.ssl")),
 	)(rt)
 
 	port := viper.GetInt("server.port")

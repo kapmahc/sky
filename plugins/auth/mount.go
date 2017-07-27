@@ -5,10 +5,16 @@ import (
 	"github.com/kapmahc/sky/web"
 )
 
+const (
+	// LayoutNonSignIn non sign in layout
+	LayoutNonSignIn = "auth/users/non-sign-in"
+)
+
 // Mount mount web points
 func (p *Plugin) Mount(rt *gin.Engine) {
 
 	ung := rt.Group("/users")
+	// ---------------
 	ung.GET("/", web.Wrap(p.indexUsers))
 	ung.POST("/sign-in", web.Wrap(p.postUsersSignIn))
 	ung.POST("/sign-up", web.Wrap(p.postUsersSignUp))

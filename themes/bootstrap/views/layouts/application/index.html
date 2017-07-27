@@ -1,29 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{.locale}}">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <link rel="icon" type="image/png" href="/assets/favicon.png">
-    <title>{{.title}}|{{t .locale "site.sub-title"}}|{{t .locale "site.title"}}</title>
-    <meta name="description" content="{{t .locale "site.description"}}">
-    <meta name="keywords" content="{{t .locale "site.keywords"}}">
-    <meta name="author" content="{{t .locale "site.author.name"}}<{{t .locale "site.author.email"}}>">
-    <meta name="X-CSRF-Token" content="{{ .csrf }}" />
-
-    <link rel="stylesheet" href="/3rd/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/application.css">
-
-    <script src="/3rd/jquery/dist/jquery.min.js"></script>
-    <script src="/3rd/tether/dist/js/tether.min.js"></script>
-    <script src="/3rd/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/assets/application.js"></script>
+    {{template "layouts/application/metas" .}}
   </head>
   <body>
     {{template "layouts/application/header" .}}
     <div class="container">
       {{ yield }}
-      {{template "layouts/application/header" .}}
+      {{template "layouts/application/footer" .}}
     </div>
   </body>
 </html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="{{.locale}}">
+  <head>
+    {{template "layouts/application/metas" .}}
+  </head>
+  <body>
+    {{template "layouts/application/header" .}}
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+          {{ yield }}
+          <br/>
+          <div class="list-group">
+            <a href="/users/sign-in" class="list-group-item list-group-item-action">
+              {{t .locale "auth.users.sign-in.title"}}
+            </a>
+            <a href="/users/sign-up" class="list-group-item list-group-item-action">
+              {{t .locale "auth.users.sign-up.title"}}
+            </a>
+            <a href="/users/forgot-password" class="list-group-item list-group-item-action">
+              {{t .locale "auth.users.forgot-password.title"}}
+            </a>
+            <a href="/users/confirm" class="list-group-item list-group-item-action">
+              {{t .locale "auth.users.confirm.title"}}
+            </a>
+            <a href="/users/unlock" class="list-group-item list-group-item-action">
+              {{t .locale "auth.users.unlock.title"}}
+            </a>
+          </div>
+        </div>
+      </div>
+      {{template "layouts/application/footer" .}}
+    </div>
+  </body>
+</html>

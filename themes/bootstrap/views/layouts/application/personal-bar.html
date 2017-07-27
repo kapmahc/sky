@@ -1,0 +1,35 @@
+<li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle" href="#" id="personal-bar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    {{if .currentUser}}
+      {{t .locale "personal-bar.welcome" .currentUser.name}}
+    {{else}}
+      {{t .locale "personal-bar.sign-in-or-up"}}
+    {{end}}
+  </a>
+  <div class="dropdown-menu" aria-labelledby="dropdown01">
+    {{if .currentUser}}
+      <a href="/dashboard" class="dropdown-item">
+        {{t .locale "personal-bar.dashboard"}}
+      </a>
+      <a data-method="delete" data-next="/users/sign-in" data-confirm="{{t .locale "messages.are-you-sure"}}" href="/users/sign-out" class="dropdown-item">
+        {{t .locale "personal-bar.sign-out"}}
+      </a>
+    {{else}}
+      <a href="/users/sign-in" class="dropdown-item">
+        {{t .locale "auth.users.sign-in.title"}}
+      </a>
+      <a href="/users/sign-up" class="dropdown-item">
+        {{t .locale "auth.users.sign-up.title"}}
+      </a>
+      <a href="/users/forgot-password" class="dropdown-item">
+        {{t .locale "auth.users.forgot-password.title"}}
+      </a>
+      <a href="/users/confirm" class="dropdown-item">
+        {{t .locale "auth.users.confirm.title"}}
+      </a>
+      <a href="/users/unlock" class="dropdown-item">
+        {{t .locale "auth.users.unlock.title"}}
+      </a>
+    {{end}}
+  </div>
+</li>
