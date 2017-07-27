@@ -638,7 +638,11 @@ func (p *Plugin) runServer(c *cli.Context, _ *inject.Graph) error {
 	// 	Debug:            !web.IsProduction(),
 	// }).Handler(rt)
 
-	hnd := csrf.Protect([]byte(viper.GetString("secrets.csrf")))(rt)
+	hnd := csrf.Protect(
+		[]byte(viper.GetString("secrets.csrf")),
+		csrf.RequestHeader("Authenticity-Token"),
+		csrf.FieldName("authenticity_token"),
+	)(rt)
 
 	port := viper.GetInt("server.port")
 	addr := fmt.Sprintf(":%d", port)

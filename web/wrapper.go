@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gorilla/csrf"
 	log "github.com/sirupsen/logrus"
 	"github.com/unrolled/render"
 )
@@ -27,6 +28,8 @@ func (p *Wrapper) HTML(l, n string, f func(*gin.Context) error) gin.HandlerFunc 
 			log.Error(err)
 			c.Set("error", err.Error())
 		}
+		c.Set(csrf.TemplateTag, csrf.TemplateField(c.Request))
+		c.Set("csrf", csrf.Token(c.Request))
 		p.Render.HTML(c.Writer, http.StatusOK, n, c.Keys, render.HTMLOptions{Layout: l})
 	}
 }

@@ -1,16 +1,29 @@
-<html>
+<!DOCTYPE html>
+<html lang="{{.locale}}">
   <head>
-    <title>My Layout</title>
-    <!-- Render the partial template called `css-$current_template` here -->
-    {{ partial "css" }}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="icon" type="image/png" href="/assets/favicon.png">
+    <title>{{.title}}|{{t .locale "site.sub-title"}}|{{t .locale "site.title"}}</title>
+    <meta name="description" content="{{t .locale "site.description"}}">
+    <meta name="keywords" content="{{t .locale "site.keywords"}}">
+    <meta name="author" content="{{t .locale "site.author.name"}}<{{t .locale "site.author.email"}}>">
+    <meta name="X-CSRF-Token" content="{{ .csrf }}" />
+
+    <link rel="stylesheet" href="/3rd/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/application.css">
+
+    <script src="/3rd/jquery/dist/jquery.min.js"></script>
+    <script src="/3rd/tether/dist/js/tether.min.js"></script>
+    <script src="/3rd/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/assets/application.js"></script>
   </head>
   <body>
-    <!-- render the partial template called `header-$current_template` here -->
-    {{ partial "header" }}
-    <h1>header</h1>
-    <!-- Render the current template here -->
-    {{ yield }}
-    <!-- render the partial template called `footer-$current_template` here -->
-    {{ partial "footer" }}
+    {{template "layouts/application/header" .}}
+    <div class="container">
+      {{ yield }}
+      {{template "layouts/application/header" .}}
+    </div>
   </body>
 </html>
