@@ -17,9 +17,9 @@ import (
 	"github.com/facebookgo/inject"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/gorilla/csrf"
 	"github.com/ikeikeikeike/go-sitemap-generator/stm"
 	"github.com/kapmahc/sky/web"
-	"github.com/rs/cors"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"github.com/steinbacher/goose"
@@ -599,6 +599,8 @@ func (p *Plugin) runServer(c *cli.Context, _ *inject.Graph) error {
 		gin.SetMode(gin.ReleaseMode)
 	}
 	rt := gin.Default()
+	rt.Static("/assets", path.Join("themes", viper.GetString("server.theme"), "assets"))
+	rt.Static("/3rd", "node_modules")
 	// --------------------
 	lm, err := p.I18n.Middleware()
 	if err != nil {
@@ -628,30 +630,25 @@ func (p *Plugin) runServer(c *cli.Context, _ *inject.Graph) error {
 	}
 
 	// ---------------
-	// TODO
-	return p.listen(
-		rt,
-		viper.GetInt("server.port"),
-		web.IsProduction(),
-		cors.Options{
-			AllowedHeaders:   []string{"Authorization", "Cache-Control", "X-Requested-With"},
-			AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodPatch},
-			AllowCredentials: true,
-			Debug:            !web.IsProduction(),
-		},
-	)
-}
 
-func (p *Plugin) listen(rt http.Handler, port int, grace bool, cro cors.Options) error {
+	// hnd := cors.New(cors.Options{
+	// 	AllowedHeaders:   []string{"Authorization", "Cache-Control", "X-Requested-With"},
+	// 	AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodPatch},
+	// 	AllowCredentials: true,
+	// 	Debug:            !web.IsProduction(),
+	// }).Handler(rt)
+
+	hnd := csrf.Protect([]byte(viper.GetString("secrets.csrf")))(rt)
+
+	port := viper.GetInt("server.port")
 	addr := fmt.Sprintf(":%d", port)
 	log.Infof(
 		"application starting on http://localhost:%d",
 		port,
 	)
+
 	// ----------------
-	hnd := cors.New(cro).Handler(rt)
-	// ----------------
-	if grace {
+	if web.IsProduction() {
 		srv := &http.Server{Addr: addr, Handler: hnd}
 		go func() {
 			// service connections
@@ -672,7 +669,7 @@ func (p *Plugin) listen(rt http.Handler, port int, grace bool, cro cors.Options)
 		if err := srv.Shutdown(ctx); err != nil {
 			return err
 		}
-		log.Info("server exist")
+		log.Info("server exit")
 		return nil
 	}
 	// ----------------
