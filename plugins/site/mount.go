@@ -7,10 +7,9 @@ import (
 
 // Mount mount web points
 func (p *Plugin) Mount(rt *gin.Engine) {
-	rt.GET("/intl/:zone/:lang", web.Wrap(p.getIntl))
-	rt.GET("/locales/:lang", web.Wrap(p.getLocales))
+	rt.GET("/", p.getHome)
+	// --------------
 
-	rt.GET("/site/info", web.Wrap(p.getSiteInfo))
 	rt.POST("/install", web.Wrap(p.mustDatabaseEmpty), web.Wrap(p.postInstall))
 	rt.GET("/donates", web.Wrap(p.getDonates))
 
@@ -34,12 +33,6 @@ func (p *Plugin) Mount(rt *gin.Engine) {
 	asg.GET("/paypal", web.Wrap(p.getAdminSitePaypal))
 	asg.POST("/paypal", web.Wrap(p.postAdminSitePaypal))
 
-	rt.GET("/notices", web.Wrap(p.indexNotices))
-	rt.GET("/notices/:id", web.Wrap(p.showNotice))
-	rt.POST("/notices", web.Wrap(p.Jwt.MustAdminMiddleware), web.Wrap(p.createNotice))
-	rt.POST("/notices/:id", web.Wrap(p.Jwt.MustAdminMiddleware), web.Wrap(p.updateNotice))
-	rt.DELETE("/notices/:id", web.Wrap(p.Jwt.MustAdminMiddleware), web.Wrap(p.destroyNotice))
-
 	rt.GET("/leave-words", web.Wrap(p.Jwt.MustAdminMiddleware), web.Wrap(p.indexLeaveWords))
 	rt.POST("/leave-words", web.Wrap(p.createLeaveWord))
 	rt.DELETE("/leave-words/:id", web.Wrap(p.Jwt.MustAdminMiddleware), web.Wrap(p.destroyLeaveWord))
@@ -61,11 +54,5 @@ func (p *Plugin) Mount(rt *gin.Engine) {
 	rt.POST("/cards", web.Wrap(p.Jwt.MustAdminMiddleware), web.Wrap(p.createCard))
 	rt.POST("/cards/:id", web.Wrap(p.Jwt.MustAdminMiddleware), web.Wrap(p.updateCard))
 	rt.DELETE("/cards/:id", web.Wrap(p.Jwt.MustAdminMiddleware), web.Wrap(p.destroyCard))
-
-	rt.GET("/posts", web.Wrap(p.indexPosts))
-	rt.GET("/posts/:id", web.Wrap(p.showPost))
-	rt.POST("/posts", web.Wrap(p.Jwt.MustAdminMiddleware), web.Wrap(p.createPost))
-	rt.POST("/posts/:id", web.Wrap(p.Jwt.MustAdminMiddleware), web.Wrap(p.updatePost))
-	rt.DELETE("/posts/:id", web.Wrap(p.Jwt.MustAdminMiddleware), web.Wrap(p.destroyPost))
 
 }

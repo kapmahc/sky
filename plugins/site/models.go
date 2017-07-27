@@ -6,29 +6,6 @@ import (
 	"github.com/kapmahc/sky/web"
 )
 
-// Post post
-type Post struct {
-	web.Media
-
-	Name  string `json:"name"`
-	Title string `json:"title"`
-}
-
-// TableName table name
-func (Post) TableName() string {
-	return "posts"
-}
-
-// Notice notice
-type Notice struct {
-	web.Media
-}
-
-// TableName table name
-func (Notice) TableName() string {
-	return "notices"
-}
-
 // LeaveWord leave-word
 type LeaveWord struct {
 	ID        uint      `gorm:"primary_key" json:"id"`

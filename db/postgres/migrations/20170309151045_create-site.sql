@@ -8,25 +8,6 @@ CREATE TABLE leave_words (
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now()
 );
 
-CREATE TABLE posts (
-  id         BIGSERIAL PRIMARY KEY,
-  title      VARCHAR(255)                NOT NULL,
-  body       TEXT                        NOT NULL,
-  name       VARCHAR(255)                NOT NULL,
-  type       VARCHAR(8)                  NOT NULL DEFAULT 'markdown',
-  created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
-  updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
-);
-CREATE UNIQUE INDEX idx_posts_name ON posts (name);
-
-CREATE TABLE notices (
-  id         BIGSERIAL PRIMARY KEY,
-  body       TEXT                        NOT NULL,
-  type       VARCHAR(8)                  NOT NULL DEFAULT 'markdown',
-  created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
-  updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
-);
-
 CREATE TABLE links (
   id BIGSERIAL PRIMARY KEY,
   href VARCHAR(255) NOT NULL,
@@ -69,6 +50,4 @@ CREATE TABLE friend_links (
 DROP TABLE friend_links;
 DROP TABLE cards;
 DROP TABLE links;
-DROP TABLE notices;
-DROP TABLE posts;
 DROP TABLE leave_words;

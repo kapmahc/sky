@@ -13,6 +13,7 @@ import (
 	"github.com/kapmahc/sky/web/job"
 	"github.com/kapmahc/sky/web/settings"
 	"github.com/spf13/viper"
+	"github.com/unrolled/render"
 	"golang.org/x/tools/blog/atom"
 )
 
@@ -25,6 +26,7 @@ type Plugin struct {
 	Settings *settings.Settings `inject:""`
 	Server   *job.Server        `inject:""`
 	Cache    *cache.Cache       `inject:""`
+	Render   *render.Render     `inject:""`
 }
 
 // Init load config
@@ -82,9 +84,10 @@ func init() {
 	})
 
 	viper.SetDefault("server", map[string]interface{}{
-		"port": 3000,
-		"ssl":  false,
-		"name": "www.change-me.com",
+		"port":  3000,
+		"ssl":   false,
+		"name":  "www.change-me.com",
+		"theme": "bootstrap",
 	})
 
 	viper.SetDefault("secrets", map[string]interface{}{

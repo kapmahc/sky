@@ -5,6 +5,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
+	"github.com/unrolled/render"
+)
+
+var (
+	// LayoutApplication application layout
+	LayoutApplication = render.HTMLOptions{Layout: "layouts/application/index"}
+	// LayoutDashboard dashboard layout
+	LayoutDashboard = render.HTMLOptions{Layout: "layouts/dashboard/index"}
 )
 
 // Wrap wrap handler
