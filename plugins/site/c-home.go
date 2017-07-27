@@ -4,12 +4,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/kapmahc/sky/web"
 )
 
-func (p *Plugin) getHome(c *gin.Context) {
-	// TODO
-	p.Render.HTML(c.Writer, http.StatusOK, "site/home", gin.H{}, web.LayoutApplication)
+func (p *Plugin) getHome(c *gin.Context) error {
+	return nil
 }
 
 func (p *Plugin) getDonates(c *gin.Context) error {

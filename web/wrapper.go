@@ -8,12 +8,28 @@ import (
 	"github.com/unrolled/render"
 )
 
-var (
+const (
 	// LayoutApplication application layout
-	LayoutApplication = render.HTMLOptions{Layout: "layouts/application/index"}
+	LayoutApplication = "layouts/application/index"
 	// LayoutDashboard dashboard layout
-	LayoutDashboard = render.HTMLOptions{Layout: "layouts/dashboard/index"}
+	LayoutDashboard = "layouts/dashboard/index"
 )
+
+// Wrapper wrapper
+type Wrapper struct {
+	Render *render.Render `inject:""`
+}
+
+// HTML render html
+func (p *Wrapper) HTML(l, n string, f func(*gin.Context) error) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if err := f(c); err != nil {
+			log.Error(err)
+			c.Set("error", err.Error())
+		}
+		p.Render.HTML(c.Writer, http.StatusOK, n, c.Keys, render.HTMLOptions{Layout: l})
+	}
+}
 
 // Wrap wrap handler
 func Wrap(f func(*gin.Context) error) gin.HandlerFunc {

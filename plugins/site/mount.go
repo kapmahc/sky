@@ -7,7 +7,7 @@ import (
 
 // Mount mount web points
 func (p *Plugin) Mount(rt *gin.Engine) {
-	rt.GET("/", p.getHome)
+	rt.GET("/", p.Wrapper.HTML(web.LayoutApplication, "site/home", p.getHome))
 	// --------------
 
 	rt.POST("/install", web.Wrap(p.mustDatabaseEmpty), web.Wrap(p.postInstall))

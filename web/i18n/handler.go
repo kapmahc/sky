@@ -25,26 +25,31 @@ func (p *I18n) Middleware() (gin.HandlerFunc, error) {
 	matcher := language.NewMatcher(tags)
 
 	return func(c *gin.Context) {
-		tag, _, _ := matcher.Match(language.Make(p.detect(c.Request)))
-		c.Set(LOCALE, tag.String())
+		lang, write := p.detect(c.Request)
+		tag, _, _ := matcher.Match(language.Make(lang))
+		lang = tag.String()
+		if write {
+			c.SetCookie(LOCALE, lang, 1<<32-1, "", "", false, false)
+		}
+		c.Set(LOCALE, lang)
 	}, nil
 }
 
-func (p *I18n) detect(r *http.Request) string {
+func (p *I18n) detect(r *http.Request) (string, bool) {
 	// 1. Check URL arguments.
 	if lang := r.URL.Query().Get(LOCALE); lang != "" {
-		return lang
+		return lang, true
 	}
 
 	// 2. Get language information from cookies.
 	if ck, er := r.Cookie(LOCALE); er == nil {
-		return ck.Value
+		return ck.Value, false
 	}
 
 	// 3. Get language information from 'Accept-Language'.
 	if al := r.Header.Get("Accept-Language"); len(al) > 4 {
-		return al[:5] // Only compare first 5 letters.
+		return al[:5], true // Only compare first 5 letters.
 	}
 
-	return ""
+	return "", true
 }
