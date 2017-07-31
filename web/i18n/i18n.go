@@ -11,7 +11,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kapmahc/sky/web"
 	"github.com/kapmahc/sky/web/cache"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/text/language"
@@ -20,9 +19,8 @@ import (
 
 // I18n i18n
 type I18n struct {
-	Store         Store              `inject:""`
-	Cache         *cache.Cache       `inject:""`
-	Configuration *web.Configuration `inject:""`
+	Store Store        `inject:""`
+	Cache *cache.Cache `inject:""`
 }
 
 // F format message

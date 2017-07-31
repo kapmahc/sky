@@ -11,8 +11,7 @@ import (
 
 // Plugin plugin
 type Plugin interface {
-	Init()
-	Mount(rt *mux.Router)
+	Mount(*mux.Router)
 	Open(*inject.Graph) error
 	Console() []cli.Command
 	Atom(lang string) ([]*atom.Entry, error)

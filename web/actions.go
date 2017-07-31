@@ -2,12 +2,13 @@ package web
 
 import (
 	"log/syslog"
+	"reflect"
 
-	"github.com/BurntSushi/toml"
 	"github.com/facebookgo/inject"
 	"github.com/kapmahc/sky/web/job"
 	log "github.com/sirupsen/logrus"
 	logrus_syslog "github.com/sirupsen/logrus/hooks/syslog"
+	"github.com/spf13/viper"
 	"github.com/urfave/cli"
 )
 
@@ -20,17 +21,19 @@ func (p *injectLogger) Debugf(format string, v ...interface{}) {
 
 // Config load config first
 func Config(f cli.ActionFunc) cli.ActionFunc {
-	const file = "config.toml"
 	return func(c *cli.Context) error {
-		var cfg Configuration
-		if _, err := toml.DecodeFile(file, &cfg); err != nil {
-			return err
-		}
+		viper.SetEnvPrefix(reflect.TypeOf(Main).String())
+		viper.BindEnv("env")
+		viper.SetDefault("env", "development")
 
-		if cfg.IsProduction() {
+		viper.SetConfigName("config")
+		viper.SetConfigType("toml")
+		viper.AddConfigPath(".")
+
+		if IsProduction() {
 			// ----------
 			log.SetLevel(log.InfoLevel)
-			if wrt, err := syslog.New(syslog.LOG_INFO, cfg.HTTP.Name); err == nil {
+			if wrt, err := syslog.New(syslog.LOG_INFO, Name()); err == nil {
 				log.AddHook(&logrus_syslog.SyslogHook{Writer: wrt})
 			} else {
 				log.Error(err)
@@ -39,12 +42,7 @@ func Config(f cli.ActionFunc) cli.ActionFunc {
 			log.SetLevel(log.DebugLevel)
 		}
 
-		log.Infof("read config from %s", file)
-
-		Walk(func(p Plugin) error {
-			p.Init()
-			return nil
-		})
+		log.Infof("read config from %s", viper.ConfigFileUsed())
 		return f(c)
 	}
 }
