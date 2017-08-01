@@ -21,14 +21,18 @@ func (p *injectLogger) Debugf(format string, v ...interface{}) {
 
 // Config load config first
 func Config(f cli.ActionFunc) cli.ActionFunc {
-	return func(c *cli.Context) error {
-		viper.SetEnvPrefix(reflect.TypeOf(Main).String())
-		viper.BindEnv("env")
-		viper.SetDefault("env", "development")
+	viper.SetEnvPrefix(reflect.TypeOf(Main).String())
+	viper.BindEnv("env")
+	viper.SetDefault("env", "development")
 
-		viper.SetConfigName("config")
-		viper.SetConfigType("toml")
-		viper.AddConfigPath(".")
+	viper.SetConfigName("config")
+	viper.SetConfigType("toml")
+	viper.AddConfigPath(".")
+
+	return func(c *cli.Context) error {
+		if err := viper.ReadInConfig(); err != nil {
+			return err
+		}
 
 		if IsProduction() {
 			// ----------

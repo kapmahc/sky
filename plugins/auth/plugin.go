@@ -2,21 +2,23 @@ package auth
 
 import (
 	"github.com/facebookgo/inject"
-	"github.com/gorilla/mux"
 	"github.com/ikeikeikeike/go-sitemap-generator/stm"
+	"github.com/jinzhu/gorm"
 	"github.com/kapmahc/sky/web"
+	"github.com/kapmahc/sky/web/cache"
+	"github.com/kapmahc/sky/web/i18n"
 	"github.com/kapmahc/sky/web/job"
+	"github.com/unrolled/render"
 	"github.com/urfave/cli"
 	"golang.org/x/tools/blog/atom"
 )
 
 // Plugin plugin
 type Plugin struct {
-}
-
-// Mount mount web points
-func (p *Plugin) Mount(*mux.Router) {
-
+	Db     *gorm.DB       `inject:""`
+	I18n   *i18n.I18n     `inject:""`
+	Cache  *cache.Cache   `inject:""`
+	Render *render.Render `inject:""`
 }
 
 // Open open beans

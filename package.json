@@ -1,0 +1,23 @@
+{
+  "name": "sky",
+  "version": "1.0.0",
+  "description": "A complete open source e-commerce solution by Go language(STILL IN DEVELOPMENT).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kapmahc/sky.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kapmahc/sky/issues"
+  },
+  "homepage": "https://github.com/kapmahc/sky#readme",
+  "dependencies": {
+    "material-design-icons": "^3.0.1",
+    "materialize-css": "^0.100.1"
+  }
+}

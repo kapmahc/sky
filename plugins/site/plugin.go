@@ -7,22 +7,26 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/ikeikeikeike/go-sitemap-generator/stm"
 	"github.com/jinzhu/gorm"
+	"github.com/kapmahc/sky/plugins/auth"
 	"github.com/kapmahc/sky/web"
 	"github.com/kapmahc/sky/web/cache"
 	"github.com/kapmahc/sky/web/i18n"
 	"github.com/kapmahc/sky/web/job"
 	"github.com/kapmahc/sky/web/settings"
 	"github.com/spf13/viper"
+	"github.com/unrolled/render"
 	"golang.org/x/tools/blog/atom"
 )
 
 // Plugin plugin
 type Plugin struct {
 	Db       *gorm.DB           `inject:""`
+	Dao      *auth.Dao          `inject:""`
 	I18n     *i18n.I18n         `inject:""`
 	Cache    *cache.Cache       `inject:""`
 	Settings *settings.Settings `inject:""`
 	Server   *job.Server        `inject:""`
+	Render   *render.Render     `inject:""`
 }
 
 // Mount mount web points

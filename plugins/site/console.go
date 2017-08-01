@@ -10,6 +10,7 @@ import (
 	"os/signal"
 	"path"
 	"path/filepath"
+	"strings"
 	"text/template"
 	"time"
 
@@ -256,11 +257,20 @@ func (p *Plugin) Console() []cli.Command {
 					en.Mount(rt)
 					return nil
 				})
-				tpl := "%-7s %s\n"
-				fmt.Printf(tpl, "METHOD", "PATH")
-				// https://github.com/gorilla/mux/pull/207
+				tpl := "%-16s %s\n"
+				fmt.Printf(tpl, "METHODS", "PATH")
 				return rt.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
-					// TODO pring routes
+					pth, err := route.GetPathTemplate()
+					if err != nil {
+						return err
+					}
+					mts, err := route.GetMethods()
+					if err != nil {
+						return err
+					}
+					if len(mts) > 0 {
+						fmt.Printf(tpl, strings.Join(mts, ","), pth)
+					}
 					return nil
 				})
 			},
@@ -605,6 +615,12 @@ func (p *Plugin) runServer(c *cli.Context, _ *inject.Graph) error {
 	} {
 		rt.PathPrefix(k).Handler(http.StripPrefix(k, http.FileServer(http.Dir(v))))
 	}
+
+	// --------------------
+	web.Walk(func(en web.Plugin) error {
+		en.Mount(rt)
+		return nil
+	})
 	// --------------------
 	lm, err := p.I18n.Middleware()
 	if err != nil {
@@ -618,11 +634,6 @@ func (p *Plugin) runServer(c *cli.Context, _ *inject.Graph) error {
 	// TODO current user?
 	ng.UseHandler(rt)
 
-	// --------------------
-	web.Walk(func(en web.Plugin) error {
-		en.Mount(rt)
-		return nil
-	})
 	// ---------------
 	if c.Bool("worker") {
 		log.Info("start worker")
@@ -650,7 +661,7 @@ func (p *Plugin) runServer(c *cli.Context, _ *inject.Graph) error {
 		csrf.RequestHeader("Authenticity-Token"),
 		csrf.FieldName("authenticity_token"),
 		csrf.Secure(viper.GetBool("server.ssl")),
-	)(rt)
+	)(ng)
 
 	port := viper.GetInt("server.port")
 	addr := fmt.Sprintf(":%d", port)
