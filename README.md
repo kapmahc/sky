@@ -1,6 +1,6 @@
 # sky
 
-A complete open source e-commerce solution by Go language(STILL IN DEVELOPMENT).
+A complete open source e-commerce solution by Go language and React(STILL IN DEVELOPMENT).
 
 ## Install nodejs
 
@@ -98,3 +98,4 @@ GRANT ALL PRIVILEGES ON DATABASE db-name TO user-name;
 ## Documents
 
 - [nginx](https://www.nginx.com/resources/deployment-guides/load-balance-apache-tomcat/)
+- [antd](https://ant.design/docs/react/introduce)

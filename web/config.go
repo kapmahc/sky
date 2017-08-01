@@ -6,12 +6,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-// H hash
-type H map[string]interface{}
-
-// K key
-type K string
-
 // Name get server.name
 func Name() string {
 	return viper.GetString("server.name")

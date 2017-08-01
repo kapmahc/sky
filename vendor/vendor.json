@@ -25,6 +25,18 @@
 			"revisionTime": "2016-12-05T22:51:55Z"
 		},
 		{
+			"checksumSHA1": "FJP5enLaw1JzZNu6Fen+eEKY7Lo=",
+			"path": "github.com/SermoDigital/jose/jws",
+			"revision": "2bd9b81ac51d6d6134fcd4fd846bd2e7347a15f9",
+			"revisionTime": "2016-12-05T22:51:55Z"
+		},
+		{
+			"checksumSHA1": "3gGGWQ3PcKHE+2cVlkJmIlBfBlw=",
+			"path": "github.com/SermoDigital/jose/jwt",
+			"revision": "2bd9b81ac51d6d6134fcd4fd846bd2e7347a15f9",
+			"revisionTime": "2016-12-05T22:51:55Z"
+		},
+		{
 			"checksumSHA1": "WklPj1YaT3LzeGnbvA7VNhQcUnc=",
 			"path": "github.com/aws/aws-sdk-go/aws",
 			"revision": "df374c20d53ed082b8cf0d0da52b1a181abf387b",
@@ -263,6 +275,30 @@
 			"path": "github.com/go-pg/pg/types",
 			"revision": "29dcffe3401db03025f8ca270bc332dcea3aff3a",
 			"revisionTime": "2017-07-31T10:25:42Z"
+		},
+		{
+			"checksumSHA1": "r6BN5PoTjaqtUTn5u/LTNwHfvRE=",
+			"path": "github.com/go-playground/form",
+			"revision": "a852958e6bc0e555a59b0dadaabd8d4398841c67",
+			"revisionTime": "2017-07-31T00:44:17Z"
+		},
+		{
+			"checksumSHA1": "pI0js2qnSKXOzUq9AoA5CJDJNRw=",
+			"path": "github.com/go-playground/locales",
+			"revision": "1e5f1161c6416a5ff48840eb8724a394e48cc534",
+			"revisionTime": "2017-03-27T19:14:50Z"
+		},
+		{
+			"checksumSHA1": "YWIa2z/i81ttb1Db9fm95XnIgwI=",
+			"path": "github.com/go-playground/locales/currency",
+			"revision": "1e5f1161c6416a5ff48840eb8724a394e48cc534",
+			"revisionTime": "2017-03-27T19:14:50Z"
+		},
+		{
+			"checksumSHA1": "7QcjNTtW0Rc/5BPw1MPaQ6YNjso=",
+			"path": "github.com/go-playground/universal-translator",
+			"revision": "71201497bace774495daed26a3874fd339e0b538",
+			"revisionTime": "2017-03-27T19:17:03Z"
 		},
 		{
 			"checksumSHA1": "i3UtE7/Cn57eX1hO5Z0CqY/Eeb4=",
@@ -575,6 +611,24 @@
 			"path": "golang.org/x/text/unicode/norm",
 			"revision": "3bd178b88a8180be2df394a1fbb81313916f0e7b",
 			"revisionTime": "2017-07-29T23:24:55Z"
+		},
+		{
+			"checksumSHA1": "6IzzHO9p32aHJhMYMwijccDUIVA=",
+			"path": "gopkg.in/alexcesaro/quotedprintable.v3",
+			"revision": "2caba252f4dc53eaf6b553000885530023f54623",
+			"revisionTime": "2015-07-16T17:19:45Z"
+		},
+		{
+			"checksumSHA1": "RQnjv93kKNXUz6lMdkb+nGhCTsA=",
+			"path": "gopkg.in/go-playground/validator.v9",
+			"revision": "0f6f568263a1ab5105b57f66f446d2625e4f545c",
+			"revisionTime": "2017-07-30T03:49:32Z"
+		},
+		{
+			"checksumSHA1": "iq5WdjScmTU+LfNoerLuwcnXpdM=",
+			"path": "gopkg.in/gomail.v2",
+			"revision": "81ebce5c23dfd25c6c67194b37d3dd3f338c98b1",
+			"revisionTime": "2016-04-11T21:29:32Z"
 		},
 		{
 			"checksumSHA1": "o20lmjzBQyKD5LfLZ3OhUoMkLds=",

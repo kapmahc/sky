@@ -8,27 +8,32 @@ import (
 	"github.com/kapmahc/sky/web/cache"
 	"github.com/kapmahc/sky/web/i18n"
 	"github.com/kapmahc/sky/web/job"
+	"github.com/kapmahc/sky/web/security"
+	"github.com/kapmahc/sky/web/settings"
+	"github.com/kapmahc/sky/web/uploader"
 	"github.com/unrolled/render"
-	"github.com/urfave/cli"
 	"golang.org/x/tools/blog/atom"
 )
 
 // Plugin plugin
 type Plugin struct {
-	Db     *gorm.DB       `inject:""`
-	I18n   *i18n.I18n     `inject:""`
-	Cache  *cache.Cache   `inject:""`
-	Render *render.Render `inject:""`
+	Dao                  *Dao                  `inject:""`
+	Jwt                  *Jwt                  `inject:""`
+	Db                   *gorm.DB              `inject:""`
+	I18n                 *i18n.I18n            `inject:""`
+	Cache                *cache.Cache          `inject:""`
+	Render               *render.Render        `inject:""`
+	Uploader             uploader.Store        `inject:""`
+	Hmac                 *security.Hmac        `inject:""`
+	Server               *job.Server           `inject:""`
+	Settings             *settings.Settings    `inject:""`
+	Wrapper              *web.Wrapper          `inject:""`
+	MustSignInMiddleware *MustSignInMiddleware `inject:""`
 }
 
 // Open open beans
 func (p *Plugin) Open(*inject.Graph) error {
 	return nil
-}
-
-// Console console commands
-func (p *Plugin) Console() []cli.Command {
-	return []cli.Command{}
 }
 
 // Atom rss.atom
@@ -39,11 +44,6 @@ func (p *Plugin) Atom(lang string) ([]*atom.Entry, error) {
 // Sitemap sitemap.xml.gz
 func (p *Plugin) Sitemap() ([]stm.URL, error) {
 	return []stm.URL{}, nil
-}
-
-// Workers background workers
-func (p *Plugin) Workers() map[string]job.Handler {
-	return map[string]job.Handler{}
 }
 
 func init() {
