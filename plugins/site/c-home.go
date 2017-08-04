@@ -66,13 +66,3 @@ func (p *Plugin) getSiteInfo(c *axe.Context) {
 
 	c.JSON(http.StatusOK, data)
 }
-
-func (p *Plugin) getDonates(c *axe.Context) {
-	data := axe.H{}
-	var paypal map[string]interface{}
-	if err := p.Settings.Get("site.paypal", &paypal); err == nil {
-		data["paypal"] = paypal["donate"]
-	}
-
-	c.JSON(http.StatusOK, data)
-}

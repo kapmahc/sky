@@ -18,6 +18,10 @@ type fmInstall struct {
 }
 
 func (p *Plugin) postInstall(c *axe.Context) {
+	if err := p._mustDatabaseEmpty(c); err != nil {
+		c.Abort(http.StatusForbidden, err)
+		return
+	}
 	var fm fmInstall
 	if err := c.Bind(&fm); err != nil {
 		c.Abort(http.StatusInternalServerError, err)
@@ -51,15 +55,14 @@ func (p *Plugin) postInstall(c *axe.Context) {
 	c.JSON(http.StatusOK, axe.H{})
 }
 
-func (p *Plugin) mustDatabaseEmpty(c *axe.Context) {
+func (p *Plugin) _mustDatabaseEmpty(c *axe.Context) error {
 	lng := c.Payload[i18n.LOCALE].(string)
 	var count int
 	if err := p.Db.Model(&auth.User{}).Count(&count).Error; err != nil {
-		c.Abort(http.StatusInternalServerError, err)
-		return
+		return err
 	}
-	if count == 0 {
-		return
+	if count > 0 {
+		return p.I18n.E(lng, "errors.forbidden")
 	}
-	c.Abort(http.StatusForbidden, p.I18n.E(lng, "errors.forbidden"))
+	return nil
 }

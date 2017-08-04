@@ -7,7 +7,7 @@ import (
 // Mount mount web points
 func (p *Plugin) Mount(rt *axe.Router) {
 	ug := axe.NewRouter()
-	ug.GET(`/pages/{id}/{href}`, p.showPage)
+	ug.GET(`/pages/{id}/{href:[/.\w]+}`, p.showPage)
 	rt.Group("/reading", ug)
 
 	mg := axe.NewRouter()

@@ -12,7 +12,7 @@ func (p *Plugin) Mount(rt *axe.Router) {
 	mg.GET("/forms/{id}/export", p.Jwt.MustAdminMiddleware, p.getFormExport)
 	mg.Resources(
 		"/forms",
-		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.indexForms},
+		[]axe.HandlerFunc{p.indexForms},
 		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.createForm},
 		[]axe.HandlerFunc{p.showForm},
 		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.updateForm},

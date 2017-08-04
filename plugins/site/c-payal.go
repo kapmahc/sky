@@ -12,7 +12,7 @@ type fmPaypal struct {
 	Donate string `json:"donate"`
 }
 
-func (p *Plugin) getAdminSitePaypal(c *axe.Context) {
+func (p *Plugin) getPaypal(c *axe.Context) {
 	paypal := make(map[string]interface{})
 	if err := p.Settings.Get("site.paypal", &paypal); err != nil {
 		paypal["donate"] = ""
@@ -21,7 +21,7 @@ func (p *Plugin) getAdminSitePaypal(c *axe.Context) {
 	c.JSON(http.StatusOK, paypal)
 }
 
-func (p *Plugin) postAdminSitePaypal(c *axe.Context) {
+func (p *Plugin) postPaypal(c *axe.Context) {
 	var fm fmPaypal
 	if err := c.Bind(&fm); err != nil {
 		c.Abort(http.StatusInternalServerError, err)
