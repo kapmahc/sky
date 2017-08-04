@@ -1,8 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import registerServiceWorker from './registerServiceWorker'
+import {detectLocale} from './intl'
+import { get } from './ajax'
+import main from './main'
 
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+const user = detectLocale()
+
+get(`/intl/antd/${user.locale}`)
+  .then((rst) => {
+    user.messages = {...rst}
+    main('root', user)
+    registerServiceWorker()
+  })
+  .catch(console.error)
