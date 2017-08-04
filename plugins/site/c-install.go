@@ -17,10 +17,11 @@ type fmInstall struct {
 	PasswordConfirmation string `json:"passwordConfirmation" binding:"eqfield=Password"`
 }
 
-func (p *Plugin) postInstall(c *axe.Context) (interface{}, error) {
+func (p *Plugin) postInstall(c *axe.Context) {
 	var fm fmInstall
 	if err := c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	lng := c.Payload[i18n.LOCALE].(string)
@@ -28,32 +29,37 @@ func (p *Plugin) postInstall(c *axe.Context) (interface{}, error) {
 	p.I18n.Set(lng, "site.subTitle", fm.SubTitle)
 	user, err := p.Dao.AddEmailUser("root", fm.Email, fm.Password)
 	if err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	for _, r := range []string{auth.RoleAdmin, auth.RoleRoot} {
 		role, er := p.Dao.Role(r, auth.DefaultResourceType, auth.DefaultResourceID)
 		if er != nil {
-			return er
+			c.Abort(http.StatusInternalServerError, er)
+			return
 		}
 		if err = p.Dao.Allow(role.ID, user.ID, 50, 0, 0); err != nil {
-			return nil, err
+			c.Abort(http.StatusInternalServerError, err)
+			return
 		}
 	}
 	if err = p.Db.Model(user).UpdateColumn("confirmed_at", time.Now()).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
+
 	c.JSON(http.StatusOK, axe.H{})
-	return nil
 }
 
-func (p *Plugin) mustDatabaseEmpty(c *axe.Context) (interface{}, error) {
+func (p *Plugin) mustDatabaseEmpty(c *axe.Context) {
 	lng := c.Payload[i18n.LOCALE].(string)
 	var count int
 	if err := p.Db.Model(&auth.User{}).Count(&count).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
-	if count > 0 {
-		return p.I18n.E(http.StatusForbidden, lng, "errors.forbidden")
+	if count == 0 {
+		return
 	}
-	return nil
+	c.Abort(http.StatusForbidden, p.I18n.E(lng, "errors.forbidden"))
 }

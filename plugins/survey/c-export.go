@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
+	"net/http"
 
 	"github.com/kapmahc/axe"
 )
@@ -31,20 +32,24 @@ func (p *Plugin) _exportForm(f *Form) ([]string, [][]string, error) {
 }
 
 // getFormExport csv?
-func (p *Plugin) getFormExport(c *axe.Context) error {
+func (p *Plugin) getFormExport(c *axe.Context) {
 	var item Form
 	if err := p.Db.Where("id = ?", c.Params["id"]).First(&item).Error; err != nil {
-		return err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	if err := p.Db.Model(&item).Association("Fields").Find(&item.Fields).Error; err != nil {
-		return err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	if err := p.Db.Model(&item).Association("Records").Find(&item.Records).Error; err != nil {
-		return err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	header, rows, err := p._exportForm(&item)
 	if err != nil {
-		return err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=form-%d.ini", item.ID))
 	c.Header("Content-Type", "text/plain; charset=utf-8")
@@ -55,5 +60,5 @@ func (p *Plugin) getFormExport(c *axe.Context) error {
 		wrt.Write(row)
 	}
 	wrt.Flush()
-	return nil
+
 }

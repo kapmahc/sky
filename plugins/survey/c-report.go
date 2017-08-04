@@ -2,21 +2,25 @@ package survey
 
 import (
 	"encoding/json"
+	"net/http"
 
 	"github.com/kapmahc/axe"
 	"github.com/kapmahc/axe/i18n"
 )
 
-func (p *Plugin) getFormReport(c *axe.Context) (interface{}, error) {
+func (p *Plugin) getFormReport(c *axe.Context) {
 	var item Form
 	if err := p.Db.Where("id = ?", c.Params["id"]).First(&item).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	if err := p.Db.Model(&item).Association("Fields").Find(&item.Fields).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	if err := p.Db.Model(&item).Association("Records").Find(&item.Records).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	lang := c.Payload[i18n.LOCALE].(string)
 	headers := []axe.H{
@@ -37,7 +41,8 @@ func (p *Plugin) getFormReport(c *axe.Context) (interface{}, error) {
 		}
 		val := make(map[string]interface{})
 		if err := json.Unmarshal([]byte(r.Value), &val); err != nil {
-			return nil, err
+			c.Abort(http.StatusInternalServerError, err)
+			return
 		}
 		for _, f := range item.Fields {
 			row[f.Name] = val[f.Name]
@@ -45,8 +50,8 @@ func (p *Plugin) getFormReport(c *axe.Context) (interface{}, error) {
 		rows = append(rows, row)
 	}
 
-	return axe.H{
+	c.JSON(http.StatusOK, axe.H{
 		"headers": headers,
 		"rows":    rows,
-	}, nil
+	})
 }

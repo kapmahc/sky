@@ -15,11 +15,11 @@ import (
 	"github.com/kapmahc/sky/web"
 )
 
-func (p *Plugin) indexBooks(c *axe.Context) (interface{}, error) {
-
+func (p *Plugin) indexBooks(c *axe.Context) {
 	var total int64
 	if err := p.Db.Model(&Book{}).Count(&total).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	pag := web.NewPagination(c.Request, total)
 
@@ -27,39 +27,40 @@ func (p *Plugin) indexBooks(c *axe.Context) (interface{}, error) {
 	if err := p.Db.
 		Limit(pag.Limit()).Offset(pag.Offset()).
 		Find(&books).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	for _, b := range books {
 		pag.Items = append(pag.Items, b)
 	}
+
 	c.JSON(http.StatusOK, pag)
-	return nil
 }
 
-func (p *Plugin) showBook(c *axe.Context) (interface{}, error) {
+func (p *Plugin) showBook(c *axe.Context) {
 	data := axe.H{}
 
 	var buf bytes.Buffer
 	it, bk, err := p.readBook(c.Params["id"])
 	if err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	var notes []Note
 	if err := p.Db.Order("updated_at DESC").Find(&notes).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	data["notes"] = notes
 	// c.Writer.Header().Set("Content-Type", "text/html; charset=utf-8")
 	p.writePoints(
 		&buf,
-		fmt.Sprintf("%s/reading/pages/%d", web.Backend(), it.ID),
+		fmt.Sprintf("%s/reading/pages/%d", web.Home(), it.ID),
 		bk.Ncx.Points,
 	)
 	data["homeage"] = buf.String()
 	data["book"] = it
-
 	c.JSON(http.StatusOK, data)
-	return nil
 }
 
 func (p *Plugin) showPage(c *axe.Context) {
@@ -73,7 +74,7 @@ func (p *Plugin) showPage(c *axe.Context) {
 func (p *Plugin) readBookPage(w http.ResponseWriter, id string, name string) error {
 	_, bk, err := p.readBook(id)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	for _, fn := range bk.Files() {
 		if strings.HasSuffix(fn, name) {
@@ -81,12 +82,12 @@ func (p *Plugin) readBookPage(w http.ResponseWriter, id string, name string) err
 				if mf.Href == name {
 					rdr, err := bk.Open(name)
 					if err != nil {
-						return nil, err
+						return err
 					}
 					defer rdr.Close()
 					body, err := ioutil.ReadAll(rdr)
 					if err != nil {
-						return nil, err
+						return err
 					}
 					w.Header().Set("Content-Type", mf.MediaType)
 					w.Write(body)
@@ -95,7 +96,7 @@ func (p *Plugin) readBookPage(w http.ResponseWriter, id string, name string) err
 			}
 		}
 	}
-	return nil, errors.New("not found")
+	return errors.New("not found")
 }
 
 func (p *Plugin) writePoints(wrt io.Writer, href string, points []epub.NavPoint) {
@@ -125,13 +126,13 @@ func (p *Plugin) readBook(id string) (*Book, *epub.Book, error) {
 	return &book, bk, err
 }
 
-func (p *Plugin) destroyBook(c *axe.Context) (interface{}, error) {
+func (p *Plugin) destroyBook(c *axe.Context) {
 	if err := p.Db.
 		Where("id = ?", c.Params["id"]).
 		Delete(Book{}).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	c.JSON(http.StatusOK, axe.H{})
-	return nil
 
 }

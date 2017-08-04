@@ -4,7 +4,6 @@ import (
 	"github.com/facebookgo/inject"
 	"github.com/ikeikeikeike/go-sitemap-generator/stm"
 	"github.com/jinzhu/gorm"
-	"github.com/kapmahc/axe"
 	"github.com/kapmahc/axe/i18n"
 	"github.com/kapmahc/axe/job"
 	"github.com/kapmahc/sky/plugins/auth"
@@ -18,11 +17,6 @@ type Plugin struct {
 	Db   *gorm.DB   `inject:""`
 	I18n *i18n.I18n `inject:""`
 	Jwt  *auth.Jwt  `inject:""`
-}
-
-// Mount mount web points
-func (p *Plugin) Mount(*axe.Router) {
-
 }
 
 // Open open beans

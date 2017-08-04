@@ -6,13 +6,14 @@ import (
 	"github.com/kapmahc/axe"
 )
 
-func (p *Plugin) indexLeaveWords(c *axe.Context) (interface{}, error) {
+func (p *Plugin) indexLeaveWords(c *axe.Context) {
 	var items []LeaveWord
 	if err := p.Db.Order("created_at DESC").Find(&items).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
+
 	c.JSON(http.StatusOK, items)
-	return nil
 }
 
 type fmLeaveWord struct {
@@ -20,10 +21,11 @@ type fmLeaveWord struct {
 	Type string `json:"type" binding:"required,max=16"`
 }
 
-func (p *Plugin) createLeaveWord(c *axe.Context) (interface{}, error) {
+func (p *Plugin) createLeaveWord(c *axe.Context) {
 	var fm fmLeaveWord
 	if err := c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	item := LeaveWord{
@@ -31,18 +33,20 @@ func (p *Plugin) createLeaveWord(c *axe.Context) (interface{}, error) {
 		Type: fm.Type,
 	}
 	if err := p.Db.Create(&item).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
+
 	c.JSON(http.StatusOK, axe.H{})
-	return nil
 }
 
-func (p *Plugin) destroyLeaveWord(c *axe.Context) (interface{}, error) {
+func (p *Plugin) destroyLeaveWord(c *axe.Context) {
 	if err := p.Db.
 		Where("id = ?", c.Params["id"]).
 		Delete(LeaveWord{}).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
+
 	c.JSON(http.StatusOK, axe.H{})
-	return nil
 }

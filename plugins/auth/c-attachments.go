@@ -7,24 +7,27 @@ import (
 	"github.com/kapmahc/axe/i18n"
 )
 
-func (p *Plugin) createAttachment(c *axe.Context) (interface{}, error) {
+func (p *Plugin) createAttachment(c *axe.Context) {
 	user := c.Payload[CurrentUser].(*User)
 
 	file, header, err := c.Request.FormFile("file")
 	if err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	url, size, err := p.Uploader.Save(header)
 	if err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	// http://golang.org/pkg/net/http/#DetectContentType
 	buf := make([]byte, 512)
 	file.Seek(0, 0)
 	if _, err = file.Read(buf); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	a := Attachment{
@@ -37,58 +40,66 @@ func (p *Plugin) createAttachment(c *axe.Context) (interface{}, error) {
 		ResourceID:   DefaultResourceID,   //fm.ID,
 	}
 	if err := p.Db.Create(&a).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
-	return axe.H{
+	c.JSON(http.StatusOK, axe.H{
 		"url":    a.URL,
 		"uid":    a.ID,
 		"status": "success",
-	}, nil
+	})
 }
 
 type fmAttachmentEdit struct {
 	Title string `json:"title" binding:"required,max=255"`
 }
 
-func (p *Plugin) updateAttachment(c *axe.Context) (interface{}, error) {
+func (p *Plugin) updateAttachment(c *axe.Context) {
 	a, err := p.canEditAttachment(c)
 	if err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	var fm fmAttachmentEdit
 	if err = c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	if err = p.Db.Model(a).Update("title", fm.Title).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
-	return a, nil
+	c.JSON(http.StatusOK, a)
 }
 
-func (p *Plugin) destroyAttachment(c *axe.Context) (interface{}, error) {
+func (p *Plugin) destroyAttachment(c *axe.Context) {
 	a, err := p.canEditAttachment(c)
 	if err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	if err := p.Db.Delete(a).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	if err := p.Uploader.Remove(a.URL); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
-	return a, nil
+	c.JSON(http.StatusOK, a)
 }
 
-func (p *Plugin) showAttachment(c *axe.Context) (interface{}, error) {
+func (p *Plugin) showAttachment(c *axe.Context) {
 	var a Attachment
 	if err := p.Db.Where("id = ?", c.Params["id"]).First(&a).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
-	return &a, nil
+	c.JSON(http.StatusOK, a)
 }
 
-func (p *Plugin) indexAttachments(c *axe.Context) (interface{}, error) {
+func (p *Plugin) indexAttachments(c *axe.Context) {
 	user := c.Payload[CurrentUser].(*User)
 	isa := c.Payload[IsAdmin].(bool)
 	var items []Attachment
@@ -97,9 +108,10 @@ func (p *Plugin) indexAttachments(c *axe.Context) (interface{}, error) {
 		qry = qry.Where("user_id = ?", user.ID)
 	}
 	if err := qry.Order("updated_at DESC").Find(&items).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
-	return items, nil
+	c.JSON(http.StatusOK, items)
 }
 
 func (p *Plugin) canEditAttachment(c *axe.Context) (*Attachment, error) {

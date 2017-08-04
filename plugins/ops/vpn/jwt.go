@@ -1,6 +1,7 @@
 package vpn
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/SermoDigital/jose/jws"
@@ -19,18 +20,20 @@ func (p *Plugin) generateToken(years int) ([]byte, error) {
 	return jt.Serialize(p.Key)
 }
 
-func (p *Plugin) tokenMiddleware(c *axe.Context) error {
+func (p *Plugin) tokenMiddleware(c *axe.Context) {
 	lng := c.Payload[i18n.LOCALE].(string)
 	tk, err := jws.ParseJWTFromRequest(c.Request)
 	if err != nil {
-		return err
+		c.Abort(http.StatusForbidden, err)
+		return
 	}
 	if err := tk.Validate(p.Key, p.Method); err != nil {
-		return err
+		c.Abort(http.StatusForbidden, err)
+		return
 	}
 
 	if act := tk.Claims().Get("act"); act != nil && act.(string) == "vpn" {
-		return nil
+		return
 	}
-	return p.I18n.E(lng, "errors.forbidden")
+	c.Abort(http.StatusForbidden, p.I18n.E(lng, "errors.forbidden"))
 }

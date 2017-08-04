@@ -10,11 +10,12 @@ type fmDict struct {
 	Keywords string `json:"keywords" binding:"required,max=255"`
 }
 
-func (p *Plugin) postDict(c *axe.Context) (interface{}, error) {
+func (p *Plugin) postDict(c *axe.Context) {
 
 	var fm fmDict
 	if err := c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	rst := axe.H{}
 	for _, dic := range dictionaries {
@@ -28,5 +29,4 @@ func (p *Plugin) postDict(c *axe.Context) (interface{}, error) {
 	}
 
 	c.JSON(http.StatusOK, rst)
-	return nil
 }

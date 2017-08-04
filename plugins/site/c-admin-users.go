@@ -7,12 +7,13 @@ import (
 	"github.com/kapmahc/sky/plugins/auth"
 )
 
-func (p *Plugin) indexAdminUsers(c *axe.Context) (interface{}, error) {
+func (p *Plugin) indexAdminUsers(c *axe.Context) {
 	var items []auth.User
 	if err := p.Db.
 		Order("last_sign_in_at DESC").Find(&items).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
+
 	c.JSON(http.StatusOK, items)
-	return nil
 }

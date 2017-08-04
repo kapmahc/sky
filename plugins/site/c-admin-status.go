@@ -120,15 +120,16 @@ func (p *Plugin) _dbStatus() (axe.H, error) {
 }
 
 func (p *Plugin) _routes() []axe.H {
-	rt := axe.New()
+	rt := axe.NewRouter()
 	web.Walk(func(en web.Plugin) error {
 		en.Mount(rt)
 		return nil
 	})
 	var items []axe.H
-	for _, r := range rt.Routes() {
-		items = append(items, axe.H{"method": r.Method, "path": r.Path})
-	}
+	rt.Walk(func(mtd string, pth string, _ ...axe.HandlerFunc) error {
+		items = append(items, axe.H{"method": mtd, "path": pth})
+		return nil
+	})
 	return items
 }
 
@@ -140,26 +141,29 @@ func (p *Plugin) _cacheStatus() ([]string, error) {
 	return strings.Split(str, "\n"), nil
 }
 
-func (p *Plugin) getAdminSiteStatus(c *axe.Context) (interface{}, error) {
+func (p *Plugin) getAdminSiteStatus(c *axe.Context) {
 	data := axe.H{}
 
 	var err error
 	if data["os"], err = p._osStatus(); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	if data["network"], err = p._networkStatus(); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	data["jobs"] = p.Server.Status()
 	data["routes"] = p._routes()
 
 	if data["cache"], err = p._cacheStatus(); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	if data["database"], err = p._dbStatus(); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	c.JSON(http.StatusOK, data)
-	return nil
 }

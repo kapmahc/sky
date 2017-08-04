@@ -2,6 +2,7 @@ package survey
 
 import (
 	"encoding/json"
+	"net/http"
 	"strings"
 
 	"github.com/kapmahc/axe"
@@ -28,25 +29,30 @@ type fmRecord struct {
 	Value string `json:"value" binding:"required"`
 }
 
-func (p *Plugin) postFormApply(c *axe.Context) (interface{}, error) {
+func (p *Plugin) postFormApply(c *axe.Context) {
 	var fm fmApply
 	if err := c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	var item Form
 	if err := p.Db.Where("id = ?", c.Params["id"]).First(&item).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	lng := c.Payload[i18n.LOCALE].(string)
 	if item.Expire() {
-		return nil, p.I18n.E(lng, "forms.errors.expired")
+		c.Abort(http.StatusInternalServerError, p.I18n.E(lng, "forms.errors.expired"))
+		return
 	}
 	var count int
 	if err := p.Db.Model(&Record{}).Where("form_id = ? AND (phone = ? OR email = ?)", item.ID, fm.Phone, fm.Email).Count(&count).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	if count > 0 {
-		return nil, p.I18n.E(lng, "forms.errors.already-apply")
+		c.Abort(http.StatusInternalServerError, p.I18n.E(lng, "forms.errors.already-apply"))
+		return
 	}
 
 	values := make(map[string]interface{})
@@ -56,7 +62,8 @@ func (p *Plugin) postFormApply(c *axe.Context) (interface{}, error) {
 
 	val, err := json.Marshal(values)
 	if err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	record := Record{
@@ -67,9 +74,10 @@ func (p *Plugin) postFormApply(c *axe.Context) (interface{}, error) {
 		FormID:   item.ID,
 	}
 	if err := p.Db.Create(&record).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	p._sendEmail(lng, &item, &record, actApply)
 
-	return axe.H{}, nil
+	c.JSON(http.StatusOK, axe.H{})
 }

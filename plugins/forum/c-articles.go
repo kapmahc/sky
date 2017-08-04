@@ -1,12 +1,14 @@
 package forum
 
 import (
+	"net/http"
+
 	"github.com/kapmahc/axe"
 	"github.com/kapmahc/axe/i18n"
 	"github.com/kapmahc/sky/plugins/auth"
 )
 
-func (p *Plugin) indexArticles(c *axe.Context) (interface{}, error) {
+func (p *Plugin) indexArticles(c *axe.Context) {
 	user := c.Payload[auth.CurrentUser].(*auth.User)
 	isa := c.Payload[auth.IsAdmin].(bool)
 	var articles []Article
@@ -15,9 +17,10 @@ func (p *Plugin) indexArticles(c *axe.Context) (interface{}, error) {
 		qry = qry.Where("user_id = ?", user.ID)
 	}
 	if err := qry.Order("updated_at DESC").Find(&articles).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
-	return articles, nil
+	c.JSON(http.StatusOK, articles)
 }
 
 type fmArticle struct {
@@ -28,11 +31,12 @@ type fmArticle struct {
 	Tags    []string `json:"tags"`
 }
 
-func (p *Plugin) createArticle(c *axe.Context) (interface{}, error) {
+func (p *Plugin) createArticle(c *axe.Context) {
 	user := c.Payload[auth.CurrentUser].(*auth.User)
 	var fm fmArticle
 	if err := c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	var tags []Tag
@@ -41,7 +45,8 @@ func (p *Plugin) createArticle(c *axe.Context) (interface{}, error) {
 		if err := p.Db.Select([]string{"id"}).Where("id = ?", it).First(&t).Error; err == nil {
 			tags = append(tags, t)
 		} else {
-			return nil, err
+			c.Abort(http.StatusInternalServerError, err)
+			return
 		}
 	}
 	a := Article{
@@ -53,38 +58,45 @@ func (p *Plugin) createArticle(c *axe.Context) (interface{}, error) {
 	}
 
 	if err := p.Db.Create(&a).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	if err := p.Db.Model(&a).Association("Tags").Append(tags).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
-	return &a, nil
+	c.JSON(http.StatusOK, &a)
 }
 
-func (p *Plugin) showArticle(c *axe.Context) (interface{}, error) {
+func (p *Plugin) showArticle(c *axe.Context) {
 	var a Article
 	if err := p.Db.Where("id = ?", c.Params["id"]).First(&a).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	if err := p.Db.Model(&a).Related(&a.Comments).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	if err := p.Db.Model(&a).Association("Tags").Find(&a.Tags).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
-	return a, nil
+	c.JSON(http.StatusOK, a)
 }
 
-func (p *Plugin) updateArticle(c *axe.Context) (interface{}, error) {
+func (p *Plugin) updateArticle(c *axe.Context) {
 	a, err := p.canEditArticle(c)
 	if err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	var fm fmArticle
 	if err := c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	var tags []Tag
@@ -93,7 +105,8 @@ func (p *Plugin) updateArticle(c *axe.Context) (interface{}, error) {
 		if err := p.Db.Select([]string{"id"}).Where("id = ?", it).First(&t).Error; err == nil {
 			tags = append(tags, t)
 		} else {
-			return nil, err
+			c.Abort(http.StatusInternalServerError, err)
+			return
 		}
 	}
 
@@ -103,29 +116,34 @@ func (p *Plugin) updateArticle(c *axe.Context) (interface{}, error) {
 		"body":    fm.Body,
 		"type":    fm.Type,
 	}).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	if err := p.Db.Model(a).Association("Tags").Replace(tags).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
-	return a, nil
+	c.JSON(http.StatusOK, a)
 }
 
-func (p *Plugin) destroyArticle(c *axe.Context) (interface{}, error) {
+func (p *Plugin) destroyArticle(c *axe.Context) {
 	a, err := p.canEditArticle(c)
 	if err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	if err := p.Db.Model(a).Association("Tags").Clear().Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	if err := p.Db.Delete(a).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
-	return a, nil
+	c.JSON(http.StatusOK, a)
 }
 
 func (p *Plugin) canEditArticle(c *axe.Context) (*Article, error) {

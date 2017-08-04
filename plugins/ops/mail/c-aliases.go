@@ -1,19 +1,23 @@
 package mail
 
 import (
+	"net/http"
+
 	"github.com/kapmahc/axe"
 )
 
-func (p *Plugin) indexAliases(c *axe.Context) (interface{}, error) {
+func (p *Plugin) indexAliases(c *axe.Context) {
 
 	var items []Alias
 	if err := p.Db.Order("updated_at DESC").Find(&items).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	var domains []Domain
 	if err := p.Db.Select([]string{"id", "name"}).Find(&domains).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	for i := range items {
 		u := &items[i]
@@ -25,7 +29,7 @@ func (p *Plugin) indexAliases(c *axe.Context) (interface{}, error) {
 		}
 	}
 
-	return items, nil
+	c.JSON(http.StatusOK, items)
 }
 
 type fmAlias struct {
@@ -33,15 +37,17 @@ type fmAlias struct {
 	Destination string `json:"destination" binding:"required,max=255"`
 }
 
-func (p *Plugin) createAlias(c *axe.Context) (interface{}, error) {
+func (p *Plugin) createAlias(c *axe.Context) {
 	var fm fmAlias
 	if err := c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	var user User
 	if err := p.Db.Where("email = ?", fm.Destination).First(&user).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	item := Alias{
 		Source:      fm.Source,
@@ -49,34 +55,39 @@ func (p *Plugin) createAlias(c *axe.Context) (interface{}, error) {
 		DomainID:    user.DomainID,
 	}
 	if err := p.Db.Create(&item).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
-	return item, nil
+	c.JSON(http.StatusOK, item)
 }
 
-func (p *Plugin) showAlias(c *axe.Context) (interface{}, error) {
+func (p *Plugin) showAlias(c *axe.Context) {
 	var item Alias
 	if err := p.Db.Where("id = ?", c.Params["id"]).First(&item).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
-	return item, nil
+	c.JSON(http.StatusOK, item)
 }
 
-func (p *Plugin) updateAlias(c *axe.Context) (interface{}, error) {
+func (p *Plugin) updateAlias(c *axe.Context) {
 	var fm fmAlias
 	if err := c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	var item Alias
 	if err := p.Db.Where("id = ?", c.Params["id"]).First(&item).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	var user User
 	if err := p.Db.Where("email = ?", fm.Destination).First(&user).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	if err := p.Db.Model(&item).
@@ -85,18 +96,20 @@ func (p *Plugin) updateAlias(c *axe.Context) (interface{}, error) {
 			"source":      fm.Source,
 			"destination": fm.Destination,
 		}).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
-	return user, nil
+	c.JSON(http.StatusOK, item)
 }
 
-func (p *Plugin) destroyAlias(c *axe.Context) (interface{}, error) {
+func (p *Plugin) destroyAlias(c *axe.Context) {
 	if err := p.Db.
 		Where("id = ?", c.Params["id"]).
 		Delete(Alias{}).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
-	return axe.H{}, nil
+	c.JSON(http.StatusOK, axe.H{})
 }

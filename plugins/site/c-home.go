@@ -7,16 +7,22 @@ import (
 	"github.com/kapmahc/axe/i18n"
 )
 
-func (p *Plugin) getLocales(c *axe.Context) (interface{}, error) {
+func (p *Plugin) getLocales(c *axe.Context) {
 	lang := c.Params["lang"]
-	return p.I18n.All(lang)
+	items, err := p.I18n.All(lang)
+	if err != nil {
+		c.Abort(http.StatusInternalServerError, err)
+		return
+	}
+	c.JSON(http.StatusOK, items)
 }
 
-func (p *Plugin) getSiteInfo(c *axe.Context) (interface{}, error) {
+func (p *Plugin) getSiteInfo(c *axe.Context) {
 	// -----------
 	langs, err := p.I18n.Store.Languages()
 	if err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	lng := c.Payload[i18n.LOCALE].(string)
 	data := axe.H{"locale": lng, "languages": langs}
@@ -33,13 +39,15 @@ func (p *Plugin) getSiteInfo(c *axe.Context) (interface{}, error) {
 	// -----------
 	var links []Link
 	if err := p.Db.Order("loc DESC, sort_order DESC").Find(&links).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	data["links"] = links
 	// -----------
 	var cards []Card
 	if err := p.Db.Order("loc DESC, sort_order DESC").Find(&cards).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	data["cards"] = cards
 	// -----------
@@ -55,16 +63,16 @@ func (p *Plugin) getSiteInfo(c *axe.Context) (interface{}, error) {
 		data["friendLinks"] = friendLinks
 	}
 	// -----------
+
 	c.JSON(http.StatusOK, data)
-	return nil
 }
 
-func (p *Plugin) getDonates(c *axe.Context) (interface{}, error) {
+func (p *Plugin) getDonates(c *axe.Context) {
 	data := axe.H{}
 	var paypal map[string]interface{}
 	if err := p.Settings.Get("site.paypal", &paypal); err == nil {
 		data["paypal"] = paypal["donate"]
 	}
+
 	c.JSON(http.StatusOK, data)
-	return nil
 }

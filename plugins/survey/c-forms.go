@@ -1,6 +1,7 @@
 package survey
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/kapmahc/axe"
@@ -8,23 +9,26 @@ import (
 	"github.com/kapmahc/sky/web"
 )
 
-func (p *Plugin) indexForms(c *axe.Context) (interface{}, error) {
+func (p *Plugin) indexForms(c *axe.Context) {
 	var items []Form
 	if err := p.Db.Order("updated_at DESC").Find(&items).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
-	return items, nil
+	c.JSON(http.StatusOK, items)
 }
 
-func (p *Plugin) createForm(c *axe.Context) (interface{}, error) {
+func (p *Plugin) createForm(c *axe.Context) {
 	var fm fmForm
 	if err := c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	deadline, err := time.Parse(time.RFC3339, fm.Deadline)
 	if err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	item := Form{
@@ -36,26 +40,30 @@ func (p *Plugin) createForm(c *axe.Context) (interface{}, error) {
 		},
 	}
 	if err := p.Db.Create(&item).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	if err := p.Db.Model(&item).Association("Fields").Append(fm.Parse(item.ID)).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
-	return item, nil
+	c.JSON(http.StatusOK, item)
 }
 
-func (p *Plugin) showForm(c *axe.Context) (interface{}, error) {
+func (p *Plugin) showForm(c *axe.Context) {
 	var item Form
 	if err := p.Db.Where("id = ?", c.Params["id"]).First(&item).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	if err := p.Db.Model(&item).Association("Fields").Find(&item.Fields).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
-	return item, nil
+	c.JSON(http.StatusOK, item)
 }
 
 type fmField struct {
@@ -93,20 +101,23 @@ func (p *fmForm) Parse(id uint) []Field {
 	return fields
 }
 
-func (p *Plugin) updateForm(c *axe.Context) (interface{}, error) {
+func (p *Plugin) updateForm(c *axe.Context) {
 	var item Form
 	if err := p.Db.Where("id = ?", c.Params["id"]).First(&item).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	var fm fmForm
 	if err := c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	deadline, err := time.Parse(time.RFC3339, fm.Deadline)
 	if err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	if err := p.Db.Model(&item).Updates(map[string]interface{}{
@@ -115,36 +126,43 @@ func (p *Plugin) updateForm(c *axe.Context) (interface{}, error) {
 		"body":     fm.Body,
 		"deadline": deadline,
 	}).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	lang := c.Payload[i18n.LOCALE].(string)
 	if p.Db.Model(&item).Association("Records").Count() > 0 {
-		return nil, p.I18n.E(lang, "errors.in-use")
+		c.Abort(http.StatusInternalServerError, p.I18n.E(lang, "errors.in-use"))
+		return
 	}
 
 	if err := p.Db.Where("form_id = ?", item.ID).Delete(&Field{}).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	if err := p.Db.Model(&item).Association("Fields").Append(fm.Parse(item.ID)).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
-	return axe.H{}, nil
+	c.JSON(http.StatusOK, item)
 }
 
-func (p *Plugin) destroyForm(c *axe.Context) (interface{}, error) {
+func (p *Plugin) destroyForm(c *axe.Context) {
 	id := c.Params["id"]
 	if err := p.Db.Where("form_id = ?", id).Delete(Field{}).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	if err := p.Db.Where("form_id = ?", id).Delete(Record{}).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	if err := p.Db.Where("id = ?", id).Delete(Form{}).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
-	return axe.H{}, nil
+	c.JSON(http.StatusOK, axe.H{})
 }

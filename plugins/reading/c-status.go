@@ -6,11 +6,12 @@ import (
 	"github.com/kapmahc/axe"
 )
 
-func (p *Plugin) getStatus(c *axe.Context) (interface{}, error) {
+func (p *Plugin) getStatus(c *axe.Context) {
 	data := axe.H{}
 	var bc int
 	if err := p.Db.Model(&Book{}).Count(&bc).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	data["book"] = axe.H{
 		"count": bc,
@@ -23,6 +24,5 @@ func (p *Plugin) getStatus(c *axe.Context) (interface{}, error) {
 	data["dict"] = dict
 
 	c.JSON(http.StatusOK, data)
-	return nil
 
 }

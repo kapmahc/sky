@@ -15,10 +15,11 @@ type fmSiteInfo struct {
 	Copyright   string `json:"copyright"`
 }
 
-func (p *Plugin) postAdminSiteInfo(c *axe.Context) (interface{}, error) {
+func (p *Plugin) postAdminSiteInfo(c *axe.Context) {
 	var fm fmSiteInfo
 	if err := c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	lng := c.Payload[i18n.LOCALE].(string)
@@ -31,12 +32,12 @@ func (p *Plugin) postAdminSiteInfo(c *axe.Context) (interface{}, error) {
 		"copyright":   fm.Copyright,
 	} {
 		if err := p.I18n.Set(lng, "site."+k, v); err != nil {
-			return nil, err
+			c.Abort(http.StatusInternalServerError, err)
+			return
 		}
 	}
 
 	c.JSON(http.StatusOK, axe.H{})
-	return nil
 }
 
 type fmSiteAuthor struct {
@@ -44,10 +45,11 @@ type fmSiteAuthor struct {
 	Email string `json:"email"`
 }
 
-func (p *Plugin) postAdminSiteAuthor(c *axe.Context) (interface{}, error) {
+func (p *Plugin) postAdminSiteAuthor(c *axe.Context) {
 	var fm fmSiteAuthor
 	if err := c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	lng := c.Payload[i18n.LOCALE].(string)
@@ -56,15 +58,15 @@ func (p *Plugin) postAdminSiteAuthor(c *axe.Context) (interface{}, error) {
 		"email": fm.Email,
 	} {
 		if err := p.I18n.Set(lng, "site.author."+k, v); err != nil {
-			return nil, err
+			c.Abort(http.StatusInternalServerError, err)
+			return
 		}
 	}
 
 	c.JSON(http.StatusOK, axe.H{})
-	return nil
 }
 
-func (p *Plugin) getAdminSiteSeo(c *axe.Context) (interface{}, error) {
+func (p *Plugin) getAdminSiteSeo(c *axe.Context) {
 	var gc string
 	var bc string
 	p.Settings.Get("site.google.verify.code", &gc)
@@ -73,20 +75,18 @@ func (p *Plugin) getAdminSiteSeo(c *axe.Context) (interface{}, error) {
 	links := []string{"robots.txt", "sitemap.xml.gz", "google" + gc + ".html", "baidu_verify_" + bc + ".html"}
 	langs, err := p.I18n.Store.Languages()
 	if err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	for _, l := range langs {
 		links = append(links, "rss-"+l+".atom")
 	}
 
-	c.JSON(
-		http.StatusOK,
-		axe.H{
-			"googleVerifyCode": gc,
-			"baiduVerifyCode":  bc,
-			"links":            links,
-		})
-	return nil
+	c.JSON(http.StatusOK, axe.H{
+		"googleVerifyCode": gc,
+		"baiduVerifyCode":  bc,
+		"links":            links,
+	})
 }
 
 type fmSiteSeo struct {
@@ -94,10 +94,11 @@ type fmSiteSeo struct {
 	BaiduVerifyCode  string `json:"baiduVerifyCode"`
 }
 
-func (p *Plugin) postAdminSiteSeo(c *axe.Context) (interface{}, error) {
+func (p *Plugin) postAdminSiteSeo(c *axe.Context) {
 	var fm fmSiteSeo
 	if err := c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	for k, v := range map[string]string{
@@ -105,11 +106,12 @@ func (p *Plugin) postAdminSiteSeo(c *axe.Context) (interface{}, error) {
 		"baidu.verify.code":  fm.BaiduVerifyCode,
 	} {
 		if err := p.Settings.Set("site."+k, v, true); err != nil {
-			return nil, err
+			c.Abort(http.StatusInternalServerError, err)
+			return
 		}
 	}
+
 	c.JSON(http.StatusOK, axe.H{})
-	return nil
 }
 
 type fmSiteSMTP struct {
@@ -121,7 +123,7 @@ type fmSiteSMTP struct {
 	PasswordConfirmation string `json:"passwordConfirmation" binding:"eqfield=Password"`
 }
 
-func (p *Plugin) getAdminSiteSMTP(c *axe.Context) (interface{}, error) {
+func (p *Plugin) getAdminSiteSMTP(c *axe.Context) {
 	smtp := make(map[string]interface{})
 	if err := p.Settings.Get("site.smtp", &smtp); err == nil {
 		smtp["password"] = ""
@@ -136,13 +138,13 @@ func (p *Plugin) getAdminSiteSMTP(c *axe.Context) (interface{}, error) {
 		"smtp":  smtp,
 		"ports": []int{25, 465, 587},
 	})
-	return nil
 }
 
-func (p *Plugin) postAdminSiteSMTP(c *axe.Context) (interface{}, error) {
+func (p *Plugin) postAdminSiteSMTP(c *axe.Context) {
 	var fm fmSiteSMTP
 	if err := c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	val := map[string]interface{}{
 		"host":     fm.Host,
@@ -152,8 +154,9 @@ func (p *Plugin) postAdminSiteSMTP(c *axe.Context) (interface{}, error) {
 		"ssl":      fm.Ssl,
 	}
 	if err := p.Settings.Set("site.smtp", val, true); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
+
 	c.JSON(http.StatusOK, axe.H{})
-	return nil
 }

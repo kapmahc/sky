@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/SermoDigital/jose/jws"
@@ -15,11 +16,12 @@ type fmSignUp struct {
 	PasswordConfirmation string `json:"passwordConfirmation" binding:"eqfield=Password"`
 }
 
-func (p *Plugin) postUsersSignUp(c *axe.Context) (interface{}, error) {
+func (p *Plugin) postUsersSignUp(c *axe.Context) {
 	l := c.Payload[i18n.LOCALE].(string)
 	var fm fmSignUp
 	if err := c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	var count int
@@ -27,22 +29,25 @@ func (p *Plugin) postUsersSignUp(c *axe.Context) (interface{}, error) {
 		Model(&User{}).
 		Where("email = ?", fm.Email).
 		Count(&count).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	if count > 0 {
-		return nil, p.I18n.E(l, "auth.errors.user.email-already-exists")
+		c.Abort(http.StatusInternalServerError, p.I18n.E(l, "auth.errors.user.email-already-exists"))
+		return
 	}
 
 	user, err := p.Dao.AddEmailUser(fm.Name, fm.Email, fm.Password)
 	if err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	p.Dao.Log(user.ID, c.ClientIP(), p.I18n.T(l, "auth.logs.user.sign-up"))
 	p.sendEmail(l, user, actConfirm)
 
-	return axe.H{}, nil
+	c.JSON(http.StatusOK, axe.H{})
 }
 
 type fmSignIn struct {
@@ -51,16 +56,18 @@ type fmSignIn struct {
 	RememberMe bool   `json:"rememberMe"`
 }
 
-func (p *Plugin) postUsersSignIn(c *axe.Context) (interface{}, error) {
+func (p *Plugin) postUsersSignIn(c *axe.Context) {
 	l := c.Payload[i18n.LOCALE].(string)
 	var fm fmSignIn
 	if err := c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	user, err := p.Dao.SignIn(l, fm.Email, fm.Password, c.ClientIP())
 	if err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	cm := jws.Claims{}
@@ -68,103 +75,117 @@ func (p *Plugin) postUsersSignIn(c *axe.Context) (interface{}, error) {
 	cm.Set("admin", p.Dao.Is(user.ID, RoleAdmin))
 	tkn, err := p.Jwt.Sum(cm, time.Hour*24*7)
 	if err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
-	return axe.H{
+	c.JSON(http.StatusOK, axe.H{
 		"token": string(tkn),
 		"name":  user.Name,
-	}, nil
+	})
 }
 
 type fmEmail struct {
 	Email string `json:"email" binding:"required,email"`
 }
 
-func (p *Plugin) getUsersConfirm(c *axe.Context) (interface{}, error) {
+func (p *Plugin) getUsersConfirm(c *axe.Context) {
 	l := c.Payload[i18n.LOCALE].(string)
 	user, err := p.parseToken(l, c.Params["token"], actConfirm)
 	if err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	if user.IsConfirm() {
-		return nil, p.I18n.E(l, "auth.errors.user.already-confirm")
+		c.Abort(http.StatusInternalServerError, p.I18n.E(l, "auth.errors.user.already-confirm"))
+		return
 	}
 	p.Db.Model(user).Update("confirmed_at", time.Now())
 	p.Dao.Log(user.ID, c.ClientIP(), p.I18n.T(l, "auth.logs.user.confirm"))
 
-	return axe.H{}, nil
+	c.JSON(http.StatusOK, axe.H{})
 }
 
-func (p *Plugin) postUsersConfirm(c *axe.Context) (interface{}, error) {
+func (p *Plugin) postUsersConfirm(c *axe.Context) {
 	l := c.Payload[i18n.LOCALE].(string)
 	var fm fmEmail
 	if err := c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	user, err := p.Dao.GetByEmail(fm.Email)
 	if err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	if user.IsConfirm() {
-		return nil, p.I18n.E(l, "auth.errors.user.already-confirm")
+		c.Abort(http.StatusInternalServerError, p.I18n.E(l, "auth.errors.user.already-confirm"))
+		return
 	}
 
 	p.sendEmail(l, user, actConfirm)
-	return axe.H{}, nil
+	c.JSON(http.StatusOK, axe.H{})
 }
 
-func (p *Plugin) getUsersUnlock(c *axe.Context) (interface{}, error) {
+func (p *Plugin) getUsersUnlock(c *axe.Context) {
 	l := c.Payload[i18n.LOCALE].(string)
 	user, err := p.parseToken(l, c.Params["token"], actUnlock)
 	if err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	if !user.IsLock() {
-		return nil, p.I18n.E(l, "auth.errors.user.not-lock")
+		c.Abort(http.StatusInternalServerError, p.I18n.E(l, "auth.errors.user.not-lock"))
+		return
 	}
 
 	if err := p.Db.Model(user).Update(map[string]interface{}{"locked_at": nil}).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	p.Dao.Log(user.ID, c.ClientIP(), p.I18n.T(l, "auth.logs.user.unlock"))
 
-	return axe.H{}, nil
+	c.JSON(http.StatusOK, axe.H{})
 }
 
-func (p *Plugin) postUsersUnlock(c *axe.Context) (interface{}, error) {
+func (p *Plugin) postUsersUnlock(c *axe.Context) {
 	l := c.Payload[i18n.LOCALE].(string)
 
 	var fm fmEmail
 	if err := c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	user, err := p.Dao.GetByEmail(fm.Email)
 	if err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	if !user.IsLock() {
-		return nil, p.I18n.E(l, "auth.errors.user.not-lock")
+		c.Abort(http.StatusInternalServerError, p.I18n.E(l, "auth.errors.user.not-lock"))
+		return
 	}
 	p.sendEmail(l, user, actUnlock)
-	return axe.H{}, nil
+	c.JSON(http.StatusOK, axe.H{})
 }
 
-func (p *Plugin) postUsersForgotPassword(c *axe.Context) (interface{}, error) {
+func (p *Plugin) postUsersForgotPassword(c *axe.Context) {
 	l := c.Payload[i18n.LOCALE].(string)
 	var fm fmEmail
 	if err := c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	var user *User
 	user, err := p.Dao.GetByEmail(fm.Email)
 	if err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	p.sendEmail(l, user, actResetPassword)
 
-	return axe.H{}, nil
+	c.JSON(http.StatusOK, axe.H{})
 }
 
 type fmResetPassword struct {
@@ -173,34 +194,36 @@ type fmResetPassword struct {
 	PasswordConfirmation string `json:"passwordConfirmation" binding:"eqfield=Password"`
 }
 
-func (p *Plugin) postUsersResetPassword(c *axe.Context) (interface{}, error) {
+func (p *Plugin) postUsersResetPassword(c *axe.Context) {
 	l := c.Payload[i18n.LOCALE].(string)
 
 	var fm fmResetPassword
 	if err := c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	user, err := p.parseToken(l, fm.Token, actResetPassword)
 	if err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	p.Db.Model(user).Update("password", p.Hmac.Sum([]byte(fm.Password)))
 	p.Dao.Log(user.ID, c.ClientIP(), p.I18n.T(l, "auth.logs.user.reset-password"))
 
-	return axe.H{}, nil
+	c.JSON(http.StatusOK, axe.H{})
 }
 
-func (p *Plugin) deleteUsersSignOut(c *axe.Context) (interface{}, error) {
+func (p *Plugin) deleteUsersSignOut(c *axe.Context) {
 	l := c.Payload[i18n.LOCALE].(string)
 	user := c.Payload[CurrentUser].(*User)
 	p.Dao.Log(user.ID, c.ClientIP(), p.I18n.T(l, "auth.logs.user.sign-out"))
 
-	return axe.H{}, nil
+	c.JSON(http.StatusOK, axe.H{})
 }
 
-func (p *Plugin) getUsersInfo(c *axe.Context) (interface{}, error) {
+func (p *Plugin) getUsersInfo(c *axe.Context) {
 	user := c.Payload[CurrentUser].(*User)
-	return axe.H{"name": user.Name, "email": user.Email}, nil
+	c.JSON(http.StatusOK, user)
 }
 
 type fmInfo struct {
@@ -209,11 +232,12 @@ type fmInfo struct {
 	// Logo string `json:"logo" binding:"max=255"`
 }
 
-func (p *Plugin) postUsersInfo(c *axe.Context) (interface{}, error) {
+func (p *Plugin) postUsersInfo(c *axe.Context) {
 	user := c.Payload[CurrentUser].(*User)
 	var fm fmInfo
 	if err := c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
 	if err := p.Db.Model(user).Updates(map[string]interface{}{
@@ -221,9 +245,10 @@ func (p *Plugin) postUsersInfo(c *axe.Context) (interface{}, error) {
 		// "logo": fm.Logo,
 		"name": fm.Name,
 	}).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
-	return axe.H{}, nil
+	c.JSON(http.StatusOK, axe.H{})
 }
 
 type fmChangePassword struct {
@@ -232,26 +257,29 @@ type fmChangePassword struct {
 	PasswordConfirmation string `json:"passwordConfirmation" binding:"eqfield=NewPassword"`
 }
 
-func (p *Plugin) postUsersChangePassword(c *axe.Context) (interface{}, error) {
+func (p *Plugin) postUsersChangePassword(c *axe.Context) {
 	l := c.Payload[i18n.LOCALE].(string)
 
 	user := c.Payload[CurrentUser].(*User)
 	var fm fmChangePassword
 	if err := c.Bind(&fm); err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 	if !p.Hmac.Chk([]byte(fm.CurrentPassword), user.Password) {
-		return nil, p.I18n.E(l, "auth.errors.bad-password")
+		c.Abort(http.StatusInternalServerError, p.I18n.E(l, "auth.errors.bad-password"))
+		return
 	}
 	if err := p.Db.Model(user).
 		Update("password", p.Hmac.Sum([]byte(fm.NewPassword))).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
-	return axe.H{}, nil
+	c.JSON(http.StatusOK, axe.H{})
 }
 
-func (p *Plugin) getUsersLogs(c *axe.Context) (interface{}, error) {
+func (p *Plugin) getUsersLogs(c *axe.Context) {
 	user := c.Payload[CurrentUser].(*User)
 	var items []Log
 	if err := p.Db.
@@ -259,8 +287,9 @@ func (p *Plugin) getUsersLogs(c *axe.Context) (interface{}, error) {
 		Where("user_id = ?", user.ID).
 		Order("id DESC").Limit(120).
 		Find(&items).Error; err != nil {
-		return nil, err
+		c.Abort(http.StatusInternalServerError, err)
+		return
 	}
 
-	return items, nil
+	c.JSON(http.StatusOK, items)
 }
