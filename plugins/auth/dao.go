@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/jinzhu/gorm"
-	"github.com/kapmahc/sky/web/i18n"
-	"github.com/kapmahc/sky/web/security"
+	"github.com/kapmahc/axe/i18n"
+	"github.com/kapmahc/axe/security"
 	log "github.com/sirupsen/logrus"
 )
 

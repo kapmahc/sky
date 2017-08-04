@@ -3,8 +3,8 @@ package auth
 import (
 	"net/http"
 
+	"github.com/kapmahc/axe/i18n"
 	"github.com/kapmahc/sky/web"
-	"github.com/kapmahc/sky/web/i18n"
 )
 
 // MustSignInMiddleware must sign-in

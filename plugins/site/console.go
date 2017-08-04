@@ -10,23 +10,19 @@ import (
 	"os/signal"
 	"path"
 	"path/filepath"
-	"strings"
 	"text/template"
 	"time"
 
 	"github.com/BurntSushi/toml"
 	"github.com/facebookgo/inject"
 	"github.com/google/uuid"
-	"github.com/gorilla/csrf"
-	"github.com/gorilla/mux"
 	"github.com/ikeikeikeike/go-sitemap-generator/stm"
+	"github.com/kapmahc/axe"
 	"github.com/kapmahc/sky/web"
-	negronilogrus "github.com/meatballhat/negroni-logrus"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"github.com/steinbacher/goose"
 	"github.com/urfave/cli"
-	"github.com/urfave/negroni"
 	"golang.org/x/text/language"
 	"golang.org/x/tools/blog/atom"
 )
@@ -252,25 +248,15 @@ func (p *Plugin) Console() []cli.Command {
 			Aliases: []string{"rt"},
 			Usage:   "print out all defined routes",
 			Action: func(*cli.Context) error {
-				rt := mux.NewRouter()
+				rt := axe.NewRouter()
 				web.Walk(func(en web.Plugin) error {
 					en.Mount(rt)
 					return nil
 				})
 				tpl := "%-16s %s\n"
 				fmt.Printf(tpl, "METHODS", "PATH")
-				return rt.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
-					pth, err := route.GetPathTemplate()
-					if err != nil {
-						return err
-					}
-					mts, err := route.GetMethods()
-					if err != nil {
-						return err
-					}
-					if len(mts) > 0 {
-						fmt.Printf(tpl, strings.Join(mts, ","), pth)
-					}
+				return rt.Walk(func(mtd, pth string, handlers ...axe.HandlerFunc) error {
+					fmt.Printf(tpl, mtd, pth)
 					return nil
 				})
 			},
@@ -607,14 +593,11 @@ func (p *Plugin) runWorker(c *cli.Context, _ *inject.Graph) error {
 }
 
 func (p *Plugin) runServer(c *cli.Context, _ *inject.Graph) error {
-	rt := mux.NewRouter()
+	theme := viper.GetString("server.theme")
+	rt := axe.NewRouter()
 
-	for k, v := range map[string]string{
-		"/assets/": path.Join("themes", viper.GetString("server.theme")),
-		"/3rd/":    "node_modules",
-	} {
-		rt.PathPrefix(k).Handler(http.StripPrefix(k, http.FileServer(http.Dir(v))))
-	}
+	rt.Static("/assets/", path.Join("themes", theme, "assets"))
+	rt.Static("/3rd/", path.Join("themes", theme, "node_modules"))
 
 	// --------------------
 	web.Walk(func(en web.Plugin) error {
@@ -626,13 +609,8 @@ func (p *Plugin) runServer(c *cli.Context, _ *inject.Graph) error {
 	if err != nil {
 		return err
 	}
-	// --------------------
-	ng := negroni.New()
-	ng.Use(negroni.NewRecovery())
-	ng.Use(negronilogrus.NewMiddleware())
-	ng.Use(lm)
+	rt.Use(lm)
 	// TODO current user?
-	ng.UseHandler(rt)
 
 	// ---------------
 	if c.Bool("worker") {
@@ -648,20 +626,9 @@ func (p *Plugin) runServer(c *cli.Context, _ *inject.Graph) error {
 	}
 
 	// ---------------
-
-	// hnd := cors.New(cors.Options{
-	// 	AllowedHeaders:   []string{"Authorization", "Cache-Control", "X-Requested-With"},
-	// 	AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodPatch},
-	// 	AllowCredentials: true,
-	// 	Debug:            !web.IsProduction(),
-	// }).Handler(rt)
-
-	hnd := csrf.Protect(
-		[]byte(viper.GetString("secrets.csrf")),
-		csrf.RequestHeader("Authenticity-Token"),
-		csrf.FieldName("authenticity_token"),
-		csrf.Secure(viper.GetBool("server.ssl")),
-	)(ng)
+	debug := !web.IsProduction()
+	views := filepath.Join("themes", theme, "views")
+	hnd := rt.Handler(views, debug)
 
 	port := viper.GetInt("server.port")
 	addr := fmt.Sprintf(":%d", port)

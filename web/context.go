@@ -5,9 +5,8 @@ import (
 	"net/http"
 	"strings"
 
-	validator "gopkg.in/go-playground/validator.v9"
-
 	"github.com/go-playground/form"
+	validator "gopkg.in/go-playground/validator.v9"
 )
 
 // H hash

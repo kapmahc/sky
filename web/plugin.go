@@ -2,16 +2,16 @@ package web
 
 import (
 	"github.com/facebookgo/inject"
-	"github.com/gorilla/mux"
 	"github.com/ikeikeikeike/go-sitemap-generator/stm"
-	"github.com/kapmahc/sky/web/job"
+	"github.com/kapmahc/axe"
+	"github.com/kapmahc/axe/job"
 	"github.com/urfave/cli"
 	"golang.org/x/tools/blog/atom"
 )
 
 // Plugin plugin
 type Plugin interface {
-	Mount(*mux.Router)
+	Mount(*axe.Router)
 	Open(*inject.Graph) error
 	Console() []cli.Command
 	Atom(lang string) ([]*atom.Entry, error)

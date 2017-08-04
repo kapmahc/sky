@@ -9,8 +9,8 @@ import (
 	"github.com/SermoDigital/jose/jws"
 	"github.com/SermoDigital/jose/jwt"
 	"github.com/google/uuid"
+	"github.com/kapmahc/axe/i18n"
 	"github.com/kapmahc/sky/web"
-	"github.com/kapmahc/sky/web/i18n"
 )
 
 const (

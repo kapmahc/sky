@@ -4,15 +4,15 @@ import (
 	"os"
 	"path"
 
-	"github.com/gorilla/mux"
 	"github.com/ikeikeikeike/go-sitemap-generator/stm"
 	"github.com/jinzhu/gorm"
+	"github.com/kapmahc/axe"
+	"github.com/kapmahc/axe/cache"
+	"github.com/kapmahc/axe/i18n"
+	"github.com/kapmahc/axe/job"
+	"github.com/kapmahc/axe/settings"
 	"github.com/kapmahc/sky/plugins/auth"
 	"github.com/kapmahc/sky/web"
-	"github.com/kapmahc/sky/web/cache"
-	"github.com/kapmahc/sky/web/i18n"
-	"github.com/kapmahc/sky/web/job"
-	"github.com/kapmahc/sky/web/settings"
 	"github.com/spf13/viper"
 	"github.com/unrolled/render"
 	"golang.org/x/tools/blog/atom"
@@ -30,7 +30,7 @@ type Plugin struct {
 }
 
 // Mount mount web points
-func (p *Plugin) Mount(*mux.Router) {
+func (p *Plugin) Mount(*axe.Router) {
 
 }
 

@@ -5,7 +5,7 @@ import (
 	"reflect"
 
 	"github.com/facebookgo/inject"
-	"github.com/kapmahc/sky/web/job"
+	"github.com/kapmahc/axe/job"
 	log "github.com/sirupsen/logrus"
 	logrus_syslog "github.com/sirupsen/logrus/hooks/syslog"
 	"github.com/spf13/viper"

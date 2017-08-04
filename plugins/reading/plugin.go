@@ -2,10 +2,10 @@ package reading
 
 import (
 	"github.com/facebookgo/inject"
-	"github.com/gorilla/mux"
 	"github.com/ikeikeikeike/go-sitemap-generator/stm"
+	"github.com/kapmahc/axe"
+	"github.com/kapmahc/axe/job"
 	"github.com/kapmahc/sky/web"
-	"github.com/kapmahc/sky/web/job"
 	"github.com/urfave/cli"
 	"golang.org/x/tools/blog/atom"
 )
@@ -15,7 +15,7 @@ type Plugin struct {
 }
 
 // Mount mount web points
-func (p *Plugin) Mount(*mux.Router) {
+func (p *Plugin) Mount(*axe.Router) {
 
 }
 
