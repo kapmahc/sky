@@ -27,7 +27,6 @@ export const detectLocale = () => {
         antd: null,
         data: dataZh,
         moment: 'zh-cn',
-        timeago: 'zh_CN',
       }
     case 'zh-Hant':
       return {
@@ -35,7 +34,6 @@ export const detectLocale = () => {
         antd: zhTWAntd,
         data: dataZh,
         moment: 'zh-tw',
-        timeago: 'zh_TW',
       }
     default:
       return {
@@ -43,7 +41,6 @@ export const detectLocale = () => {
         antd: enUSAntd,
         data: dataEn,
         moment: 'en',
-        timeago: 'en',
       }
   }
 }

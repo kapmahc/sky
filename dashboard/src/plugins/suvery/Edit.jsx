@@ -19,7 +19,7 @@ class WidgetF extends Component {
     const {setFieldsValue,getFieldDecorator} = this.props.form
     const {id} = this.props.match.params
     if (id) {
-      get(`/forms/${id}`).then((rst)=>{
+      get(`/suvery/${id}`).then((rst)=>{
         var data = {
           title: rst.title,
           body: rst.body,
@@ -86,10 +86,10 @@ class WidgetF extends Component {
          }))
        }
       //  console.log(data)
-       post(id ? `/forms/${id}` : '/forms', data)
+       post(id ? `/suvery/${id}` : '/suvery', data)
         .then((rst) => {
           message.success(formatMessage({id: 'messages.success'}))
-          push('/forms/manage')
+          push('/suvery/manage')
         }).catch(message.error)
      }
     });
@@ -108,7 +108,7 @@ class WidgetF extends Component {
           <Row>
             <Col sm={{offset:5}}>
               <h2>
-                <FormattedMessage id="forms.edit.field_item" values={{id:i+1}}/>
+                <FormattedMessage id="suvery.edit.field_item" values={{id:i+1}}/>
                 <Icon
                   className="dynamic-delete-button"
                   type="minus-circle-o"
@@ -185,8 +185,8 @@ class WidgetF extends Component {
 
     return (
       <Layout breads={[
-          {href: '/forms/manage', label: 'forms.manage.title'},
-          {href: id ? `/forms/edit/${id}` : '/forms/new', label: id ? 'buttons.edit': 'buttons.new'},
+          {href: '/suvery/manage', label: 'suvery.manage.title'},
+          {href: id ? `/suvery/edit/${id}` : '/suvery/new', label: id ? 'buttons.edit': 'buttons.new'},
         ]}>
         <Form onSubmit={this.handleSubmit}>
           <FormItem
@@ -228,7 +228,7 @@ class WidgetF extends Component {
           {fields}
 
           <FormItem {...tailFormItemLayout}>
-            <Button onClick={this.onAppend}><FormattedMessage id="forms.edit.add_field"/></Button>
+            <Button onClick={this.onAppend}><FormattedMessage id="suvery.edit.add_field"/></Button>
             &nbsp; &nbsp;
             <Button type="primary" htmlType="submit" size="large">
               <FormattedMessage id="buttons.submit"/>

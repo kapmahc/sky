@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {message, Input, Row, Form, Select, Radio, Col, Checkbox} from 'antd'
-import TimeAgo from 'timeago-react'
 import Markdown from 'react-markdown'
 import { connect } from 'react-redux'
 import {injectIntl, intlShape, FormattedMessage} from 'react-intl'
@@ -26,7 +25,7 @@ class WidgetF extends Component {
   componentDidMount () {
     this.loadItem(this.props.id)
   }
-  loadItem = (id) => get(`/forms/${id}`).then((rst)=>this.setState({item:rst})).catch(message.error)
+  loadItem = (id) => get(`/suvery/${id}`).then((rst)=>this.setState({item:rst})).catch(message.error)
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -53,10 +52,10 @@ class WidgetF extends Component {
       }
 
      if (!err) {
-       post(`/forms/${id}/${action}`, data)
+       post(`/suvery/${id}/${action}`, data)
         .then((rst) => {
           message.success(formatMessage({id: 'message.success'}))
-          push('/forms')
+          push('/suvery')
         }).catch(message.error)
      }
     });
@@ -202,7 +201,7 @@ class WidgetF extends Component {
         return (<Form onSubmit={this.handleSubmit}>
           <FormItem
             {...formItemLayout}
-            label={<FormattedMessage id="forms.cancel.who"/>}
+            label={<FormattedMessage id="suvery.cancel.who"/>}
             hasFeedback
           >
           {getFieldDecorator('who', {
@@ -225,11 +224,10 @@ class WidgetF extends Component {
     const {item} = this.state
 
     return (
-      <Layout breads={[{href: '/forms', label: 'forms.index.title'}, {href: `/forms/apply/${id}`, label: `buttons.${action}`}]}>
+      <Layout breads={[{href: '/suvery', label: 'suvery.index.title'}, {href: `/suvery/apply/${id}`, label: `buttons.${action}`}]}>
         <Row>
           <Col>
-            <h2>{item.title}</h2>
-            <TimeAgo datetime={item.updatedAt}/>
+            <h2>{item.title}</h2>            
             <Markdown source={item.body}/>
           </Col>
           <Col md={{span:12}}>

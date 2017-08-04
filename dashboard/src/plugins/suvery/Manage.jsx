@@ -6,13 +6,13 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
 
-import Layout from '../../../../layouts/Dashboard'
-import {get, _delete} from '../../../../ajax'
+import Layout from '../../layouts/Dashboard'
+import {get, _delete} from '../../ajax'
 
 class WidgetF extends Component {
   state = { items: []}
   componentDidMount () {
-    get('/notices').then(
+    get('/suvery').then(
       function (rst){
         this.setState({items: rst})
       }.bind(this)
@@ -20,7 +20,7 @@ class WidgetF extends Component {
   }
   handleRemove = (id) => {
     const {formatMessage} = this.props.intl
-    _delete(`/notices/${id}`)
+    _delete(`/suvery/${id}`)
       .then((rst)=>{
         message.success(formatMessage({id: 'messages.success'}))
         var items = this.state.items.filter((it) => it.id !== id)
@@ -32,20 +32,21 @@ class WidgetF extends Component {
     const {push} = this.props
     const columns = [
       {
-        title: <FormattedMessage id="attributes.updatedAt"/>,
-        dataIndex: 'updatedAt',
-        key: 'updatedAt',
+        title: <FormattedMessage id="attributes.deadline"/>,
+        dataIndex: 'deadline',
+        key: 'deadline',
       },
       {
         title: <FormattedMessage id="attributes.content"/>,
         key: 'content',
-        render: (text, record) => (<div>{record.type}<br/>{record.body}</div>)
+        render: (text, record) => (<div>{record.title}<br/>{record.type}<br/>{record.body}</div>),
       },
       {
         title: <FormattedMessage id="buttons.manage"/>,
         key: 'manage',
-        render: (text, record) =>(<span>          
-          <Button onClick={(e)=>push(`/admin/notices/edit/${record.id}`)} shape="circle" icon="edit" />
+        render: (text, record) =>(<span>
+          <Button onClick={(e)=>push(`/suvery/apply/${record.id}`)} shape="circle" icon="eye" />
+          <Button onClick={(e)=>push(`/suvery/edit/${record.id}`)} shape="circle" icon="edit" />
           <Popconfirm title={<FormattedMessage id="messages.are-you-sure"/>} onConfirm={(e) => this.handleRemove(record.id)}>
             <Button type="danger" shape="circle" icon="delete" />
           </Popconfirm>
@@ -54,10 +55,10 @@ class WidgetF extends Component {
     ]
 
     return (
-      <Layout admin breads={[{href: '/admin/notices', label: 'site.admin.notices.index.title'}]}>
+      <Layout admin breads={[{href: '/suvery/manage', label: 'suvery.manage.title'}]}>
         <Row>
           <Col>
-            <Button onClick={(e)=>push('/admin/notices/new')} type='primary' shape="circle" icon="plus" />
+            <Button onClick={(e)=>push('/suvery/new')} type='primary' shape="circle" icon="plus" />
             <Table bordered rowKey="id" columns={columns} dataSource={this.state.items} />
           </Col>
         </Row>

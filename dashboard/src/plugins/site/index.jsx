@@ -21,15 +21,6 @@ import AdminUsersIndex from './admin/users/Index'
 import AdminLocalesIndex from './admin/locales/Index'
 import AdminLocalesEdit from './admin/locales/Edit'
 
-import AdminPostsIndex from './admin/posts/Index'
-import AdminPostsEdit from './admin/posts/Edit'
-import PostsIndex from './posts/Index'
-import PostsShow from './posts/Show'
-
-import AdminNoticesIndex from './admin/notices/Index'
-import AdminNoticesEdit from './admin/notices/Edit'
-import NoticesIndex from './notices/Index'
-
 import AdminLinksIndex from './admin/links/Index'
 import AdminLinksEdit from './admin/links/Edit'
 
@@ -60,18 +51,7 @@ export default [
   <Route key="site.admin.locales.new" path="/admin/locales/new" component={AdminLocalesEdit}/>,
   <Route key="site.admin.locales.edit" path="/admin/locales/edit/:code" component={AdminLocalesEdit}/>,
   <Route key="site.admin.locales.index" path="/admin/locales" component={AdminLocalesIndex}/>,
-
-  <Route key="site.admin.posts.new" path="/admin/posts/new" component={AdminPostsEdit}/>,
-  <Route key="site.admin.posts.edit" path="/admin/posts/edit/:id" component={AdminPostsEdit}/>,
-  <Route key="site.admin.posts.index" path="/admin/posts" component={AdminPostsIndex}/>,
-  <Route key="site.posts.show" path="/posts/:name" component={PostsShow}/>,
-  <Route key="site.posts.index" path="/posts" component={PostsIndex}/>,
-
-  <Route key="site.admin.notices.new" path="/admin/notices/new" component={AdminNoticesEdit}/>,
-  <Route key="site.admin.notices.edit" path="/admin/notices/edit/:id" component={AdminNoticesEdit}/>,
-  <Route key="site.admin.notices.index" path="/admin/notices" component={AdminNoticesIndex}/>,
-  <Route key="site.notices.index" path="/notices" component={NoticesIndex}/>,
-
+  
   <Route key="site.admin.links.new" path="/admin/links/new" component={AdminLinksEdit}/>,
   <Route key="site.admin.links.edit" path="/admin/links/edit/:id" component={AdminLinksEdit}/>,
   <Route key="site.admin.links.index" path="/admin/links" component={AdminLinksIndex}/>,

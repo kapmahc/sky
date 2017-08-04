@@ -19,22 +19,22 @@ export default (user) => {
   console.log()
 
   // mall
-  var mall = {
-    icon: 'shopping-cart',
-    label: 'mall.profile.title',
-    items: [
-      {href: '/mall/self/addresses', label: 'mall.self.addresses.index.title'},
-    ]
-  }
-  if (user.admin){
-    mall.items.push({href: '/mall/self/tags', label: 'mall.self.tags.index.title'})
-  }
-
-  if (user.admin || process.env.REACT_APP_MALL_MODE === 'public') {
-    mall.items.push({href: '/mall/self/stores', label: 'mall.self.stores.index.title'})
-    mall.items.push({href: '/mall/self/products', label: 'mall.self.products.index.title'})
-  }
-  items.push(mall)
+  // var mall = {
+  //   icon: 'shopping-cart',
+  //   label: 'mall.profile.title',
+  //   items: [
+  //     {href: '/mall/self/addresses', label: 'mall.self.addresses.index.title'},
+  //   ]
+  // }
+  // if (user.admin){
+  //   mall.items.push({href: '/mall/self/tags', label: 'mall.self.tags.index.title'})
+  // }
+  //
+  // if (user.admin || process.env.REACT_APP_MALL_MODE === 'public') {
+  //   mall.items.push({href: '/mall/self/stores', label: 'mall.self.stores.index.title'})
+  //   mall.items.push({href: '/mall/self/products', label: 'mall.self.products.index.title'})
+  // }
+  // items.push(mall)
 
   // admin
   if(user.admin){
@@ -60,9 +60,9 @@ export default (user) => {
     })
     items.push({
       icon: 'question-circle-o',
-      label: 'forms.profile.title',
+      label: 'suvery.profile.title',
       items: [
-        {href: '/forms/manage', label: 'forms.manage.title'},
+        {href: '/suvery/manage', label: 'suvery.manage.title'},
       ]
     })
   }
