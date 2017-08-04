@@ -3,12 +3,12 @@ package auth
 import (
 	"net/http"
 
+	"github.com/kapmahc/axe"
 	"github.com/kapmahc/axe/i18n"
-	"github.com/kapmahc/sky/web"
 )
 
-func (p *Plugin) createAttachment(c *web.Context) (interface{}, error) {
-	user := c.Get(CurrentUser).(*User)
+func (p *Plugin) createAttachment(c *axe.Context) (interface{}, error) {
+	user := c.Payload[CurrentUser].(*User)
 
 	file, header, err := c.Request.FormFile("file")
 	if err != nil {
@@ -39,7 +39,7 @@ func (p *Plugin) createAttachment(c *web.Context) (interface{}, error) {
 	if err := p.Db.Create(&a).Error; err != nil {
 		return nil, err
 	}
-	return web.H{
+	return axe.H{
 		"url":    a.URL,
 		"uid":    a.ID,
 		"status": "success",
@@ -50,7 +50,7 @@ type fmAttachmentEdit struct {
 	Title string `json:"title" binding:"required,max=255"`
 }
 
-func (p *Plugin) updateAttachment(c *web.Context) (interface{}, error) {
+func (p *Plugin) updateAttachment(c *axe.Context) (interface{}, error) {
 	a, err := p.canEditAttachment(c)
 	if err != nil {
 		return nil, err
@@ -66,7 +66,7 @@ func (p *Plugin) updateAttachment(c *web.Context) (interface{}, error) {
 	return a, nil
 }
 
-func (p *Plugin) destroyAttachment(c *web.Context) (interface{}, error) {
+func (p *Plugin) destroyAttachment(c *axe.Context) (interface{}, error) {
 	a, err := p.canEditAttachment(c)
 	if err != nil {
 		return nil, err
@@ -80,7 +80,7 @@ func (p *Plugin) destroyAttachment(c *web.Context) (interface{}, error) {
 	return a, nil
 }
 
-func (p *Plugin) showAttachment(c *web.Context) (interface{}, error) {
+func (p *Plugin) showAttachment(c *axe.Context) (interface{}, error) {
 	var a Attachment
 	if err := p.Db.Where("id = ?", c.Params["id"]).First(&a).Error; err != nil {
 		return nil, err
@@ -88,9 +88,9 @@ func (p *Plugin) showAttachment(c *web.Context) (interface{}, error) {
 	return &a, nil
 }
 
-func (p *Plugin) indexAttachments(c *web.Context) (interface{}, error) {
-	user := c.Get(CurrentUser).(*User)
-	isa := c.Get(IsAdmin).(bool)
+func (p *Plugin) indexAttachments(c *axe.Context) (interface{}, error) {
+	user := c.Payload[CurrentUser].(*User)
+	isa := c.Payload[IsAdmin].(bool)
 	var items []Attachment
 	qry := p.Db
 	if !isa {
@@ -102,16 +102,16 @@ func (p *Plugin) indexAttachments(c *web.Context) (interface{}, error) {
 	return items, nil
 }
 
-func (p *Plugin) canEditAttachment(c *web.Context) (*Attachment, error) {
-	user := c.Get(CurrentUser).(*User)
-	lng := c.Get(i18n.LOCALE).(string)
+func (p *Plugin) canEditAttachment(c *axe.Context) (*Attachment, error) {
+	user := c.Payload[CurrentUser].(*User)
+	lng := c.Payload[i18n.LOCALE].(string)
 
 	var a Attachment
 	if err := p.Db.Where("id = ?", c.Params["id"]).First(&a).Error; err != nil {
 		return nil, err
 	}
 
-	if user.ID == a.UserID || c.Get(IsAdmin).(bool) {
+	if user.ID == a.UserID || c.Payload[IsAdmin].(bool) {
 		return &a, nil
 	}
 

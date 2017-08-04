@@ -4,8 +4,8 @@ import (
 	"time"
 
 	"github.com/SermoDigital/jose/jws"
+	"github.com/kapmahc/axe"
 	"github.com/kapmahc/axe/i18n"
-	"github.com/kapmahc/sky/web"
 )
 
 type fmSignUp struct {
@@ -15,8 +15,8 @@ type fmSignUp struct {
 	PasswordConfirmation string `json:"passwordConfirmation" binding:"eqfield=Password"`
 }
 
-func (p *Plugin) postUsersSignUp(c *web.Context) (interface{}, error) {
-	l := c.Get(i18n.LOCALE).(string)
+func (p *Plugin) postUsersSignUp(c *axe.Context) (interface{}, error) {
+	l := c.Payload[i18n.LOCALE].(string)
 	var fm fmSignUp
 	if err := c.Bind(&fm); err != nil {
 		return nil, err
@@ -42,7 +42,7 @@ func (p *Plugin) postUsersSignUp(c *web.Context) (interface{}, error) {
 	p.Dao.Log(user.ID, c.ClientIP(), p.I18n.T(l, "auth.logs.user.sign-up"))
 	p.sendEmail(l, user, actConfirm)
 
-	return web.H{}, nil
+	return axe.H{}, nil
 }
 
 type fmSignIn struct {
@@ -51,8 +51,8 @@ type fmSignIn struct {
 	RememberMe bool   `json:"rememberMe"`
 }
 
-func (p *Plugin) postUsersSignIn(c *web.Context) (interface{}, error) {
-	l := c.Get(i18n.LOCALE).(string)
+func (p *Plugin) postUsersSignIn(c *axe.Context) (interface{}, error) {
+	l := c.Payload[i18n.LOCALE].(string)
 	var fm fmSignIn
 	if err := c.Bind(&fm); err != nil {
 		return nil, err
@@ -71,7 +71,7 @@ func (p *Plugin) postUsersSignIn(c *web.Context) (interface{}, error) {
 		return nil, err
 	}
 
-	return web.H{
+	return axe.H{
 		"token": string(tkn),
 		"name":  user.Name,
 	}, nil
@@ -81,8 +81,8 @@ type fmEmail struct {
 	Email string `json:"email" binding:"required,email"`
 }
 
-func (p *Plugin) getUsersConfirm(c *web.Context) (interface{}, error) {
-	l := c.Get(i18n.LOCALE).(string)
+func (p *Plugin) getUsersConfirm(c *axe.Context) (interface{}, error) {
+	l := c.Payload[i18n.LOCALE].(string)
 	user, err := p.parseToken(l, c.Params["token"], actConfirm)
 	if err != nil {
 		return nil, err
@@ -93,11 +93,11 @@ func (p *Plugin) getUsersConfirm(c *web.Context) (interface{}, error) {
 	p.Db.Model(user).Update("confirmed_at", time.Now())
 	p.Dao.Log(user.ID, c.ClientIP(), p.I18n.T(l, "auth.logs.user.confirm"))
 
-	return web.H{}, nil
+	return axe.H{}, nil
 }
 
-func (p *Plugin) postUsersConfirm(c *web.Context) (interface{}, error) {
-	l := c.Get(i18n.LOCALE).(string)
+func (p *Plugin) postUsersConfirm(c *axe.Context) (interface{}, error) {
+	l := c.Payload[i18n.LOCALE].(string)
 	var fm fmEmail
 	if err := c.Bind(&fm); err != nil {
 		return nil, err
@@ -112,11 +112,11 @@ func (p *Plugin) postUsersConfirm(c *web.Context) (interface{}, error) {
 	}
 
 	p.sendEmail(l, user, actConfirm)
-	return web.H{}, nil
+	return axe.H{}, nil
 }
 
-func (p *Plugin) getUsersUnlock(c *web.Context) (interface{}, error) {
-	l := c.Get(i18n.LOCALE).(string)
+func (p *Plugin) getUsersUnlock(c *axe.Context) (interface{}, error) {
+	l := c.Payload[i18n.LOCALE].(string)
 	user, err := p.parseToken(l, c.Params["token"], actUnlock)
 	if err != nil {
 		return nil, err
@@ -130,11 +130,11 @@ func (p *Plugin) getUsersUnlock(c *web.Context) (interface{}, error) {
 	}
 	p.Dao.Log(user.ID, c.ClientIP(), p.I18n.T(l, "auth.logs.user.unlock"))
 
-	return web.H{}, nil
+	return axe.H{}, nil
 }
 
-func (p *Plugin) postUsersUnlock(c *web.Context) (interface{}, error) {
-	l := c.Get(i18n.LOCALE).(string)
+func (p *Plugin) postUsersUnlock(c *axe.Context) (interface{}, error) {
+	l := c.Payload[i18n.LOCALE].(string)
 
 	var fm fmEmail
 	if err := c.Bind(&fm); err != nil {
@@ -148,11 +148,11 @@ func (p *Plugin) postUsersUnlock(c *web.Context) (interface{}, error) {
 		return nil, p.I18n.E(l, "auth.errors.user.not-lock")
 	}
 	p.sendEmail(l, user, actUnlock)
-	return web.H{}, nil
+	return axe.H{}, nil
 }
 
-func (p *Plugin) postUsersForgotPassword(c *web.Context) (interface{}, error) {
-	l := c.Get(i18n.LOCALE).(string)
+func (p *Plugin) postUsersForgotPassword(c *axe.Context) (interface{}, error) {
+	l := c.Payload[i18n.LOCALE].(string)
 	var fm fmEmail
 	if err := c.Bind(&fm); err != nil {
 		return nil, err
@@ -164,7 +164,7 @@ func (p *Plugin) postUsersForgotPassword(c *web.Context) (interface{}, error) {
 	}
 	p.sendEmail(l, user, actResetPassword)
 
-	return web.H{}, nil
+	return axe.H{}, nil
 }
 
 type fmResetPassword struct {
@@ -173,8 +173,8 @@ type fmResetPassword struct {
 	PasswordConfirmation string `json:"passwordConfirmation" binding:"eqfield=Password"`
 }
 
-func (p *Plugin) postUsersResetPassword(c *web.Context) (interface{}, error) {
-	l := c.Get(i18n.LOCALE).(string)
+func (p *Plugin) postUsersResetPassword(c *axe.Context) (interface{}, error) {
+	l := c.Payload[i18n.LOCALE].(string)
 
 	var fm fmResetPassword
 	if err := c.Bind(&fm); err != nil {
@@ -187,20 +187,20 @@ func (p *Plugin) postUsersResetPassword(c *web.Context) (interface{}, error) {
 	p.Db.Model(user).Update("password", p.Hmac.Sum([]byte(fm.Password)))
 	p.Dao.Log(user.ID, c.ClientIP(), p.I18n.T(l, "auth.logs.user.reset-password"))
 
-	return web.H{}, nil
+	return axe.H{}, nil
 }
 
-func (p *Plugin) deleteUsersSignOut(c *web.Context) (interface{}, error) {
-	l := c.Get(i18n.LOCALE).(string)
-	user := c.Get(CurrentUser).(*User)
+func (p *Plugin) deleteUsersSignOut(c *axe.Context) (interface{}, error) {
+	l := c.Payload[i18n.LOCALE].(string)
+	user := c.Payload[CurrentUser].(*User)
 	p.Dao.Log(user.ID, c.ClientIP(), p.I18n.T(l, "auth.logs.user.sign-out"))
 
-	return web.H{}, nil
+	return axe.H{}, nil
 }
 
-func (p *Plugin) getUsersInfo(c *web.Context) (interface{}, error) {
-	user := c.Get(CurrentUser).(*User)
-	return web.H{"name": user.Name, "email": user.Email}, nil
+func (p *Plugin) getUsersInfo(c *axe.Context) (interface{}, error) {
+	user := c.Payload[CurrentUser].(*User)
+	return axe.H{"name": user.Name, "email": user.Email}, nil
 }
 
 type fmInfo struct {
@@ -209,8 +209,8 @@ type fmInfo struct {
 	// Logo string `json:"logo" binding:"max=255"`
 }
 
-func (p *Plugin) postUsersInfo(c *web.Context) (interface{}, error) {
-	user := c.Get(CurrentUser).(*User)
+func (p *Plugin) postUsersInfo(c *axe.Context) (interface{}, error) {
+	user := c.Payload[CurrentUser].(*User)
 	var fm fmInfo
 	if err := c.Bind(&fm); err != nil {
 		return nil, err
@@ -223,7 +223,7 @@ func (p *Plugin) postUsersInfo(c *web.Context) (interface{}, error) {
 	}).Error; err != nil {
 		return nil, err
 	}
-	return web.H{}, nil
+	return axe.H{}, nil
 }
 
 type fmChangePassword struct {
@@ -232,10 +232,10 @@ type fmChangePassword struct {
 	PasswordConfirmation string `json:"passwordConfirmation" binding:"eqfield=NewPassword"`
 }
 
-func (p *Plugin) postUsersChangePassword(c *web.Context) (interface{}, error) {
-	l := c.Get(i18n.LOCALE).(string)
+func (p *Plugin) postUsersChangePassword(c *axe.Context) (interface{}, error) {
+	l := c.Payload[i18n.LOCALE].(string)
 
-	user := c.Get(CurrentUser).(*User)
+	user := c.Payload[CurrentUser].(*User)
 	var fm fmChangePassword
 	if err := c.Bind(&fm); err != nil {
 		return nil, err
@@ -248,11 +248,11 @@ func (p *Plugin) postUsersChangePassword(c *web.Context) (interface{}, error) {
 		return nil, err
 	}
 
-	return web.H{}, nil
+	return axe.H{}, nil
 }
 
-func (p *Plugin) getUsersLogs(c *web.Context) (interface{}, error) {
-	user := c.Get(CurrentUser).(*User)
+func (p *Plugin) getUsersLogs(c *axe.Context) (interface{}, error) {
+	user := c.Payload[CurrentUser].(*User)
 	var items []Log
 	if err := p.Db.
 		Select([]string{"id", "ip", "message", "created_at"}).

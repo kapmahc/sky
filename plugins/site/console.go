@@ -600,18 +600,19 @@ func (p *Plugin) runServer(c *cli.Context, _ *inject.Graph) error {
 	rt.Static("/3rd/", path.Join("themes", theme, "node_modules"))
 
 	// --------------------
-	web.Walk(func(en web.Plugin) error {
-		en.Mount(rt)
-		return nil
-	})
-	// --------------------
 	lm, err := p.I18n.Middleware()
 	if err != nil {
 		return err
 	}
-	rt.Use(lm)
-	// TODO current user?
-
+	rt.Use(
+		lm,
+		p.Jwt.CurrentUserMiddleware,
+	)
+	// --------------------
+	web.Walk(func(en web.Plugin) error {
+		en.Mount(rt)
+		return nil
+	})
 	// ---------------
 	if c.Bool("worker") {
 		log.Info("start worker")

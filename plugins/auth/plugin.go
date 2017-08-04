@@ -11,24 +11,20 @@ import (
 	"github.com/kapmahc/axe/settings"
 	"github.com/kapmahc/axe/uploader"
 	"github.com/kapmahc/sky/web"
-	"github.com/unrolled/render"
 	"golang.org/x/tools/blog/atom"
 )
 
 // Plugin plugin
 type Plugin struct {
-	Dao                  *Dao                  `inject:""`
-	Jwt                  *Jwt                  `inject:""`
-	Db                   *gorm.DB              `inject:""`
-	I18n                 *i18n.I18n            `inject:""`
-	Cache                *cache.Cache          `inject:""`
-	Render               *render.Render        `inject:""`
-	Uploader             uploader.Store        `inject:""`
-	Hmac                 *security.Hmac        `inject:""`
-	Server               *job.Server           `inject:""`
-	Settings             *settings.Settings    `inject:""`
-	Wrapper              *web.Wrapper          `inject:""`
-	MustSignInMiddleware *MustSignInMiddleware `inject:""`
+	Dao      *Dao               `inject:""`
+	Jwt      *Jwt               `inject:""`
+	Db       *gorm.DB           `inject:""`
+	I18n     *i18n.I18n         `inject:""`
+	Cache    *cache.Cache       `inject:""`
+	Uploader uploader.Store     `inject:""`
+	Hmac     *security.Hmac     `inject:""`
+	Server   *job.Server        `inject:""`
+	Settings *settings.Settings `inject:""`
 }
 
 // Open open beans

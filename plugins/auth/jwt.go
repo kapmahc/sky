@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"context"
 	"net/http"
 	"time"
 
@@ -9,8 +8,8 @@ import (
 	"github.com/SermoDigital/jose/jws"
 	"github.com/SermoDigital/jose/jwt"
 	"github.com/google/uuid"
+	"github.com/kapmahc/axe"
 	"github.com/kapmahc/axe/i18n"
-	"github.com/kapmahc/sky/web"
 )
 
 const (
@@ -19,18 +18,17 @@ const (
 	// UID uid key
 	UID = "uid"
 	// CurrentUser current-user key
-	CurrentUser = web.K("currentUser")
+	CurrentUser = "currentUser"
 	// IsAdmin is-admin key
-	IsAdmin = web.K("isAdmin")
+	IsAdmin = "isAdmin"
 )
 
 //Jwt jwt helper
 type Jwt struct {
-	Key     []byte               `inject:"jwt.key"`
-	Method  crypto.SigningMethod `inject:"jwt.method"`
-	Dao     *Dao                 `inject:""`
-	I18n    *i18n.I18n           `inject:""`
-	Wrapper *web.Wrapper         `inject:""`
+	Key    []byte               `inject:"jwt.key"`
+	Method crypto.SigningMethod `inject:"jwt.method"`
+	Dao    *Dao                 `inject:""`
+	I18n   *i18n.I18n           `inject:""`
 }
 
 //Validate check jwt
@@ -69,8 +67,8 @@ func (p *Jwt) Sum(cm jws.Claims, exp time.Duration) ([]byte, error) {
 	return jt.Serialize(p.Key)
 }
 
-func (p *Jwt) getUserFromRequest(c *web.Context) (*User, error) {
-	lng := c.Get(i18n.LOCALE).(string)
+func (p *Jwt) getUserFromRequest(c *axe.Context) (*User, error) {
+	lng := c.Payload[i18n.LOCALE].(string)
 	cm, err := p.parse(c.Request)
 	if err != nil {
 		return nil, err
@@ -89,13 +87,32 @@ func (p *Jwt) getUserFromRequest(c *web.Context) (*User, error) {
 }
 
 // CurrentUserMiddleware current-user middleware
-func (p *Jwt) CurrentUserMiddleware(wrt http.ResponseWriter, req *http.Request, next http.HandlerFunc) {
-	if user, err := p.getUserFromRequest(p.Wrapper.Context(wrt, req)); err == nil {
-		ctx := req.Context()
-		ctx = context.WithValue(ctx, CurrentUser, user)
-		ctx = context.WithValue(ctx, IsAdmin, p.Dao.Is(user.ID, RoleAdmin))
-		next(wrt, req.WithContext(ctx))
+func (p *Jwt) CurrentUserMiddleware(c *axe.Context) {
+	if user, err := p.getUserFromRequest(c); err == nil {
+		c.Payload[CurrentUser] = user
+		c.Payload[RoleAdmin] = p.Dao.Is(user.ID, RoleAdmin)
+	}
+	c.Next()
+}
+
+// MustSignInMiddleware must sign-in
+func (p *Jwt) MustSignInMiddleware(c *axe.Context) {
+	lng := c.Payload[i18n.LOCALE].(string)
+
+	if _, ok := c.Payload[CurrentUser]; !ok {
+		c.Abort(http.StatusForbidden, p.I18n.E(lng, "auth.errors.please-sign-in"))
 		return
 	}
-	next(wrt, req)
+	c.Next()
+}
+
+// MustAdminMiddleware must has admin role
+func (p *Jwt) MustAdminMiddleware(c *axe.Context) {
+	lng := c.Payload[i18n.LOCALE].(string)
+
+	if is, ok := c.Payload[IsAdmin]; !ok || !is.(bool) {
+		c.Abort(http.StatusForbidden, p.I18n.E(lng, "errors.not-allow"))
+		return
+	}
+	c.Next()
 }

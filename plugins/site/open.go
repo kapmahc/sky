@@ -8,7 +8,6 @@ import (
 	"github.com/SermoDigital/jose/crypto"
 	"github.com/facebookgo/inject"
 	_redis "github.com/garyburd/redigo/redis"
-	"github.com/gorilla/sessions"
 	"github.com/jinzhu/gorm"
 	"github.com/kapmahc/axe/cache/redis"
 	i_orm "github.com/kapmahc/axe/i18n/orm"
@@ -60,10 +59,6 @@ func (p *Plugin) Open(g *inject.Graph) error {
 		&inject.Object{Value: db},
 		&inject.Object{Value: p.openRedis()},
 		&inject.Object{Value: up},
-		&inject.Object{Value: web.NewWrapper()},
-		&inject.Object{Value: p.openRender(viper.GetString("server.theme"))},
-		&inject.Object{Value: sessions.NewCookieStore([]byte(viper.GetString("secrets.cookie")))},
-
 		&inject.Object{Value: &redis.Store{}},
 		&inject.Object{Value: rabbitmq.New(
 			web.Name(),
