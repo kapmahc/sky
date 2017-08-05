@@ -9,6 +9,10 @@ import Cookie from 'js-cookie'
 import dataEn from 'react-intl/locale-data/en'
 import dataZh from 'react-intl/locale-data/zh'
 
+import enUS from './locales/en-US'
+import zhHans from './locales/zh-Hans'
+import zhHant from './locales/zh-Hant'
+
 
 const KEY = 'locale'
 
@@ -27,6 +31,7 @@ export const detectLocale = () => {
         antd: null,
         data: dataZh,
         moment: 'zh-cn',
+        messages: zhHans,
       }
     case 'zh-Hant':
       return {
@@ -34,6 +39,7 @@ export const detectLocale = () => {
         antd: zhTWAntd,
         data: dataZh,
         moment: 'zh-tw',
+        messages: zhHant,
       }
     default:
       return {
@@ -41,6 +47,7 @@ export const detectLocale = () => {
         antd: enUSAntd,
         data: dataEn,
         moment: 'en',
+        messages: enUS,
       }
   }
 }

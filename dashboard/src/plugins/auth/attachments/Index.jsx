@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import CopyToClipboard from 'react-copy-to-clipboard'
 
 import Layout from '../../../layouts/Dashboard'
-import {get, api, _delete} from '../../../ajax'
+import {get, _delete} from '../../../ajax'
 import {TOKEN} from '../../../constants'
 
 class WidgetF extends Component {
@@ -45,7 +45,7 @@ class WidgetF extends Component {
   render() {
     const {push} = this.props
     const props = {
-      action: api('/upload'),
+      action: '/api/attachments',
       onChange: this.handleChange,
       multiple: true,
       withCredentials: true,

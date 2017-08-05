@@ -62,7 +62,7 @@ class WidgetF extends Component {
       }
     }
     if (info.languages.length === 0) {
-      get('/site/info')
+      get('/api/site/info')
         .then(rst => {
           refresh(rst)
           document.title = `${rst.subTitle} | ${rst.title}`

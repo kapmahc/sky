@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "/",
+  "proxy": "http://localhost:8080",
   "dependencies": {
     "antd": "^2.12.3",
     "draft-js": "^0.10.1",

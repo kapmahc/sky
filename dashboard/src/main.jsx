@@ -31,8 +31,7 @@ const store = createStore(
 
 const main = (id, user) => {
   moment.locale(user.moment)
-  addLocaleData(user.data)
-
+  addLocaleData(user.data)  
   ReactDOM.render(
     (<Provider store={store}>
       <LocaleProvider locale={user.antd}>
