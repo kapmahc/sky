@@ -15,7 +15,7 @@ import reducers from './reducers'
 import routes from './plugins'
 
 // Create a history of your choosing (we're using a browser history in this case)
-const history = createHistory()
+const history = createHistory({basename: '/my'})
 // Build the middleware for intercepting and dispatching navigation actions
 const middleware = routerMiddleware(history)
 // Add the reducer to your store on the `router` key
@@ -31,7 +31,7 @@ const store = createStore(
 
 const main = (id, user) => {
   moment.locale(user.moment)
-  addLocaleData(user.data)  
+  addLocaleData(user.data)
   ReactDOM.render(
     (<Provider store={store}>
       <LocaleProvider locale={user.antd}>

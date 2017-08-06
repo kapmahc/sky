@@ -8,6 +8,8 @@ func (p *Plugin) Mount(rt *axe.Router) {
 		return p.I18n.T(lang, code, args...)
 	})
 
+	// --------------------
+
 	ag := axe.NewRouter()
 	ag.Use(p.Jwt.MustAdminMiddleware)
 	ag.GET("/locales/{code}", p.showAdminLocale)
@@ -52,4 +54,7 @@ func (p *Plugin) Mount(rt *axe.Router) {
 		nil,
 		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.destroyLink},
 	)
+
+	// -----------------
+	rt.GET("/", p.getHome)
 }
