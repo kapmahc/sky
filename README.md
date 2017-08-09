@@ -2,38 +2,31 @@
 
 A complete open source e-commerce solution by Go language and React(STILL IN DEVELOPMENT).
 
-## Install nodejs
+## Usage
 
 ```bash
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | zsh
-nvm install node
-nvm alias default node
+go get github.com/kapmahc/sky
+cd $GOPATH/src/github.com/kapmahc/sky
+cd desktop && npm install
 ```
 
-## Install go
-
-```bash
-zsh < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
-gvm install go1.9rc1 -B
-gvm use go1.9rc1 --default
-```
-
-## Devleopment
+### Devleopment
 
 ```bash
 cd $GOPATH/src/github.com/kapmahc/sky
+go run main.go g c # generate config.toml
 ./run.sh # start backend server
-cd dashboard && npm start # start frontend server
+cd front && npm start # start frontend server
 ```
 
-will listen at <http://localhost:8080>
+will listen at <http://localhost:3000>
 
-## Deployment
+### Deployment
 
 ```bash
 cd $GOPATH/src/github.com/kapmahc/sky
 make
-ls
+ls dist.tar.bz2
 ```
 
 ## Create database
