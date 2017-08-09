@@ -24,9 +24,9 @@ func (p *Plugin) getFormReport(c *axe.Context) {
 	}
 	lang := c.Payload[i18n.LOCALE].(string)
 	headers := []axe.H{
-		axe.H{"name": "username", "label": p.I18n.T(lang, "forms.attributes.record.username")},
-		axe.H{"name": "email", "label": p.I18n.T(lang, "forms.attributes.record.email")},
-		axe.H{"name": "phone", "label": p.I18n.T(lang, "forms.attributes.record.phone")},
+		axe.H{"name": "username", "label": p.I18n.T(lang, "survey.attributes.record.username")},
+		axe.H{"name": "email", "label": p.I18n.T(lang, "survey.attributes.record.email")},
+		axe.H{"name": "phone", "label": p.I18n.T(lang, "survey.attributes.record.phone")},
 	}
 	for _, f := range item.Fields {
 		headers = append(headers, axe.H{"name": f.Name, "label": f.Label})

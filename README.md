@@ -16,7 +16,7 @@ cd desktop && npm install
 cd $GOPATH/src/github.com/kapmahc/sky
 go run main.go g c # generate config.toml
 ./run.sh # start backend server
-cd front && npm start # start frontend server
+cd dashboard && npm start # start frontend server
 ```
 
 will listen at <http://localhost:3000>

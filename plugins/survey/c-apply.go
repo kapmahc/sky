@@ -42,7 +42,7 @@ func (p *Plugin) postFormApply(c *axe.Context) {
 	}
 	lng := c.Payload[i18n.LOCALE].(string)
 	if item.Expire() {
-		c.Abort(http.StatusInternalServerError, p.I18n.E(lng, "forms.errors.expired"))
+		c.Abort(http.StatusInternalServerError, p.I18n.E(lng, "survey.errors.expired"))
 		return
 	}
 	var count int
@@ -51,7 +51,7 @@ func (p *Plugin) postFormApply(c *axe.Context) {
 		return
 	}
 	if count > 0 {
-		c.Abort(http.StatusInternalServerError, p.I18n.E(lng, "forms.errors.already-apply"))
+		c.Abort(http.StatusInternalServerError, p.I18n.E(lng, "survey.errors.already-apply"))
 		return
 	}
 

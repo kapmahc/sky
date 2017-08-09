@@ -27,12 +27,12 @@ func (p *Plugin) _sendEmail(lng string, form *Form, record *Record, act string) 
 		Apply:  fmt.Sprintf("/forms/apply/%d", form.ID),
 		Cancel: fmt.Sprintf("/forms/cancel/%d", form.ID),
 	}
-	subject, err := p.I18n.F(lng, fmt.Sprintf("forms.emails.%s.subject", act), obj)
+	subject, err := p.I18n.F(lng, fmt.Sprintf("survey.emails.%s.subject", act), obj)
 	if err != nil {
 		log.Error(err)
 		return
 	}
-	body, err := p.I18n.F(lng, fmt.Sprintf("forms.emails.%s.body", act), obj)
+	body, err := p.I18n.F(lng, fmt.Sprintf("survey.emails.%s.body", act), obj)
 	if err != nil {
 		log.Error(err)
 		return

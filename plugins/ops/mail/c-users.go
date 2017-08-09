@@ -157,7 +157,7 @@ func (p *Plugin) postChangeUserPassword(c *axe.Context) {
 		return
 	}
 	if !user.ChkPassword(fm.CurrentPassword) {
-		c.Abort(http.StatusInternalServerError, p.I18n.E(lng, "ops.mail.errors.user.email-password-not-match"))
+		c.Abort(http.StatusInternalServerError, p.I18n.E(lng, "errors.user.email-password-not-match"))
 		return
 	}
 	if err := user.SetPassword(fm.NewPassword); err != nil {

@@ -1,117 +1,16 @@
-languages:
-  en-US: English
-  zh-Hans: 简体中文
-  zh-Hant: 繁體中文
-currencies:
-  rmb: 人民币
-  usd: 美元
-messages:
-  are-you-sure: 你确定么？
-  success: 操作成功
-  fail: 操作失败
-buttons:
-  submit: 提交
-  manage: 管理
-  edit: 编辑
-  new: 新建
-  add: 添加
-  remove: 删除
-  upload: 上传
-  confirm: 确认
-  apply: 申请
-  cancel: 取消
-  ok: 确定
-  close: 关闭
-  show: 展示
-  view: 查看
-  search: 搜索
-  reset: 重写
-attributes:
-  email: 邮箱
-  user: 用户
-  username: 姓名
-  phone: 电话号码
-  password: 密码
-  currentPassword: 当前密码
-  newPassword: 新密码
-  passwordConfirmation: 密码确认
-  createdAt: 创建时间
-  updatedAt: 修改时间
-  description: 说明信息
-  content: 内容
-  size: 大小
-  name: 名称
-  host: 主机
-  port: 端口
-  ssl: 启用SSL?
-  title: 标题
-  body: 正文
-  logo: 图标
-  sortOrder: 序号
-  loc: 位置
-  href: 地址
-  label: 标签
-  summary: 摘要
-  action: 动作
-  deadline: 截止日期
-  value: 值
-  type: 类型
-  currency: 货币
-  address: 地址
-helps:
-  email: 我们不会公开您的电子邮箱
-  can-markdown: 支持MARKDOWN格式
-  no-match: 页面不存在
-  please-sign-in-first: 请先登录
-  not-empty: 不能为空
-  password: 密码应该在6至32位之间
-  passwordConfirmation: 两次密码输入应一致
-  not-valid-email: 邮箱格式不正确
 errors:
+  user:
+    email-password-not-match: 邮箱和密码不匹配
+    not-available: 用户不可用
   in-use: 正在被使用
   forbidden: 禁止的访问
   bad-action: 错误的操作
   not-allow: 不允许
-personal-bar:
-  sign-in-or-up: 注册/登录
-  welcome: 欢迎你, %s
-  sign-out: 安全退出
-footer:
-  other-languages: 本站其他语言版本
 auth:
-  profile:
-    title: 账户信息
-  attachments:
-    index:
-      title: 文件管理
-  users:
-    logs:
-      title: 操作日志
-    info:
-      title: 个人信息
-    change-password:
-      title: 修改密码
-    sign-in:
-      title: 登录
-    sign-up:
-      title: 新用户注册
-    forgot-password:
-      title: 忘记密码？
-      success: 你将会收到一封邮件来重置密码
-    confirm:
-      title: 没有收到激活邮件？
-      success: 你将会收到一封邮件来激活账户
-    unlock:
-      title: 没有收到解锁邮件？
-      success: 你将会收到一封邮件来解锁账户
-    reset-password:
-      title: 重置密码
-      success: 重置密码成功
   errors:
     please-sign-in: 请先登录
     user:
       email-already-exist: 邮箱已存在
-      email-password-not-match: 邮箱和密码不匹配
       already-confirm: 已经被激活
       not-lock: 没有被锁定
       bad-password: 错误的密码
@@ -139,9 +38,6 @@ auth:
     reset-password:
       subject: 重置密码信息
       body: 有人要求更改密码的链接，您可以通过下面的链接更改密码。 <br/> <a href="{{.Home}}/users/reset-password/{{.Token}}">重置密码</a><br/>如果您没有要求请求更改密码，请忽略此电子邮件。<br/>如果你没有访问上面的链接并更改密码，你的密码就不会被改变。
-site:
-  install:
-    title: 安装
 survey:
   emails:
     apply:
@@ -153,22 +49,3 @@ survey:
   errors:
     expired: 已过期
     already-apply: 已经申请
-  attributes:
-    record:
-      email: 邮箱
-      phone: 电话号码
-      username: 姓名
-ops:
-  mail:
-    errors:
-      user:
-        email-password-not-match: 邮箱和密码不匹配
-  vpn:
-    errors:
-      user:
-        not-available: 用户不可用
-        email-password-not-match: 邮箱和密码不匹配
-mall:
-  logs:
-    apply-manager: 添加管理员[%s]@商店[%d]
-    deny-manager: 删除管理员[%s]@商店[%d]

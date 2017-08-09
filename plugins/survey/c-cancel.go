@@ -26,7 +26,7 @@ func (p *Plugin) postFormCancel(c *axe.Context) {
 	}
 
 	if item.Expire() {
-		c.Abort(http.StatusInternalServerError, p.I18n.E(lng, "forms.errors.expired"))
+		c.Abort(http.StatusInternalServerError, p.I18n.E(lng, "survey.errors.expired"))
 		return
 	}
 	var record Record

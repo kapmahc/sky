@@ -25,7 +25,7 @@ func (p *Dao) SignIn(lang, email, password, ip string) (*User, error) {
 	}
 	if !p.Hmac.Chk([]byte(password), user.Password) {
 		p.Log(user.ID, ip, p.I18n.T(lang, "auth.logs.user.sign-in.failed"))
-		return nil, p.I18n.E(lang, "auth.errors.user.email-password-not-match")
+		return nil, p.I18n.E(lang, "errors.user.email-password-not-match")
 	}
 
 	if !user.IsConfirm() {
