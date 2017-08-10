@@ -24,10 +24,10 @@ func (p *Plugin) indexArticles(c *axe.Context) {
 }
 
 type fmArticle struct {
-	Title   string   `json:"title" binding:"required,max=255"`
-	Summary string   `json:"summary" binding:"required,max=500"`
-	Type    string   `json:"type" binding:"required,max=8"`
-	Body    string   `json:"body" binding:"required,max=2000"`
+	Title   string   `json:"title" validate:"required,max=255"`
+	Summary string   `json:"summary" validate:"required,max=500"`
+	Type    string   `json:"type" validate:"required,max=8"`
+	Body    string   `json:"body" validate:"required,max=2000"`
 	Tags    []string `json:"tags"`
 }
 

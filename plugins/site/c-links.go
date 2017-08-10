@@ -17,9 +17,9 @@ func (p *Plugin) indexLinks(c *axe.Context) {
 }
 
 type fmLink struct {
-	Label     string `json:"label" binding:"required,max=255"`
-	Href      string `json:"href" binding:"required,max=255"`
-	Loc       string `json:"loc" binding:"required,max=32"`
+	Label     string `json:"label" validate:"required,max=255"`
+	Href      string `json:"href" validate:"required,max=255"`
+	Loc       string `json:"loc" validate:"required,max=32"`
 	SortOrder int    `json:"sortOrder"`
 }
 

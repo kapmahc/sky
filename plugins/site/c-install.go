@@ -10,11 +10,11 @@ import (
 )
 
 type fmInstall struct {
-	Title                string `json:"title" binding:"required"`
-	SubTitle             string `json:"subTitle" binding:"required"`
-	Email                string `json:"email" binding:"required,email"`
-	Password             string `json:"password" binding:"min=6,max=32"`
-	PasswordConfirmation string `json:"passwordConfirmation" binding:"eqfield=Password"`
+	Title                string `json:"title" validate:"required"`
+	SubTitle             string `json:"subTitle" validate:"required"`
+	Email                string `json:"email" validate:"required,email"`
+	Password             string `json:"password" validate:"min=6,max=32"`
+	PasswordConfirmation string `json:"passwordConfirmation" validate:"eqfield=Password"`
 }
 
 func (p *Plugin) postInstall(c *axe.Context) {

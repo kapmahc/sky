@@ -7,7 +7,7 @@ import (
 )
 
 type fmDict struct {
-	Keywords string `json:"keywords" binding:"required,max=255"`
+	Keywords string `json:"keywords" validate:"required,max=255"`
 }
 
 func (p *Plugin) postDict(c *axe.Context) {

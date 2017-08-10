@@ -17,8 +17,8 @@ func (p *Plugin) indexLeaveWords(c *axe.Context) {
 }
 
 type fmLeaveWord struct {
-	Body string `json:"body" binding:"required,max=2048"`
-	Type string `json:"type" binding:"required,max=16"`
+	Body string `json:"body" validate:"required,max=2048"`
+	Type string `json:"type" validate:"required,max=16"`
 }
 
 func (p *Plugin) createLeaveWord(c *axe.Context) {

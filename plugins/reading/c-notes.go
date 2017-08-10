@@ -25,8 +25,8 @@ func (p *Plugin) indexNotes(c *axe.Context) {
 }
 
 type fmNoteNew struct {
-	Type   string `json:"type" binding:"required,max=8"`
-	Body   string `json:"body" binding:"required,max=2000"`
+	Type   string `json:"type" validate:"required,max=8"`
+	Body   string `json:"body" validate:"required,max=2000"`
 	BookID uint   `json:"bookId"`
 }
 
@@ -64,8 +64,8 @@ func (p *Plugin) showNote(c *axe.Context) {
 }
 
 type fmNoteEdit struct {
-	Type string `json:"type" binding:"required,max=8"`
-	Body string `json:"body" binding:"required,max=2000"`
+	Type string `json:"type" validate:"required,max=8"`
+	Body string `json:"body" validate:"required,max=2000"`
 }
 
 func (p *Plugin) updateNote(c *axe.Context) {

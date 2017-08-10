@@ -8,7 +8,7 @@ import (
 )
 
 type fmCancel struct {
-	Who string `json:"who" binding:"required,max=255"`
+	Who string `json:"who" validate:"required,max=255"`
 }
 
 func (p *Plugin) postFormCancel(c *axe.Context) {

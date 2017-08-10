@@ -16,7 +16,7 @@ func (p *Plugin) indexTags(c *axe.Context) {
 }
 
 type fmTag struct {
-	Name string `json:"name" binding:"required,max=255"`
+	Name string `json:"name" validate:"required,max=255"`
 }
 
 func (p *Plugin) createTag(c *axe.Context) {

@@ -51,7 +51,7 @@ func (p *Plugin) createAttachment(c *axe.Context) {
 }
 
 type fmAttachmentEdit struct {
-	Title string `json:"title" binding:"required,max=255"`
+	Title string `json:"title" validate:"required,max=255"`
 }
 
 func (p *Plugin) updateAttachment(c *axe.Context) {

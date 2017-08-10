@@ -25,9 +25,9 @@ func (p *Plugin) indexComments(c *axe.Context) {
 }
 
 type fmCommentAdd struct {
-	Body      string `json:"body" binding:"required,max=800"`
-	Type      string `json:"type" binding:"required,max=8"`
-	ArticleID uint   `json:"articleId" binding:"required"`
+	Body      string `json:"body" validate:"required,max=800"`
+	Type      string `json:"type" validate:"required,max=8"`
+	ArticleID uint   `json:"articleId" validate:"required"`
 }
 
 func (p *Plugin) createComment(c *axe.Context) {
@@ -64,8 +64,8 @@ func (p *Plugin) showComment(c *axe.Context) {
 }
 
 type fmCommentEdit struct {
-	Body string `json:"body" binding:"required,max=800"`
-	Type string `json:"type" binding:"required,max=8"`
+	Body string `json:"body" validate:"required,max=800"`
+	Type string `json:"type" validate:"required,max=8"`
 }
 
 func (p *Plugin) updateComment(c *axe.Context) {

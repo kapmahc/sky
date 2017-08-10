@@ -33,8 +33,8 @@ func (p *Plugin) indexAliases(c *axe.Context) {
 }
 
 type fmAlias struct {
-	Source      string `json:"source" binding:"required,max=255"`
-	Destination string `json:"destination" binding:"required,max=255"`
+	Source      string `json:"source" validate:"required,max=255"`
+	Destination string `json:"destination" validate:"required,max=255"`
 }
 
 func (p *Plugin) createAlias(c *axe.Context) {

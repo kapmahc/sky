@@ -18,15 +18,15 @@ func (p *Plugin) _parseValues(f *Field) []interface{} {
 }
 
 type fmApply struct {
-	Records  []fmRecord `json:"records" binding:"required,max=255"`
-	Username string     `json:"username" binding:"required,max=255"`
-	Email    string     `json:"email" binding:"required,max=255"`
-	Phone    string     `json:"phone" binding:"required,max=255"`
+	Records  []fmRecord `json:"records" validate:"required,max=255"`
+	Username string     `json:"username" validate:"required,max=255"`
+	Email    string     `json:"email" validate:"required,max=255"`
+	Phone    string     `json:"phone" validate:"required,max=255"`
 }
 
 type fmRecord struct {
-	Name  string `json:"name" binding:"required"`
-	Value string `json:"value" binding:"required"`
+	Name  string `json:"name" validate:"required"`
+	Value string `json:"value" validate:"required"`
 }
 
 func (p *Plugin) postFormApply(c *axe.Context) {

@@ -67,18 +67,18 @@ func (p *Plugin) showForm(c *axe.Context) {
 }
 
 type fmField struct {
-	Name  string `json:"name" binding:"required"`
-	Label string `json:"label" binding:"required"`
+	Name  string `json:"name" validate:"required"`
+	Label string `json:"label" validate:"required"`
 	Body  string `json:"body"`
 	Value string `json:"value"`
-	Type  string `json:"type" binding:"required"`
+	Type  string `json:"type" validate:"required"`
 }
 
 type fmForm struct {
-	Title    string    `json:"title" binding:"required,max=255"`
-	Deadline string    `json:"deadline" binding:"required"`
-	Body     string    `json:"body" binding:"required"`
-	Type     string    `json:"type" binding:"required,max=8"`
+	Title    string    `json:"title" validate:"required,max=255"`
+	Deadline string    `json:"deadline" validate:"required"`
+	Body     string    `json:"body" validate:"required"`
+	Type     string    `json:"type" validate:"required,max=8"`
 	Fields   []fmField `json:"fields"`
 }
 

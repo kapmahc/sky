@@ -18,7 +18,7 @@ func (p *Plugin) indexDomains(c *axe.Context) {
 }
 
 type fmDomain struct {
-	Name string `json:"name" binding:"required,max=255"`
+	Name string `json:"name" validate:"required,max=255"`
 }
 
 func (p *Plugin) createDomain(c *axe.Context) {

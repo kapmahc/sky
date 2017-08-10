@@ -16,7 +16,7 @@ export const options = (method) => {
   }
 }
 
-const api = (path) => `/api/${path}`
+const api = (path) => `/api${path}`
 
 export const get = (path) => {
   return fetch(api(path), options('get')).then(parse)

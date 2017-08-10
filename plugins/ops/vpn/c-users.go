@@ -19,10 +19,10 @@ func (p *Plugin) indexUsers(c *axe.Context) {
 }
 
 type fmUserNew struct {
-	FullName             string `json:"fullName" binding:"required,max=255"`
-	Email                string `json:"email" binding:"required,email"`
-	Password             string `json:"password" binding:"min=6,max=32"`
-	PasswordConfirmation string `json:"passwordConfirmation" binding:"eqfield=Password"`
+	FullName             string `json:"fullName" validate:"required,max=255"`
+	Email                string `json:"email" validate:"required,email"`
+	Password             string `json:"password" validate:"min=6,max=32"`
+	PasswordConfirmation string `json:"passwordConfirmation" validate:"eqfield=Password"`
 	Details              string `json:"details"`
 	Enable               bool   `json:"enable"`
 	StartUp              string `json:"startUp"`
@@ -75,7 +75,7 @@ func (p *Plugin) showUser(c *axe.Context) {
 }
 
 type fmUserEdit struct {
-	FullName string `json:"fullName" binding:"required,max=255"`
+	FullName string `json:"fullName" validate:"required,max=255"`
 	Details  string `json:"details"`
 	Enable   bool   `json:"enable"`
 	StartUp  string `json:"startUp"`
@@ -120,8 +120,8 @@ func (p *Plugin) updateUser(c *axe.Context) {
 }
 
 type fmUserResetPassword struct {
-	Password             string `json:"password" binding:"min=6,max=32"`
-	PasswordConfirmation string `json:"passwordConfirmation" binding:"eqfield=Password"`
+	Password             string `json:"password" validate:"min=6,max=32"`
+	PasswordConfirmation string `json:"passwordConfirmation" validate:"eqfield=Password"`
 }
 
 func (p *Plugin) postResetUserPassword(c *axe.Context) {
@@ -153,10 +153,10 @@ func (p *Plugin) postResetUserPassword(c *axe.Context) {
 }
 
 type fmUserChangePassword struct {
-	Email                string `json:"email" binding:"required,email"`
-	CurrentPassword      string `json:"currentPassword" binding:"required"`
-	NewPassword          string `json:"newPassword" binding:"min=6,max=32"`
-	PasswordConfirmation string `json:"passwordConfirmation" binding:"eqfield=NewPassword"`
+	Email                string `json:"email" validate:"required,email"`
+	CurrentPassword      string `json:"currentPassword" validate:"required"`
+	NewPassword          string `json:"newPassword" validate:"min=6,max=32"`
+	PasswordConfirmation string `json:"passwordConfirmation" validate:"eqfield=NewPassword"`
 }
 
 func (p *Plugin) postChangeUserPassword(c *axe.Context) {

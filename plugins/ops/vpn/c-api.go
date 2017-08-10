@@ -9,8 +9,8 @@ import (
 )
 
 type fmSignIn struct {
-	Email    string `json:"username" binding:"required,email"`
-	Password string `json:"password" binding:"min=6,max=32"`
+	Email    string `json:"username" validate:"required,email"`
+	Password string `json:"password" validate:"min=6,max=32"`
 }
 
 func (p *Plugin) apiAuth(c *axe.Context) {
@@ -34,13 +34,13 @@ func (p *Plugin) apiAuth(c *axe.Context) {
 }
 
 type fmStatus struct {
-	Email       string  `json:"common_name" binding:"required,email"`
-	TrustedIP   string  `json:"trusted_ip" binding:"required"`
-	TrustedPort uint    `json:"trusted_port" binding:"required"`
-	RemoteIP    string  `json:"ifconfig_pool_remote_ip" binding:"required"`
-	RemotePort  uint    `json:"remote_port_1" binding:"required"`
-	Received    float64 `json:"bytes_received" binding:"required"`
-	Send        float64 `json:"bytes_sent" binding:"required"`
+	Email       string  `json:"common_name" validate:"required,email"`
+	TrustedIP   string  `json:"trusted_ip" validate:"required"`
+	TrustedPort uint    `json:"trusted_port" validate:"required"`
+	RemoteIP    string  `json:"ifconfig_pool_remote_ip" validate:"required"`
+	RemotePort  uint    `json:"remote_port_1" validate:"required"`
+	Received    float64 `json:"bytes_received" validate:"required"`
+	Send        float64 `json:"bytes_sent" validate:"required"`
 }
 
 func (p *Plugin) apiConnect(c *axe.Context) {

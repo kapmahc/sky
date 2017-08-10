@@ -33,8 +33,8 @@ func (p *Plugin) destroyAdminLocale(c *axe.Context) {
 }
 
 type fmLocale struct {
-	Code    string `json:"code" binding:"required,max=255"`
-	Message string `json:"message" binding:"required"`
+	Code    string `json:"code" validate:"required,max=255"`
+	Message string `json:"message" validate:"required"`
 }
 
 func (p *Plugin) postAdminLocales(c *axe.Context) {

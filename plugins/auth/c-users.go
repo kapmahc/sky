@@ -10,10 +10,10 @@ import (
 )
 
 type fmSignUp struct {
-	Name                 string `json:"name" binding:"required,max=255"`
-	Email                string `json:"email" binding:"required,email"`
-	Password             string `json:"password" binding:"min=6,max=32"`
-	PasswordConfirmation string `json:"passwordConfirmation" binding:"eqfield=Password"`
+	Name                 string `json:"name" validate:"required,max=255"`
+	Email                string `json:"email" validate:"required,email"`
+	Password             string `json:"password" validate:"min=6,max=32"`
+	PasswordConfirmation string `json:"passwordConfirmation" validate:"eqfield=Password"`
 }
 
 func (p *Plugin) postUsersSignUp(c *axe.Context) {
@@ -34,7 +34,7 @@ func (p *Plugin) postUsersSignUp(c *axe.Context) {
 	}
 
 	if count > 0 {
-		c.Abort(http.StatusInternalServerError, p.I18n.E(l, "auth.errors.user.email-already-exists"))
+		c.Abort(http.StatusInternalServerError, p.I18n.E(l, "auth.errors.user.email-already-exist"))
 		return
 	}
 
@@ -51,8 +51,8 @@ func (p *Plugin) postUsersSignUp(c *axe.Context) {
 }
 
 type fmSignIn struct {
-	Email      string `json:"email" binding:"required,email"`
-	Password   string `json:"password" binding:"required"`
+	Email      string `json:"email" validate:"required,email"`
+	Password   string `json:"password" validate:"required"`
 	RememberMe bool   `json:"rememberMe"`
 }
 
@@ -86,7 +86,7 @@ func (p *Plugin) postUsersSignIn(c *axe.Context) {
 }
 
 type fmEmail struct {
-	Email string `json:"email" binding:"required,email"`
+	Email string `json:"email" validate:"required,email"`
 }
 
 func (p *Plugin) getUsersConfirm(c *axe.Context) {
@@ -189,9 +189,9 @@ func (p *Plugin) postUsersForgotPassword(c *axe.Context) {
 }
 
 type fmResetPassword struct {
-	Token                string `json:"token" binding:"required"`
-	Password             string `json:"password" binding:"min=6,max=32"`
-	PasswordConfirmation string `json:"passwordConfirmation" binding:"eqfield=Password"`
+	Token                string `json:"token" validate:"required"`
+	Password             string `json:"password" validate:"min=6,max=32"`
+	PasswordConfirmation string `json:"passwordConfirmation" validate:"eqfield=Password"`
 }
 
 func (p *Plugin) postUsersResetPassword(c *axe.Context) {
@@ -227,9 +227,9 @@ func (p *Plugin) getUsersInfo(c *axe.Context) {
 }
 
 type fmInfo struct {
-	Name string `json:"name" binding:"required,max=255"`
-	// Home string `json:"home" binding:"max=255"`
-	// Logo string `json:"logo" binding:"max=255"`
+	Name string `json:"name" validate:"required,max=255"`
+	// Home string `json:"home" validate:"max=255"`
+	// Logo string `json:"logo" validate:"max=255"`
 }
 
 func (p *Plugin) postUsersInfo(c *axe.Context) {
@@ -252,9 +252,9 @@ func (p *Plugin) postUsersInfo(c *axe.Context) {
 }
 
 type fmChangePassword struct {
-	CurrentPassword      string `json:"currentPassword" binding:"required"`
-	NewPassword          string `json:"newPassword" binding:"min=6,max=32"`
-	PasswordConfirmation string `json:"passwordConfirmation" binding:"eqfield=NewPassword"`
+	CurrentPassword      string `json:"currentPassword" validate:"required"`
+	NewPassword          string `json:"newPassword" validate:"min=6,max=32"`
+	PasswordConfirmation string `json:"passwordConfirmation" validate:"eqfield=NewPassword"`
 }
 
 func (p *Plugin) postUsersChangePassword(c *axe.Context) {

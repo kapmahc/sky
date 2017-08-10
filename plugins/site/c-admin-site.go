@@ -119,8 +119,8 @@ type fmSiteSMTP struct {
 	Port                 int    `json:"port"`
 	Ssl                  bool   `json:"ssl"`
 	Username             string `json:"username"`
-	Password             string `json:"password" binding:"min=6,max=32"`
-	PasswordConfirmation string `json:"passwordConfirmation" binding:"eqfield=Password"`
+	Password             string `json:"password" validate:"min=6,max=32"`
+	PasswordConfirmation string `json:"passwordConfirmation" validate:"eqfield=Password"`
 }
 
 func (p *Plugin) getAdminSiteSMTP(c *axe.Context) {

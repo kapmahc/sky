@@ -17,13 +17,13 @@ func (p *Plugin) indexCards(c *axe.Context) {
 }
 
 type fmCard struct {
-	Loc       string `json:"loc" binding:"required,max=32"`
-	Title     string `json:"title" binding:"required,max=255"`
-	Summary   string `json:"summary" binding:"required"`
-	Type      string `json:"type" binding:"required"`
-	Href      string `json:"href" binding:"required,max=255"`
-	Logo      string `json:"logo" binding:"required,max=255"`
-	Action    string `json:"action" binding:"required,max=32"`
+	Loc       string `json:"loc" validate:"required,max=32"`
+	Title     string `json:"title" validate:"required,max=255"`
+	Summary   string `json:"summary" validate:"required"`
+	Type      string `json:"type" validate:"required"`
+	Href      string `json:"href" validate:"required,max=255"`
+	Logo      string `json:"logo" validate:"required,max=255"`
+	Action    string `json:"action" validate:"required,max=32"`
 	SortOrder int    `json:"sortOrder"`
 }
 

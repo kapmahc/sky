@@ -18,9 +18,9 @@ func (p *Plugin) indexFriendLinks(c *axe.Context) {
 }
 
 type fmFriendLink struct {
-	Title     string `json:"title" binding:"required,max=255"`
-	Home      string `json:"home" binding:"required,max=255"`
-	Logo      string `json:"logo" binding:"required,max=255"`
+	Title     string `json:"title" validate:"required,max=255"`
+	Home      string `json:"home" validate:"required,max=255"`
+	Logo      string `json:"logo" validate:"required,max=255"`
 	SortOrder int    `json:"sortOrder"`
 }
 
