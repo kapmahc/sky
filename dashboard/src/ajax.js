@@ -16,17 +16,19 @@ export const options = (method) => {
   }
 }
 
+const api = (path) => `/api/${path}`
+
 export const get = (path) => {
-  return fetch(path, options('get')).then(parse)
+  return fetch(api(path), options('get')).then(parse)
 }
 
 export const _delete = (path) => {
-  return fetch(path, options('delete')).then(parse)
+  return fetch(api(path), options('delete')).then(parse)
 }
 
 export const post = (path, body) => {
   var data = options('post')
   data.body = JSON.stringify(body)
   // https://github.github.io/fetch/#options
-  return fetch(path, data).then(parse)
+  return fetch(api(path), data).then(parse)
 }
