@@ -1,7 +1,8 @@
-import registerServiceWorker from './registerServiceWorker'
-import {detectLocale} from './intl'
-import main from './main'
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-const user = detectLocale()
-main('root', user)
+import registerServiceWorker from './registerServiceWorker'
+import App from './App'
+
+ReactDOM.render(<App/>, document.getElementById("root"))
 registerServiceWorker()

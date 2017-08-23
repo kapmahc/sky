@@ -1,7 +1,6 @@
-import './main.css';
+import './App.css';
 
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import createHistory from 'history/createBrowserHistory'
@@ -13,6 +12,7 @@ import { IntlProvider, addLocaleData } from 'react-intl'
 
 import reducers from './reducers'
 import routes from './plugins'
+import {detectLocale} from './intl'
 
 // Create a history of your choosing (we're using a browser history in this case)
 const history = createHistory({basename: '/my'})
@@ -28,24 +28,20 @@ const store = createStore(
   applyMiddleware(middleware)
 )
 
+const user = detectLocale()
+moment.locale(user.moment)
+addLocaleData(user.data)
 
-const main = (id, user) => {
-  moment.locale(user.moment)
-  addLocaleData(user.data)
-  ReactDOM.render(
-    (<Provider store={store}>
-      <LocaleProvider locale={user.antd}>
-        <IntlProvider locale={user.locale} messages={user.messages}>
-          <ConnectedRouter history={history}>
-            <Switch>
-              {routes}
-            </Switch>
-          </ConnectedRouter>
-        </IntlProvider>
-      </LocaleProvider>
-    </Provider>),
-    document.getElementById(id)
-  );
-}
+const Widget = () => <Provider store={store}>
+  <LocaleProvider locale={user.antd}>
+    <IntlProvider locale={user.locale} messages={user.messages}>
+      <ConnectedRouter history={history}>
+        <Switch>
+          {routes}
+        </Switch>
+      </ConnectedRouter>
+    </IntlProvider>
+  </LocaleProvider>
+</Provider>
 
-export default main;
+export default Widget
