@@ -8,6 +8,7 @@ export default {
   'attributes.email': 'Email',
   'attributes.password': 'Password',
   'attributes.passwordConfirmation': 'Password confirmation',
+  'errors.no-match': 'No match',
   'errors.not-empty': 'Not empty',
   'errors.not-valid-email': 'Not a valid email address.',
   'errors.password': 'Password length must between 6 and 18.',
