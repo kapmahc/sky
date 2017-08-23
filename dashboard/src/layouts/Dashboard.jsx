@@ -1,42 +1,60 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {Col, Icon} from 'antd'
+import {connect} from 'react-redux'
 import {FormattedMessage} from 'react-intl'
-import {Link} from 'react-router-dom'
+import {Layout, Menu, Row} from 'antd'
 
-import Layout from './Application'
+import Root from './Root'
+import Fail from './Fail'
+import Footer from '../components/Footer'
+import Breadcrumb from '../components/Breadcrumb'
+
+const { Header, Content } = Layout
 
 class Widget extends Component {
   render() {
-    const {children, breadcrumbs} = this.props
-    const links = [
-      {icon: 'login', href: '/users/sign-in', label: 'auth.users.sign-in.title'},
-      {icon: 'user-add', href: '/users/sign-up', label: 'auth.users.sign-up.title'},
-      {icon: 'retweet', href: '/users/forgot-password', label: 'auth.users.forgot-password.title'},
-      {icon: 'check-circle-o', href: '/users/confirm', label: 'auth.users.confirm.title'},
-      {icon: 'unlock', href: '/users/unlock', label: 'auth.users.unlock.title'},
-      {icon: 'question-circle-o', href: '/leave-words/new', label: 'site.leave-words.new.title'},
-    ]
-    return <Layout breadcrumbs={[
-        {label: <FormattedMessage id={title}/>, href}
-      ]}>
-      <Col md={{offset:8, span:8}}>
-        <FormattedMessage tagName="h2" id={title} />
-        <div style={{marginTop: '20px'}}>
+    const {children, info, user, breadcrumbs} = this.props
+    if (!user.uid) {
+      return <Fail
+        message={<FormattedMessage id="errors.not-allow"/>}
+        breadcrumbs={[
+          {label:<FormattedMessage id="auth.users.sign-in.title"/>, href: "/users/sign-in"},
+        ]} />
+    }
+    return (<Root>
+      <Header>
+        <div className="logo" />
+        <Menu
+          theme="dark"
+          mode="horizontal"
+          defaultSelectedKeys={[]}
+          style={{ lineHeight: '64px' }}
+        >
+          <Menu.Item key="home">{info.title}</Menu.Item>
+        </Menu>
+      </Header>
+      <Content style={{ padding: '0 50px'}}>
+        <Breadcrumb items={breadcrumbs}/>
+        <Row style={{ background: '#fff', padding: 24, minHeight: 380 }}>
           {children}
-        </div>
-        <ul style={{marginTop: '20px'}}>
-          {links.map((l, i) => <li key={i}><Icon type={l.icon}/> <Link to={l.href}><FormattedMessage id={l.label}/></Link></li>)}
-        </ul>
-      </Col>
-    </Layout>
+        </Row>
+      </Content>
+      <Footer/>
+    </Root>)
   }
 }
 
-
 Widget.propTypes = {
+  children: PropTypes.node.isRequired,
+  info: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
   breadcrumbs: PropTypes.array.isRequired,
 }
 
-export default Widget;
+export default connect(
+  state => ({
+    info: state.siteInfo,
+    user: state.currentUser,
+  }),
+  {},
+)(Widget)
