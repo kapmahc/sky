@@ -30,7 +30,7 @@ class WidgetF extends Component {
      }
     });
   }
-  render() {
+  render() {    
     const {formatMessage} = this.props.intl
     const { getFieldDecorator } = this.props.form;
     return (

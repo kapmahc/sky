@@ -12,18 +12,21 @@ import UsersResetPassword from './users/ResetPassword'
 // import AttachmentsIndex from './attachments/Index'
 // import AttachmentsEdit from './attachments/Edit'
 
-const UsersForgotPassword = () => <UsersEmailForm action="forgot-password"/>
-const UsersConfirm = () => <UsersEmailForm action="confirm"/>
-const UsersUnlock = () => <UsersEmailForm action="unlock"/>
+const UsersForgotPassword = () => <UsersEmailForm  action="forgot-password"/>
+const UsersConfirm = ({match}) => <UsersEmailForm match={match} action="confirm"/>
+const UsersUnlock = ({match}) => <UsersEmailForm match={match} action="unlock"/>
 
 export default [
   <Route key="auth.users.sign-in" path="/users/sign-in" component={UsersSignIn}/>,
   <Route key="auth.users.sign-up" path="/users/sign-up" component={UsersSignUp}/>,
   <Route key="auth.users.forgot-password" path="/users/forgot-password" component={UsersForgotPassword}/>,
-  <Route key="auth.users.confirm" path="/users/confirm" component={UsersConfirm}/>,
-  <Route key="auth.users.unlock" path="/users/unlock" component={UsersUnlock}/>,
   <Route key="auth.users.reset-password" path="/users/reset-password/:token" component={UsersResetPassword}/>,
-  
+  <Route key="auth.users.confirm" path="/users/confirm/:token" component={UsersConfirm}/>,
+  <Route key="auth.users.confirm.form" path="/users/confirm" component={UsersConfirm}/>,
+  <Route key="auth.users.unlock" path="/users/unlock/:token" component={UsersUnlock}/>,
+  <Route key="auth.users.unlock.form" path="/users/unlock" component={UsersUnlock}/>,
+
+
   // <Route key="auth.users.info" path="/users/info" component={UsersInfo}/>,
   // <Route key="auth.users.change-password" path="/users/change-password" component={UsersChangePassword}/>,
   // <Route key="auth.users.logs" path="/users/logs" component={UsersLogs}/>,

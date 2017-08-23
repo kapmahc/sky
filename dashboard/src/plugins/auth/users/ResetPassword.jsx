@@ -20,7 +20,7 @@ class WidgetF extends Component {
      if (!err) {
        post('/users/reset-password', Object.assign({}, values, {token: match.params.token}))
         .then((rst) => {
-          message.success(formatMessage({id: 'auth.users.reset-password.success'}))
+          message.success(formatMessage({id: 'messages.success'}))
           push('/users/sign-in')
         }).catch(message.error)
      }

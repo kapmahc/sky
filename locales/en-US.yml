@@ -22,13 +22,13 @@ auth:
   emails:
     confirm:
       subject: Confirm message
-      body: You can confirm your email via the following link.<br/> <a href="{{.Home}}/users/confirm/{{.Token}}">Confirm Account</a>
+      body: You can confirm your email via the following link.<br/> <a href="{{.Home}}/my/users/confirm/{{.Token}}">Confirm Account</a>
     unlock:
       subject: unlock message
-      body: Click the following link to unlock your account <br/> <a href="{{.Home}}/users/unlock/{{.Token}}">Unlock Account</a>
+      body: Click the following link to unlock your account <br/> <a href="{{.Home}}/my/users/unlock/{{.Token}}">Unlock Account</a>
     reset-password:
       subject: Reset password message
-      body:  Please use the following link <br/> <a href="{{.Home}}/users/reset-password/{{.Token}}">Reset Password</a><br/>please ignore/discard, if you don't want reset password. <br/> If you did not visit the link, your password will not be changed.
+      body:  Please use the following link <br/> <a href="{{.Home}}/my/users/reset-password/{{.Token}}">Reset Password</a><br/>please ignore/discard, if you don't want reset password. <br/> If you did not visit the link, your password will not be changed.
   errors:
     please-sign-in: Please sign in at first.
     user:

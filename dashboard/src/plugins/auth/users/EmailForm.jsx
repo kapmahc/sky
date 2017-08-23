@@ -7,7 +7,7 @@ import { push } from 'react-router-redux'
 
 import Layout from './Layout'
 import SubmitButton from '../../../components/SubmitButton'
-import {post} from '../../../ajax'
+import {get, post} from '../../../ajax'
 
 const FormItem = Form.Item;
 
@@ -26,6 +26,21 @@ class WidgetF extends Component {
         }).catch(message.error)
      }
     });
+  }
+  componentDidMount () {
+    const {push, match, action} = this.props
+    const {formatMessage} = this.props.intl
+    if(match){
+      const token = match.params.token
+      if (token) {
+        get(`/users/${action}/${token}`)
+          .then((_)=>{
+            message.success(formatMessage({id: `auth.users.${action}.success`}))
+            push('/users/sign-in')
+          })
+          .catch(message.error)
+      }
+    }
   }
   render() {
     const {action} = this.props
