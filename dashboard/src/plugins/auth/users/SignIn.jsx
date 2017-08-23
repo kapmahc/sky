@@ -5,7 +5,7 @@ import {injectIntl, intlShape, FormattedMessage} from 'react-intl'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
-import Layout from '../../../layouts/Application'
+import Layout from './Layout'
 import {TOKEN} from '../../../constants'
 import SubmitButton from '../../../components/SubmitButton'
 import {post} from '../../../ajax'

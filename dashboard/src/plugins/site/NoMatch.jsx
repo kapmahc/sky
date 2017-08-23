@@ -3,7 +3,7 @@ import {FormattedMessage} from 'react-intl'
 import {Col, Card } from 'antd'
 
 import fail from '../../assets/fail.png'
-import Layout from '../../layouts/Basic'
+import Layout from '../../layouts/Application'
 
 class Widget extends Component {
   render() {

@@ -19,4 +19,5 @@ export default {
   'auth.users.confirm.success': 'You will receive an email to confirm your account.',
   'auth.users.unlock.title': "Didn't receive unlock instructions?",
   'site.leave-words.new.title': 'Leave me a message',
+  'site.home.title': 'Home',
 }
