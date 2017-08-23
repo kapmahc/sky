@@ -14,6 +14,7 @@ export default {
   'errors.not-valid-email': 'Not a valid email address.',
   'errors.password': 'Password length must between 6 and 18.',
   'errors.passwordConfirmation': 'Passwords must match',
+  'footer.others': 'This site in other languages:',
   'auth.users.sign-in.title': 'Sign in',
   'auth.users.sign-up.title': 'Sign up',
   'auth.users.forgot-password.title': 'Forgot your password?',

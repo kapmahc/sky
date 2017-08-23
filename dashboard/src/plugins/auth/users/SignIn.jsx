@@ -24,13 +24,13 @@ class WidgetF extends Component {
         .then((rst) => {
           signIn(rst.token)
           sessionStorage.setItem(TOKEN, rst.token)
-          push('/dashboard')
+          push('/')
           message.success(formatMessage({id: 'messages.success'}))
         }).catch(message.error)
      }
     });
   }
-  render() {    
+  render() {
     const {formatMessage} = this.props.intl
     const { getFieldDecorator } = this.props.form;
     return (

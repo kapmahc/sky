@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {Layout, Menu, Row, Breadcrumb} from 'antd'
-import {FormattedMessage} from 'react-intl'
-import {Link} from 'react-router-dom'
+import {Layout, Menu, Row} from 'antd'
 
 import Root from './Root'
 import Footer from '../components/Footer'
+import Breadcrumb from '../components/Breadcrumb'
 
 const { Header, Content } = Layout
 
@@ -26,10 +25,7 @@ class Widget extends Component {
         </Menu>
       </Header>
       <Content style={{ padding: '0 50px'}}>
-        <Breadcrumb style={{ margin: '12px 0' }}>
-          <Breadcrumb.Item><Link to="/"><FormattedMessage id="site.home.title"/></Link></Breadcrumb.Item>
-          {breadcrumbs.map((l,i)=> <Breadcrumb.Item key={i}><Link to={l.href}>{l.label}</Link></Breadcrumb.Item>)}
-        </Breadcrumb>
+        <Breadcrumb items={breadcrumbs}/>
         <Row style={{ background: '#fff', padding: 24, minHeight: 380 }}>
           {children}
         </Row>
