@@ -27,7 +27,7 @@ func (p *Plugin) Mount(rt *axe.Router) {
 	ag.POST("/paypal", p.postPaypal)
 	rt.Group("/api/admin", ag)
 
-	rt.POST("/api/site/install", p.postInstall)
+	rt.POST("/api/install", p.postInstall)
 	rt.GET("/api/site/info", p.getSiteInfo)
 	rt.GET("/api/locales/{lang}", p.getLocales)
 	rt.Resources(

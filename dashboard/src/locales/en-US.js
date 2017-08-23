@@ -2,6 +2,7 @@ export default {
   'languages.en-US': 'English',
   'languages.zh-Hans': '简体中文',
   'languages.zh-Hant': '繁體中文',
+  'messages.success': '操作成功',
   'buttons.submit': 'Submit',
   'buttons.more': 'More',
   'attributes.username': 'Username',
@@ -12,6 +13,7 @@ export default {
   'errors.not-empty': 'Not empty',
   'errors.not-valid-email': 'Not a valid email address.',
   'errors.password': 'Password length must between 6 and 18.',
+  'errors.passwordConfirmation': 'Passwords must match',
   'auth.users.sign-in.title': 'Sign in',
   'auth.users.sign-up.title': 'Sign up',
   'auth.users.forgot-password.title': 'Forgot your password?',
@@ -20,4 +22,7 @@ export default {
   'auth.users.unlock.title': "Didn't receive unlock instructions?",
   'site.leave-words.new.title': 'Leave me a message',
   'site.home.title': 'Home',
+  'site.install.title': 'Install',
+  'site.attributes.title': 'Title',
+  'site.attributes.subTitle': 'Sub title',
 }

@@ -12,6 +12,7 @@ import (
 type fmInstall struct {
 	Title                string `json:"title" validate:"required"`
 	SubTitle             string `json:"subTitle" validate:"required"`
+	Name                 string `json:"name" validate:"required"`
 	Email                string `json:"email" validate:"required,email"`
 	Password             string `json:"password" validate:"min=6,max=32"`
 	PasswordConfirmation string `json:"passwordConfirmation" validate:"eqfield=Password"`
@@ -31,7 +32,7 @@ func (p *Plugin) postInstall(c *axe.Context) {
 	lng := c.Payload[i18n.LOCALE].(string)
 	p.I18n.Set(lng, "site.title", fm.Title)
 	p.I18n.Set(lng, "site.subTitle", fm.SubTitle)
-	user, err := p.Dao.AddEmailUser("root", fm.Email, fm.Password)
+	user, err := p.Dao.AddEmailUser(fm.Name, fm.Email, fm.Password)
 	if err != nil {
 		c.Abort(http.StatusInternalServerError, err)
 		return
