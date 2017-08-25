@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, message } from 'antd';
+import { Form, Input, Col, message } from 'antd';
 import {injectIntl, intlShape, FormattedMessage} from 'react-intl'
 
 import Layout from '../../../layouts/Dashboard'
@@ -36,49 +36,52 @@ class WidgetF extends Component {
     const {formatMessage} = this.props.intl
     const { getFieldDecorator } = this.props.form;
     return (
-      <Layout ={[{href: '/users/change-password', label: 'auth.users.change-password.title'}]}>
-        <Form onSubmit={this.handleSubmit}>
-          <FormItem
-            label={<FormattedMessage id="attributes.currentPassword"/>}
-            hasFeedback
-          >
-          {getFieldDecorator('currentPassword', {
-            rules: [
-              { required: true, message: formatMessage({id:"errors.not-empty"})},
-            ],
-          })(
-            <Input type="password" />
-          )}
-          </FormItem>
+      <Layout breadcrumbs={[{href: '/users/change-password', label: <FormattedMessage id='auth.users.change-password.title'/>}]}>
+        <Col md={{span:8}}>
+          <FormattedMessage id='auth.users.change-password.title' tagName='h2'/>
+          <Form onSubmit={this.handleSubmit}>
+            <FormItem
+              label={<FormattedMessage id="attributes.currentPassword"/>}
+              hasFeedback
+            >
+            {getFieldDecorator('currentPassword', {
+              rules: [
+                { required: true, message: formatMessage({id:"errors.not-empty"})},
+              ],
+            })(
+              <Input type="password" />
+            )}
+            </FormItem>
 
-          <FormItem
-            label={<FormattedMessage id="attributes.newPassword"/>}
-            hasFeedback
-          >
-          {getFieldDecorator('newPassword', {
-            rules: [
-              { required: true, min: 6, max: 32, message: formatMessage({id:"errors.password"})},
-            ],
-          })(
-            <Input type="password" />
-          )}
-          </FormItem>
+            <FormItem
+              label={<FormattedMessage id="attributes.newPassword"/>}
+              hasFeedback
+            >
+            {getFieldDecorator('newPassword', {
+              rules: [
+                { required: true, min: 6, max: 32, message: formatMessage({id:"errors.password"})},
+              ],
+            })(
+              <Input type="password" />
+            )}
+            </FormItem>
 
-          <FormItem
-            label={<FormattedMessage id="attributes.passwordConfirmation"/>}
-            hasFeedback
-          >
-          {getFieldDecorator('passwordConfirmation', {
-            rules: [
-              { required: true, message: formatMessage({id:"errors.not-empty"})},
-              {validator: this.checkPasswords},
-            ],
-          })(
-            <Input type="password" />
-          )}
-          </FormItem>
-          <SubmitButton />
-        </Form>
+            <FormItem
+              label={<FormattedMessage id="attributes.passwordConfirmation"/>}
+              hasFeedback
+            >
+            {getFieldDecorator('passwordConfirmation', {
+              rules: [
+                { required: true, message: formatMessage({id:"errors.not-empty"})},
+                {validator: this.checkPasswords},
+              ],
+            })(
+              <Input type="password" />
+            )}
+            </FormItem>
+            <SubmitButton />
+          </Form>
+        </Col>
       </Layout>
     );
   }

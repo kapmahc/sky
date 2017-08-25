@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Input, message } from 'antd';
+import { Form, Input, Col, message } from 'antd';
 import {injectIntl, intlShape, FormattedMessage} from 'react-intl'
 
 import Layout from '../../../layouts/Dashboard'
@@ -33,33 +33,35 @@ class WidgetF extends Component {
     const {formatMessage} = this.props.intl
     const { getFieldDecorator } = this.props.form;
     return (
-      <Layout breads={[{href: '/users/info', label: 'auth.users.info.title'}]}>
-        <Form onSubmit={this.handleSubmit}>
+      <Layout breadcrumbs={[{href: '/users/info', label:<FormattedMessage id='auth.users.info.title'/>}]}>
+        <Col md={{span:8}}>
+          <FormattedMessage id='auth.users.info.title' tagName='h2'/>
+          <Form onSubmit={this.handleSubmit}>
+            <FormItem
+              label={<FormattedMessage id="attributes.email"/>}
+            >
+            {getFieldDecorator('email', {
+              rules: [
+              ],
+            })(
+              <Input disabled/>
+            )}
+            </FormItem>
 
-          <FormItem
-            label={<FormattedMessage id="attributes.email"/>}
-          >
-          {getFieldDecorator('email', {
-            rules: [
-            ],
-          })(
-            <Input disabled/>
-          )}
-          </FormItem>
+            <FormItem
+              label={<FormattedMessage id="attributes.username"/>}
+              hasFeedback
+            >
+            {getFieldDecorator('name', {
+              rules: [{ required: true, message: formatMessage({id:"errors.not-empty"})}],
+            })(
+              <Input />
+            )}
+            </FormItem>
 
-          <FormItem
-            label={<FormattedMessage id="attributes.username"/>}
-            hasFeedback
-          >
-          {getFieldDecorator('name', {
-            rules: [{ required: true, message: formatMessage({id:"errors.not-empty"})}],
-          })(
-            <Input />
-          )}
-          </FormItem>
-
-          <SubmitButton />
-        </Form>
+            <SubmitButton />
+          </Form>
+        </Col>
       </Layout>
     );
   }
