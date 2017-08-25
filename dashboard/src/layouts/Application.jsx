@@ -14,7 +14,7 @@ class Widget extends Component {
     const {children, info, breadcrumbs} = this.props
     return (<Root>
       <Header>
-        <div className="logo" />
+        <div className="logo" />        
         <Menu
           theme="dark"
           mode="horizontal"

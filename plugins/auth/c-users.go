@@ -72,6 +72,7 @@ func (p *Plugin) postUsersSignIn(c *axe.Context) {
 
 	cm := jws.Claims{}
 	cm.Set(UID, user.UID)
+	cm.Set("name", user.Name)
 	cm.Set("admin", p.Dao.Is(user.ID, RoleAdmin))
 	tkn, err := p.Jwt.Sum(cm, time.Hour*24*7)
 	if err != nil {

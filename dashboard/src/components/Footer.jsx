@@ -8,10 +8,7 @@ import {setLocale} from '../intl'
 
 const {Footer } = Layout;
 
-class Widget extends Component {
-  onSwitchLang (l) {
-    console.log(l)
-  }
+class Widget extends Component {  
   render () {
     const {info} = this.props
     return <Footer style={{ textAlign: 'center' }}>

@@ -28,7 +28,7 @@ class Widget extends Component {
   render() {
     const {children} = this.props
     return (
-      <Layout className="layout">
+      <Layout>
         {children}
       </Layout>
     );

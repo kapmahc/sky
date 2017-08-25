@@ -5,8 +5,8 @@ import UsersSignIn from './users/SignIn'
 import UsersSignUp from './users/SignUp'
 import UsersEmailForm from './users/EmailForm'
 import UsersResetPassword from './users/ResetPassword'
-// import UsersInfo from './users/Info'
-// import UsersChangePassword from './users/ChangePassword'
+import UsersInfo from './users/Info'
+import UsersChangePassword from './users/ChangePassword'
 import UsersLogs from './users/Logs'
 //
 // import AttachmentsIndex from './attachments/Index'
@@ -27,8 +27,8 @@ export default [
   <Route key="auth.users.unlock.form" path="/users/unlock" component={UsersUnlock}/>,
 
 
-  // <Route key="auth.users.info" path="/users/info" component={UsersInfo}/>,
-  // <Route key="auth.users.change-password" path="/users/change-password" component={UsersChangePassword}/>,
+  <Route key="auth.users.info" path="/users/info" component={UsersInfo}/>,
+  <Route key="auth.users.change-password" path="/users/change-password" component={UsersChangePassword}/>,
   <Route key="auth.users.logs" path="/users/logs" component={UsersLogs}/>,
   //
   // <Route key="auth.attachments.edit" path="/attachments/edit/:id" component={AttachmentsEdit}/>,
