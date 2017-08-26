@@ -12,6 +12,7 @@ func (p *Plugin) Mount(rt *axe.Router) {
 
 	ag := axe.NewRouter()
 	ag.Use(p.Jwt.MustAdminMiddleware)
+	ag.GET("/locales", p.indexAdminLocale)
 	ag.GET("/locales/{code}", p.showAdminLocale)
 	ag.DELETE("/locales/{code}", p.destroyAdminLocale)
 	ag.POST("/locales", p.postAdminLocales)

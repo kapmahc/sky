@@ -5,6 +5,8 @@ export default {
   'messages.success': 'Success',
   'messages.are-you-sure': 'Are you sure?',
   'buttons.submit': 'Submit',
+  'buttons.new': 'New',
+  'buttons.edit': 'Edit',
   'buttons.more': 'More',
   'buttons.manage': 'Manage',
   'attributes.username': 'Username',
@@ -63,6 +65,7 @@ export default {
   'site.admin.smtp.sender': 'Sender',
   'site.admin.paypal.title': 'Paypal',
   'site.admin.paypal.donate-form': 'Donate form code',
+  'site.admin.locales.index.title': 'Locales',
   'site.dashboard.title': 'Dashboard',
   'site.install.title': 'Install',
   'site.attributes.title': 'Title',
@@ -70,4 +73,6 @@ export default {
   'site.attributes.keywords': 'Keywords',
   'site.attributes.description': 'Description',
   'site.attributes.copyright': 'Copyright',
+  'site.attributes.locale.code': 'Code',
+  'site.attributes.locale.message': 'Message',
 }

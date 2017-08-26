@@ -12,6 +12,7 @@ import {get, _delete} from '../../../../ajax'
 class WidgetF extends Component {
   state = { items: []}
   componentDidMount () {
+    // const { locale } = this.props.intl
     get('/admin/locales').then(
       function (rst){
         this.setState({items: Object.entries(rst).map((v)=>({code:v[0], message:v[1]}))})
@@ -54,7 +55,7 @@ class WidgetF extends Component {
     ]
 
     return (
-      <Layout admin breadcrumbs={[{href: '/admin/locales', label: 'site.admin.locales.index.title'}]}>
+      <Layout admin breadcrumbs={[{href: '/admin/locales', label: <FormattedMessage id='site.admin.locales.index.title'/>}]}>
         <Row>
           <Col>
             <Button onClick={(e)=>push('/admin/locales/new')} type='primary' shape="circle" icon="plus" />

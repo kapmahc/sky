@@ -80,6 +80,7 @@ class Widget extends Component {
             <Menu.Item key="to-/admin/seo"><FormattedMessage id="site.admin.seo.title"/></Menu.Item>
             <Menu.Item key="to-/admin/smtp"><FormattedMessage id="site.admin.smtp.title"/></Menu.Item>
             <Menu.Item key="to-/admin/paypal"><FormattedMessage id="site.admin.paypal.title"/></Menu.Item>
+            <Menu.Item key="to-/admin/locales"><FormattedMessage id="site.admin.locales.index.title"/></Menu.Item>
             <Menu.Item key="to-/leave-words"><FormattedMessage id="site.leave-words.index.title"/></Menu.Item>
           </SubMenu>
           <Menu.Item key="sign-out">

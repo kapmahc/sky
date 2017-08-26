@@ -7,6 +7,22 @@ import (
 	"github.com/kapmahc/axe/i18n"
 )
 
+func (p *Plugin) indexAdminLocale(c *axe.Context) {
+	lng := c.Payload[i18n.LOCALE].(string)
+	// var items []i_orm.Model
+	// if err := p.Db.Select([]string{"code", "message"}).Where("lang = ?", lng).Order("code ASC").Find(&items).Error; err != nil {
+	// 	c.Abort(http.StatusInternalServerError, err)
+	// 	return
+	// }
+	items, err := p.I18n.Store.All(lng)
+	if err != nil {
+		c.Abort(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, items)
+}
+
 func (p *Plugin) showAdminLocale(c *axe.Context) {
 	lng := c.Payload[i18n.LOCALE].(string)
 	code := c.Params["code"]

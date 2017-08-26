@@ -39,8 +39,8 @@ class WidgetF extends Component {
     const {code} = this.props.match.params
     return (
       <Layout breadcrumbs={[
-          {href: '/admin/locales', label: 'site.admin.locales.index.title'},
-          {href: code ? `/admin/locales/edit/${code}` : '/admin/locales/new', label: code ? 'buttons.edit': 'buttons.new'},
+          {href: '/admin/locales', label: <FormattedMessage id='site.admin.locales.index.title'/>},
+          {href: code ? `/admin/locales/edit/${code}` : '/admin/locales/new', label: <FormattedMessage id={code ? 'buttons.edit': 'buttons.new'}/>},
         ]}>
         <Form onSubmit={this.handleSubmit}>
           <FormItem
