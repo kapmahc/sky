@@ -49,11 +49,11 @@ func (p *Plugin) Mount(rt *axe.Router) {
 	)
 	rt.Resources(
 		"/api/friend-links",
-		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.indexFriendLinks},
-		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.createLink},
-		nil,
-		nil,
-		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.destroyLink},
+		[]axe.HandlerFunc{p.indexFriendLinks},
+		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.createFriendLink},
+		[]axe.HandlerFunc{p.showFriendLink},
+		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.updateFriendLink},
+		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.destroyFriendLink},
 	)
 	rt.Resources(
 		"/api/leave-words",

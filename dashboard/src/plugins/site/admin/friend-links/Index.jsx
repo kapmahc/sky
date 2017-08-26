@@ -40,6 +40,7 @@ class WidgetF extends Component {
         title: <FormattedMessage id="buttons.manage"/>,
         key: 'manage',
         render: (text, record) =>(<span>
+          <Button onClick={(e)=>window.open(record.home, '_blank')} shape="circle" icon="eye" />
           <Button onClick={(e)=>push(`/admin/friend-links/edit/${record.id}`)} shape="circle" icon="edit" />
           <Popconfirm title={<FormattedMessage id="messages.are-you-sure"/>} onConfirm={(e) => this.handleRemove(record.id)}>
             <Button type="danger" shape="circle" icon="delete" />
@@ -49,7 +50,7 @@ class WidgetF extends Component {
     ]
 
     return (
-      <Layout admin breadcrumbs={[{href: '/admin/friend-links', label: 'site.admin.friend-links.index.title'}]}>
+      <Layout admin breadcrumbs={[{href: '/admin/friend-links', label: <FormattedMessage id='site.admin.friend-links.index.title'/>}]}>
         <Row>
           <Col>
             <Button onClick={(e)=>push('/admin/friend-links/new')} type='primary' shape="circle" icon="plus" />

@@ -34,7 +34,7 @@ class Widget extends Component {
     ]
 
     return (
-      <Layout admin breadcrumbs={[{href: '/admin/users', label: 'site.admin.users.index.title'}]}>
+      <Layout admin breadcrumbs={[{href: '/admin/users', label: <FormattedMessage id='site.admin.users.index.title'/>}]}>
         <Row>
           <Col>
             <Table bordered rowKey="id" columns={columns} dataSource={this.state.items} />

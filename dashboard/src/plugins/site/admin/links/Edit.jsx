@@ -44,8 +44,8 @@ class WidgetF extends Component {
     const {id} = this.props.match.params
     return (
       <Layout breadcrumbs={[
-          {href: '/admin/links', label: 'site.admin.links.index.title'},
-          {href: id ? `/admin/links/edit/${id}` : '/admin/links/new', label: id ? 'buttons.edit': 'buttons.new'},
+          {href: '/admin/links', label: <FormattedMessage id='site.admin.links.index.title'/>},
+          {href: id ? `/admin/links/edit/${id}` : '/admin/links/new', label: <FormattedMessage id={id ? 'buttons.edit': 'buttons.new'}/>},
         ]}>
         <Form onSubmit={this.handleSubmit}>
           <FormItem
