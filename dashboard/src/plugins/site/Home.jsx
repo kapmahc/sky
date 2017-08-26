@@ -12,16 +12,7 @@ class Widget extends Component {
       return <SignIn />
     }
     return <Layout breadcrumbs={[]}>
-      <h1>home</h1>
-      <h1>home</h1>
-        <h1>home</h1>
-        <h1>home</h1>
-          <h1>home</h1>
-          <h1>home</h1>
-            <h1>home</h1>
-            <h1>home</h1>
-              <h1>home</h1>
-              <h1>home</h1>
+      <h1>Help</h1>
     </Layout>
   }
 }

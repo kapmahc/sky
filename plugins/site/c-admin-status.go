@@ -141,7 +141,7 @@ func (p *Plugin) _cacheStatus() ([]string, error) {
 	return strings.Split(str, "\n"), nil
 }
 
-func (p *Plugin) getAdminSiteStatus(c *axe.Context) {
+func (p *Plugin) getAdminStatus(c *axe.Context) {
 	data := axe.H{}
 
 	var err error

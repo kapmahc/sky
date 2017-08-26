@@ -66,7 +66,7 @@ func (p *Plugin) postAdminSiteAuthor(c *axe.Context) {
 	c.JSON(http.StatusOK, axe.H{})
 }
 
-func (p *Plugin) getAdminSiteSeo(c *axe.Context) {
+func (p *Plugin) getAdminSeo(c *axe.Context) {
 	var gc string
 	var bc string
 	p.Settings.Get("site.google.verify.code", &gc)
@@ -94,7 +94,7 @@ type fmSiteSeo struct {
 	BaiduVerifyCode  string `json:"baiduVerifyCode"`
 }
 
-func (p *Plugin) postAdminSiteSeo(c *axe.Context) {
+func (p *Plugin) postAdminSeo(c *axe.Context) {
 	var fm fmSiteSeo
 	if err := c.Bind(&fm); err != nil {
 		c.Abort(http.StatusInternalServerError, err)
@@ -123,7 +123,7 @@ type fmSiteSMTP struct {
 	PasswordConfirmation string `json:"passwordConfirmation" validate:"eqfield=Password"`
 }
 
-func (p *Plugin) getAdminSiteSMTP(c *axe.Context) {
+func (p *Plugin) getAdminSMTP(c *axe.Context) {
 	smtp := make(map[string]interface{})
 	if err := p.Settings.Get("site.smtp", &smtp); err == nil {
 		smtp["password"] = ""
@@ -140,7 +140,7 @@ func (p *Plugin) getAdminSiteSMTP(c *axe.Context) {
 	})
 }
 
-func (p *Plugin) postAdminSiteSMTP(c *axe.Context) {
+func (p *Plugin) postAdminSMTP(c *axe.Context) {
 	var fm fmSiteSMTP
 	if err := c.Bind(&fm); err != nil {
 		c.Abort(http.StatusInternalServerError, err)

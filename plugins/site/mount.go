@@ -17,11 +17,11 @@ func (p *Plugin) Mount(rt *axe.Router) {
 	ag.POST("/locales", p.postAdminLocales)
 	ag.POST("/site/info", p.postAdminSiteInfo)
 	ag.POST("/site/author", p.postAdminSiteAuthor)
-	ag.GET("/site/seo", p.getAdminSiteSeo)
-	ag.POST("/site/seo", p.postAdminSiteSeo)
-	ag.GET("/site/get", p.getAdminSiteSMTP)
-	ag.POST("/site/smtp", p.postAdminSiteSMTP)
-	ag.GET("/site/status", p.getAdminSiteStatus)
+	ag.GET("/seo", p.getAdminSeo)
+	ag.POST("/seo", p.postAdminSeo)
+	ag.GET("/smtp", p.getAdminSMTP)
+	ag.POST("/smtp", p.postAdminSMTP)
+	ag.GET("/status", p.getAdminStatus)
 	ag.GET("/users", p.indexAdminUsers)
 	ag.GET("/paypal", p.getPaypal)
 	ag.POST("/paypal", p.postPaypal)
@@ -49,10 +49,18 @@ func (p *Plugin) Mount(rt *axe.Router) {
 	rt.Resources(
 		"/api/friend-links",
 		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.indexFriendLinks},
-		[]axe.HandlerFunc{p.createLink},
+		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.createLink},
 		nil,
 		nil,
 		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.destroyLink},
+	)
+	rt.Resources(
+		"/api/leave-words",
+		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.indexLeaveWords},
+		[]axe.HandlerFunc{p.createLeaveWord},
+		nil,
+		nil,
+		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.destroyLeaveWord},
 	)
 
 	// -----------------

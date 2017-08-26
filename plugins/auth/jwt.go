@@ -90,7 +90,7 @@ func (p *Jwt) getUserFromRequest(c *axe.Context) (*User, error) {
 func (p *Jwt) CurrentUserMiddleware(c *axe.Context) {
 	if user, err := p.getUserFromRequest(c); err == nil {
 		c.Payload[CurrentUser] = user
-		c.Payload[RoleAdmin] = p.Dao.Is(user.ID, RoleAdmin)
+		c.Payload[IsAdmin] = p.Dao.Is(user.ID, RoleAdmin)
 	}
 	c.Next()
 }
