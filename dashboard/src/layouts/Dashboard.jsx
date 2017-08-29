@@ -55,6 +55,16 @@ class Widget extends Component {
           {label:<FormattedMessage id="auth.users.sign-in.title"/>, href: "/users/sign-in"},
         ]} />
     }
+
+    var sider = [
+      {key: 'personal'},
+      {}
+    ]
+    if(user.admin){
+      sider.push({
+        key: ''
+      })
+    }
     return (<Root>
       <Sider
         breakpoint="lg"

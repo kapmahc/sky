@@ -1,10 +1,10 @@
 import auth from './auth'
 import site from './site'
-// import suvery from './suvery'
+import survey from './survey'
 
 const routes = []
   .concat(auth)
-  // .concat(suvery)
+  .concat(survey)
   .concat(site)
 
 export default routes
