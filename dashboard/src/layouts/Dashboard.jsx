@@ -9,7 +9,7 @@ import Root from './Root'
 import Fail from './Fail'
 import Footer from '../components/Footer'
 import Breadcrumb from '../components/Breadcrumb'
-import {TOKEN} from '../constants'
+import {TOKEN, dashboard} from '../constants'
 import {signOut} from '../actions'
 import {_delete} from '../ajax'
 
@@ -40,7 +40,10 @@ class Widget extends Component {
               }).catch(message.error)
             }
           });
-        break;
+        return
+      case 'home':
+        window.open('/', '_blank')
+        return
       default:
         console.log(key)
     }
@@ -56,15 +59,7 @@ class Widget extends Component {
         ]} />
     }
 
-    var sider = [
-      {key: 'personal'},
-      {}
-    ]
-    if(user.admin){
-      sider.push({
-        key: ''
-      })
-    }
+    var sider = dashboard(user)
     return (<Root>
       <Sider
         breakpoint="lg"
@@ -77,26 +72,9 @@ class Widget extends Component {
             <Icon type="home" />
             <FormattedMessage id="sider.home" className="nav-text"/>
           </Menu.Item>
-          <SubMenu key="personal" title={<span><Icon type="user" /><FormattedMessage id="sider.personal" values={user}/></span>}>
-            <Menu.Item key="to-/users/logs"><FormattedMessage id="auth.users.logs.title"/></Menu.Item>
-            <Menu.Item key="to-/users/change-password"><FormattedMessage id="auth.users.change-password.title"/></Menu.Item>
-            <Menu.Item key="to-/users/info"><FormattedMessage id="auth.users.info.title"/></Menu.Item>
-            <Menu.Item key="to-/attachments"><FormattedMessage id="auth.attachments.index.title"/></Menu.Item>
-          </SubMenu>
-          <SubMenu key="site" title={<span><Icon type="setting" /><FormattedMessage id="sider.site" values={user}/></span>}>
-            <Menu.Item key="to-/admin/status"><FormattedMessage id="site.admin.status.title"/></Menu.Item>
-            <Menu.Item key="to-/admin/site/info"><FormattedMessage id="site.admin.site.info.title"/></Menu.Item>
-            <Menu.Item key="to-/admin/site/author"><FormattedMessage id="site.admin.site.author.title"/></Menu.Item>
-            <Menu.Item key="to-/admin/seo"><FormattedMessage id="site.admin.seo.title"/></Menu.Item>
-            <Menu.Item key="to-/admin/smtp"><FormattedMessage id="site.admin.smtp.title"/></Menu.Item>
-            <Menu.Item key="to-/admin/paypal"><FormattedMessage id="site.admin.paypal.title"/></Menu.Item>
-            <Menu.Item key="to-/admin/locales"><FormattedMessage id="site.admin.locales.index.title"/></Menu.Item>
-            <Menu.Item key="to-/admin/links"><FormattedMessage id="site.admin.links.index.title"/></Menu.Item>
-            <Menu.Item key="to-/admin/cards"><FormattedMessage id="site.admin.cards.index.title"/></Menu.Item>
-            <Menu.Item key="to-/admin/users"><FormattedMessage id="site.admin.users.index.title"/></Menu.Item>
-            <Menu.Item key="to-/admin/friend-links"><FormattedMessage id="site.admin.friend-links.index.title"/></Menu.Item>
-            <Menu.Item key="to-/leave-words"><FormattedMessage id="site.leave-words.index.title"/></Menu.Item>
-          </SubMenu>
+          {sider.map((m, i)=><SubMenu key={`sider-${i}`} title={<span><Icon type={m.icon} /><FormattedMessage id={m.label}/></span>}>
+            {m.items.map((t)=><Menu.Item key={`to-${t.to}`}><FormattedMessage id={t.label}/></Menu.Item>)}
+          </SubMenu>)}
           <Menu.Item key="sign-out">
             <Icon type="logout" />
             <FormattedMessage id="sider.sign-out" className="nav-text"/>
@@ -107,7 +85,7 @@ class Widget extends Component {
         <Content style={{ padding: '0 50px'}}>
           <Breadcrumb items={breadcrumbs}/>
           <div style={{ padding: 24, background: '#fff', minHeight: 380 }}>
-            <Row>
+            <Row gutter={16}>
               {children}
             </Row>
           </div>

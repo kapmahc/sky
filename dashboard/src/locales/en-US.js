@@ -36,10 +36,10 @@ export default {
   'errors.passwordConfirmation': 'Passwords must match',
   'footer.others': 'This site in other languages:',
   'sider.home': 'Home',
-  'sider.personal': 'Welcome, {name}',
-  'sider.site': 'Site',
   'sider.sign-out': 'Sign out',
+  'breadcrumb.home': 'Dashboard',
 
+  'auth.dashboard.title': 'Account',
   'auth.users.sign-in.title': 'Sign in',
   'auth.users.sign-up.title': 'Sign up',
   'auth.users.forgot-password.title': 'Forgot your password?',
@@ -54,6 +54,7 @@ export default {
   'auth.users.change-password.title': 'Change password',
   'auth.attachments.index.title': 'Attachments',
 
+  'site.dashboard.title': 'Settings',
   'site.leave-words.new.title': 'Leave me a message',
   'site.leave-words.new.please-leave-contact': 'Please leave contact information',
   'site.leave-words.index.title': 'Leave words',
@@ -81,7 +82,6 @@ export default {
   'site.admin.links.index.title': 'Links',
   'site.admin.cards.index.title': 'Cards',
   'site.admin.friend-links.index.title': 'Friend links',
-  'site.dashboard.title': 'Dashboard',
   'site.install.title': 'Install',
   'site.attributes.title': 'Title',
   'site.attributes.subTitle': 'Sub title',
@@ -91,4 +91,8 @@ export default {
   'site.attributes.locale.code': 'Code',
   'site.attributes.locale.message': 'Message',
   'site.attributes.friend-link.home': 'Home',
+
+
+  'survey.dashboard.title': 'Surveies',
+  'survey.forms.index.title': 'Forms',
 }
