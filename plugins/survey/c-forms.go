@@ -25,15 +25,14 @@ func (p *Plugin) createForm(c *axe.Context) {
 		return
 	}
 
-	deadline, err := time.Parse(time.RFC3339, fm.Deadline)
-	if err != nil {
-		c.Abort(http.StatusInternalServerError, err)
-		return
-	}
+	// deadline, err := time.Parse(time.RFC3339, fm.Deadline)
+	// if err != nil {
+	// 	c.Abort(http.StatusInternalServerError, err)
+	// 	return
+	// }
 
 	item := Form{
-		Title:    fm.Title,
-		Deadline: deadline,
+		Title: fm.Title,
 		Media: web.Media{
 			Body: fm.Body,
 			Type: fm.Type,

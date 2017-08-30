@@ -34,11 +34,7 @@ func (p *Plugin) getFormReport(c *axe.Context) {
 
 	var rows []axe.H
 	for _, r := range item.Records {
-		row := axe.H{
-			"username": r.Username,
-			"email":    r.Email,
-			"phone":    r.Phone,
-		}
+		row := axe.H{}
 		val := make(map[string]interface{})
 		if err := json.Unmarshal([]byte(r.Value), &val); err != nil {
 			c.Abort(http.StatusInternalServerError, err)

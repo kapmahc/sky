@@ -1,6 +1,7 @@
 package survey
 
 import (
+	"github.com/SermoDigital/jose/crypto"
 	"github.com/facebookgo/inject"
 	"github.com/ikeikeikeike/go-sitemap-generator/stm"
 	"github.com/jinzhu/gorm"
@@ -14,10 +15,12 @@ import (
 
 // Plugin plugin
 type Plugin struct {
-	Db     *gorm.DB    `inject:""`
-	I18n   *i18n.I18n  `inject:""`
-	Jwt    *auth.Jwt   `inject:""`
-	Server *job.Server `inject:""`
+	Db     *gorm.DB             `inject:""`
+	I18n   *i18n.I18n           `inject:""`
+	Jwt    *auth.Jwt            `inject:""`
+	Server *job.Server          `inject:""`
+	Key    []byte               `inject:"jwt.key"`
+	Method crypto.SigningMethod `inject:"jwt.method"`
 }
 
 // Open open beans

@@ -1,8 +1,6 @@
 package survey
 
 import (
-	"time"
-
 	"github.com/kapmahc/sky/web"
 )
 
@@ -10,21 +8,15 @@ import (
 type Form struct {
 	web.Media
 
-	Deadline time.Time `json:"deadline"`
-	Title    string    `json:"title"`
+	Title string `json:"title"`
 
 	Fields  []Field  `json:"fields"`
 	Records []Record `json:"records"`
 }
 
-// Expire expire?
-func (p *Form) Expire() bool {
-	return time.Now().After(p.Deadline)
-}
-
 // TableName table name
 func (Form) TableName() string {
-	return "survey_models"
+	return "survey_forms"
 }
 
 // Field field
@@ -49,12 +41,9 @@ func (Field) TableName() string {
 type Record struct {
 	web.Model
 
-	Username string
-	Email    string
-	Phone    string
-	Value    string
+	Value string `json:"value"`
 
-	FormID uint
+	FormID uint `json:"formId"`
 	Form   Form
 }
 

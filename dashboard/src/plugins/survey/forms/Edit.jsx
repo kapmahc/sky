@@ -19,7 +19,7 @@ class WidgetF extends Component {
     const {setFieldsValue,getFieldDecorator} = this.props.form
     const {id} = this.props.match.params
     if (id) {
-      get(`/survey/${id}`).then((rst)=>{
+      get(`/survey/forms/${id}`).then((rst)=>{
         var data = {
           title: rst.title,
           body: rst.body,
@@ -86,10 +86,10 @@ class WidgetF extends Component {
          }))
        }
       //  console.log(data)
-       post(id ? `/survey/${id}` : '/survey', data)
+       post(id ? `/survey/forms/${id}` : '/survey/forms', data)
         .then((rst) => {
           message.success(formatMessage({id: 'messages.success'}))
-          push('/survey/manage')
+          push('/survey/forms')
         }).catch(message.error)
      }
     });
@@ -184,9 +184,9 @@ class WidgetF extends Component {
     });
 
     return (
-      <Layout breads={[
-          {href: '/survey/manage', label: 'survey.manage.title'},
-          {href: id ? `/survey/edit/${id}` : '/survey/new', label: id ? 'buttons.edit': 'buttons.new'},
+      <Layout admin breadcrumbs={[
+          {href: '/survey/forms', label: <FormattedMessage id='survey.forms.index.title'/>},
+          {href: id ? `/survey/forms/edit/${id}` : '/survey/forms/new', label: <FormattedMessage id={id ? 'buttons.edit': 'buttons.new'}/>},
         ]}>
         <Form onSubmit={this.handleSubmit}>
           <FormItem

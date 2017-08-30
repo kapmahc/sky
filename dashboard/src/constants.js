@@ -41,7 +41,8 @@ export const dashboard = (user) => {
         icon: 'question-circle-o',
         label: 'survey.dashboard.title',
         items: [
-          {to:'/survey/forms', label: 'survey.forms.index.title'}
+          {to:'/survey/forms', label: 'survey.forms.index.title'},
+          {to:'/survey/reports', label: 'survey.reports.index.title'}
         ],
       })
 

@@ -12,7 +12,7 @@ import {get, _delete} from '../../../ajax'
 class WidgetF extends Component {
   state = { items: []}
   componentDidMount () {
-    get('/forms').then(
+    get('/survey/forms').then(
       function (rst){
         this.setState({items: rst})
       }.bind(this)
@@ -20,7 +20,7 @@ class WidgetF extends Component {
   }
   handleRemove = (id) => {
     const {formatMessage} = this.props.intl
-    _delete(`/forms/${id}`)
+    _delete(`/survey/forms/${id}`)
       .then((rst)=>{
         message.success(formatMessage({id: 'messages.success'}))
         var items = this.state.items.filter((it) => it.id !== id)
@@ -45,8 +45,8 @@ class WidgetF extends Component {
         title: <FormattedMessage id="buttons.manage"/>,
         key: 'manage',
         render: (text, record) =>(<span>
-          <Button onClick={(e)=>push(`/forms/apply/${record.id}`)} shape="circle" icon="eye" />
-          <Button onClick={(e)=>push(`/forms/edit/${record.id}`)} shape="circle" icon="edit" />
+          <Button onClick={(e)=> window.open(`/survey/forms/${record.id}`, '_blank')} shape="circle" icon="eye" />
+          <Button onClick={(e)=>push(`/survey/forms/edit/${record.id}`)} shape="circle" icon="edit" />
           <Popconfirm title={<FormattedMessage id="messages.are-you-sure"/>} onConfirm={(e) => this.handleRemove(record.id)}>
             <Button type="danger" shape="circle" icon="delete" />
           </Popconfirm>
@@ -55,10 +55,10 @@ class WidgetF extends Component {
     ]
 
     return (
-      <Layout admin breads={[{href: '/forms/manage', label: 'forms.manage.title'}]}>
+      <Layout admin breadcrumbs={[{href: '/survey/forms', label: <FormattedMessage id='survey.forms.index.title'/>}]}>
         <Row>
           <Col>
-            <Button onClick={(e)=>push('/forms/new')} type='primary' shape="circle" icon="plus" />
+            <Button onClick={(e)=>push('/survey/forms/new')} type='primary' shape="circle" icon="plus" />
             <Table bordered rowKey="id" columns={columns} dataSource={this.state.items} />
           </Col>
         </Row>

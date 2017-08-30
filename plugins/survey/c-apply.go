@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/kapmahc/axe"
-	"github.com/kapmahc/axe/i18n"
 )
 
 func (p *Plugin) _parseValues(f *Field) []interface{} {
@@ -30,28 +29,14 @@ type fmRecord struct {
 }
 
 func (p *Plugin) postFormApply(c *axe.Context) {
+	item, err := p.parseToken(c, actApply)
+	if err != nil {
+		c.Abort(http.StatusInternalServerError, err)
+		return
+	}
 	var fm fmApply
-	if err := c.Bind(&fm); err != nil {
+	if err = c.Bind(&fm); err != nil {
 		c.Abort(http.StatusInternalServerError, err)
-		return
-	}
-	var item Form
-	if err := p.Db.Where("id = ?", c.Params["id"]).First(&item).Error; err != nil {
-		c.Abort(http.StatusInternalServerError, err)
-		return
-	}
-	lng := c.Payload[i18n.LOCALE].(string)
-	if item.Expire() {
-		c.Abort(http.StatusInternalServerError, p.I18n.E(lng, "survey.errors.expired"))
-		return
-	}
-	var count int
-	if err := p.Db.Model(&Record{}).Where("form_id = ? AND (phone = ? OR email = ?)", item.ID, fm.Phone, fm.Email).Count(&count).Error; err != nil {
-		c.Abort(http.StatusInternalServerError, err)
-		return
-	}
-	if count > 0 {
-		c.Abort(http.StatusInternalServerError, p.I18n.E(lng, "survey.errors.already-apply"))
 		return
 	}
 
@@ -67,17 +52,13 @@ func (p *Plugin) postFormApply(c *axe.Context) {
 	}
 
 	record := Record{
-		Email:    fm.Email,
-		Phone:    fm.Phone,
-		Username: fm.Username,
-		Value:    string(val),
-		FormID:   item.ID,
+		Value:  string(val),
+		FormID: item.ID,
 	}
 	if err := p.Db.Create(&record).Error; err != nil {
 		c.Abort(http.StatusInternalServerError, err)
 		return
 	}
-	p._sendEmail(lng, &item, &record, actApply)
 
 	c.JSON(http.StatusOK, axe.H{})
 }

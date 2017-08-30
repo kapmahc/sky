@@ -20,6 +20,7 @@ export default {
   'attributes.href': 'Href',
   'attributes.summary': 'Summary',
   'attributes.action': 'Action',
+  'attributes.deadline': 'Deadline',
   'attributes.label': 'Label',
   'attributes.sortOrder': 'Sort order',
   'attributes.password': 'Password',
@@ -28,6 +29,10 @@ export default {
   'attributes.createdAt': 'Created at',
   'attributes.currentPassword': 'Current password',
   'attributes.newPassword': 'New password',
+  'attributes.body': 'Body',
+  'attributes.type': 'Type',
+  'attributes.name': 'Name',
+  'attributes.value': 'Value',
   'errors.not-allow': 'Not allow',
   'errors.not-match': 'Not match',
   'errors.not-empty': 'Not empty',
@@ -95,4 +100,7 @@ export default {
 
   'survey.dashboard.title': 'Surveies',
   'survey.forms.index.title': 'Forms',
+  'survey.forms.edit.field_item': 'Field [{id}] ',
+  'survey.forms.edit.add_field': 'Add field',
+  'survey.reports.index.title': 'Reports',
 }

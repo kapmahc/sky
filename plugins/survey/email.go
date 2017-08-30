@@ -9,11 +9,6 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-const (
-	actApply  = "apply"
-	actCancel = "cancel"
-)
-
 func (p *Plugin) _sendEmail(lng string, form *Form, record *Record, act string) {
 
 	obj := struct {
@@ -40,7 +35,7 @@ func (p *Plugin) _sendEmail(lng string, form *Form, record *Record, act string) 
 
 	// -----------------------
 	p.Server.Send(job.PriorityLow, auth.SendEmailJob, map[string]string{
-		"to":      record.Email,
+		// "to":      record.Email,
 		"subject": subject,
 		"body":    body,
 	})

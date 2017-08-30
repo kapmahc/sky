@@ -10,14 +10,14 @@ import (
 )
 
 func (p *Plugin) _exportForm(f *Form) ([]string, [][]string, error) {
-	header := []string{"email", "username", "phone"}
+	header := []string{}
 	for _, f := range f.Fields {
 		header = append(header, f.Label)
 	}
 
 	var items [][]string
 	for _, r := range f.Records {
-		row := []string{r.Email, r.Username, r.Phone}
+		row := []string{}
 		val := make(map[string]interface{})
 		if err := json.Unmarshal([]byte(r.Value), &val); err != nil {
 			return nil, nil, err

@@ -25,10 +25,6 @@ func (p *Plugin) postFormCancel(c *axe.Context) {
 		return
 	}
 
-	if item.Expire() {
-		c.Abort(http.StatusInternalServerError, p.I18n.E(lng, "survey.errors.expired"))
-		return
-	}
 	var record Record
 	if err := p.Db.Where("form_id = ? AND (phone = ? OR email = ?)", item.ID, fm.Who, fm.Who).First(&record).Error; err != nil {
 		c.Abort(http.StatusInternalServerError, err)

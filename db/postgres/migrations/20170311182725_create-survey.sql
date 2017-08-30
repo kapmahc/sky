@@ -5,12 +5,15 @@ CREATE TABLE survey_forms (
   title      VARCHAR(255)                NOT NULL,
   body       TEXT                        NOT NULL,
   type       VARCHAR(8)                  NOT NULL DEFAULT 'markdown',
-  deadline   DATE NOT NULL,
+  uid        VARCHAR(36) NOT NULL,
+  multi      BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );
 CREATE INDEX idx_survey_forms_type
   ON survey_forms (type);
+CREATE UNIQUE INDEX idx_survey_forms_uid
+  ON survey_forms (uid);
 
 CREATE TABLE survey_fields (
   id         BIGSERIAL PRIMARY KEY,
@@ -30,18 +33,12 @@ CREATE UNIQUE INDEX idx_survey_fields_name_form_id
 
 CREATE TABLE survey_records (
   id         BIGSERIAL PRIMARY KEY,
-  username   VARCHAR(255)                NOT NULL,
-  email      VARCHAR(255)                NOT NULL,
-  phone      VARCHAR(255)                NOT NULL,
   value      TEXT                        NOT NULL,
   form_id    BIGINT                      REFERENCES survey_forms,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );
-CREATE UNIQUE INDEX idx_survey_fields_email_form
-  ON survey_records (email, form_id);
-CREATE UNIQUE INDEX idx_survey_fields_phone_phone
-  ON survey_records (phone, form_id);
+
 
 -- +goose Down
 -- SQL section 'Down' is executed when this migration is rolled back
