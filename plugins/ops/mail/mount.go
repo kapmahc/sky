@@ -35,5 +35,5 @@ func (p *Plugin) Mount(rt *axe.Router) {
 		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.destroyUser},
 	)
 
-	rt.Group("/api/ops/mail", mg)
+	rt.Group("/ops/mail", mg)
 }

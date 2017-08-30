@@ -20,10 +20,10 @@ func (p *Plugin) Mount(rt *axe.Router) {
 	ug.POST("/info", p.Jwt.MustSignInMiddleware, p.postUsersInfo)
 	ug.POST("/change-password", p.Jwt.MustSignInMiddleware, p.postUsersChangePassword)
 	ug.DELETE("/sign-out", p.Jwt.MustSignInMiddleware, p.deleteUsersSignOut)
-	rt.Group("/api/users", ug)
+	rt.Group("/users", ug)
 
 	rt.Resources(
-		"/api/attachments",
+		"/attachments",
 		[]axe.HandlerFunc{p.Jwt.MustSignInMiddleware, p.indexAttachments},
 		[]axe.HandlerFunc{p.Jwt.MustSignInMiddleware, p.createAttachment},
 		[]axe.HandlerFunc{p.showAttachment},

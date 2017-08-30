@@ -25,6 +25,6 @@ func (p *Plugin) Mount(rt *axe.Router) {
 		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.destroyUser},
 	)
 
-	rt.Group("/api/ops/vpn", mg)
+	rt.Group("/ops/vpn", mg)
 
 }

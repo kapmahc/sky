@@ -27,6 +27,6 @@ func (p *Plugin) Mount(rt *axe.Router) {
 		[]axe.HandlerFunc{p.Jwt.MustSignInMiddleware, p.updateNote},
 		[]axe.HandlerFunc{p.Jwt.MustSignInMiddleware, p.destroyNote},
 	)
-	rt.Group("/api/reading", mg)
+	rt.Group("/reading", mg)
 
 }

@@ -1,12 +1,12 @@
 import Link from 'next/link'
 
-import Layout from '../layouts/application'
+import Layout from '../../layouts/dashboard'
 
 export default() => (
   <Layout>
     <div>
       Welcome to next.js!
-      <Link href="/admin"><a>Admin</a></Link>
+      <Link href="/"><a>Home</a></Link>
     </div>
   </Layout>
 )

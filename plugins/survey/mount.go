@@ -19,5 +19,5 @@ func (p *Plugin) Mount(rt *axe.Router) {
 		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.destroyForm},
 	)
 
-	rt.Group("/api/survey", mg)
+	rt.Group("/survey", mg)
 }

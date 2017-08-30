@@ -26,13 +26,13 @@ func (p *Plugin) Mount(rt *axe.Router) {
 	ag.GET("/users", p.indexAdminUsers)
 	ag.GET("/paypal", p.getPaypal)
 	ag.POST("/paypal", p.postPaypal)
-	rt.Group("/api/admin", ag)
+	rt.Group("/admin", ag)
 
-	rt.POST("/api/install", p.postInstall)
-	rt.GET("/api/site/info", p.getSiteInfo)
-	rt.GET("/api/locales/{lang}", p.getLocales)
+	rt.POST("/install", p.postInstall)
+	rt.GET("/site/info", p.getSiteInfo)
+	rt.GET("/locales/{lang}", p.getLocales)
 	rt.Resources(
-		"/api/cards",
+		"/cards",
 		[]axe.HandlerFunc{p.indexCards},
 		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.createCard},
 		[]axe.HandlerFunc{p.showCard},
@@ -40,7 +40,7 @@ func (p *Plugin) Mount(rt *axe.Router) {
 		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.destroyCard},
 	)
 	rt.Resources(
-		"/api/links",
+		"/links",
 		[]axe.HandlerFunc{p.indexLinks},
 		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.createLink},
 		[]axe.HandlerFunc{p.showLink},
@@ -48,7 +48,7 @@ func (p *Plugin) Mount(rt *axe.Router) {
 		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.destroyLink},
 	)
 	rt.Resources(
-		"/api/friend-links",
+		"/friend-links",
 		[]axe.HandlerFunc{p.indexFriendLinks},
 		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.createFriendLink},
 		[]axe.HandlerFunc{p.showFriendLink},
@@ -56,7 +56,7 @@ func (p *Plugin) Mount(rt *axe.Router) {
 		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.destroyFriendLink},
 	)
 	rt.Resources(
-		"/api/leave-words",
+		"/leave-words",
 		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.indexLeaveWords},
 		[]axe.HandlerFunc{p.createLeaveWord},
 		nil,
@@ -64,6 +64,4 @@ func (p *Plugin) Mount(rt *axe.Router) {
 		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.destroyLeaveWord},
 	)
 
-	// -----------------
-	rt.GET("/", p.getHome)
 }
