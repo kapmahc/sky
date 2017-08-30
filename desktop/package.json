@@ -1,0 +1,39 @@
+{
+  "name": "sky",
+  "version": "1.0.0",
+  "description": "A complete open source e-commerce solution by Go language and React(STILL IN DEVELOPMENT).",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kapmahc/sky.git"
+  },
+  "author": "Jeremy Zheng",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kapmahc/sky/issues"
+  },
+  "homepage": "https://github.com/kapmahc/sky#readme",
+  "dependencies": {
+    "antd": "^2.12.8",
+    "bootstrap": "^4.0.0-beta",
+    "draft-js": "^0.10.1",
+    "jwt-decode": "^2.2.0",
+    "moment": "^2.18.1",
+    "moment-timezone": "^0.5.13",
+    "next": "^3.2.0",
+    "qrcode.react": "^0.7.1",
+    "react": "^15.6.1",
+    "react-copy-to-clipboard": "^5.0.0",
+    "react-dom": "^15.6.1",
+    "react-intl": "^2.3.0",
+    "react-markdown": "^2.5.0",
+    "react-moment": "^0.6.4",
+    "react-transition-group": "^1.2.0",
+    "reactstrap": "^4.8.0"
+  }
+}
