@@ -27,6 +27,7 @@ export default {
   'attributes.passwordConfirmation': 'Password confirmation',
   'attributes.content': 'Content',
   'attributes.createdAt': 'Created at',
+  'attributes.updatedAt': 'Updated at',
   'attributes.currentPassword': 'Current password',
   'attributes.newPassword': 'New password',
   'attributes.body': 'Body',
@@ -103,4 +104,14 @@ export default {
   'survey.forms.edit.field_item': 'Field [{id}] ',
   'survey.forms.edit.add_field': 'Add field',
   'survey.reports.index.title': 'Reports',
+
+  'forum.dashboard.title': 'Forum',
+  'forum.articles.index.title': 'Articles',
+  'forum.tags.index.title': 'Tags',
+  'forum.comments.index.title': 'Comments',
+
+  'reading.dashboard.title': 'Reading',
+  'reading.books.index.title': 'Books',
+  'reading.notes.index.title': 'Notes',
+  'reading.favorites.index.title': 'Favorites',
 }

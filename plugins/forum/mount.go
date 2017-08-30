@@ -31,5 +31,5 @@ func (p *Plugin) Mount(rt *axe.Router) {
 		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.updateTag},
 		[]axe.HandlerFunc{p.Jwt.MustAdminMiddleware, p.destroyTag},
 	)
-	rt.Group("/api/forums", fg)
+	rt.Group("/api/forum", fg)
 }

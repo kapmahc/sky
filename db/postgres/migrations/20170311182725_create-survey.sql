@@ -6,7 +6,7 @@ CREATE TABLE survey_forms (
   body       TEXT                        NOT NULL,
   type       VARCHAR(8)                  NOT NULL DEFAULT 'markdown',
   uid        VARCHAR(36) NOT NULL,
-  multi      BOOLEAN NOT NULL DEFAULT FALSE,
+  mode       VARCHAR(8)                  NOT NULL,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );

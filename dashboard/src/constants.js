@@ -47,6 +47,32 @@ export const dashboard = (user) => {
       })
 
     }
+    // forum plugin
+    var forum = [
+      {to: '/forum/articles', label: 'forum.articles.index.title'},
+      {to: '/forum/comments', label: 'forum.comments.index.title'},
+    ]
+    if(user.admin){
+      forum.push({to: '/forum/tags', label: 'forum.tags.index.title'})
+    }
+    items.push({
+      icon: 'tags-o',
+      label: 'forum.dashboard.title',
+      items: forum,
+    })
+    // reading book
+    var reading = [
+      {to: '/reading/notes', label: 'reading.notes.index.title'},
+      {to: '/reading/favorites', label: 'reading.favorites.index.title'},
+    ]
+    if(user.admin){
+      reading.push({to: '/reading/books', label: 'reading.books.index.title'})
+    }
+    items.push({
+      icon: 'book',
+      label: 'reading.dashboard.title',
+      items: reading,
+    })
 
   }
   return items
