@@ -593,11 +593,8 @@ func (p *Plugin) runWorker(c *cli.Context, _ *inject.Graph) error {
 }
 
 func (p *Plugin) runServer(c *cli.Context, _ *inject.Graph) error {
-	theme := viper.GetString("server.theme")
-	rt := axe.NewRouter()
 
-	rt.Static("/assets/", path.Join("themes", theme, "assets"))
-	rt.Static("/3rd/", path.Join("themes", theme, "node_modules"))
+	rt := axe.NewRouter()
 
 	// --------------------
 	lm, err := p.I18n.Middleware()
@@ -628,8 +625,8 @@ func (p *Plugin) runServer(c *cli.Context, _ *inject.Graph) error {
 
 	// ---------------
 	debug := !web.IsProduction()
-	views := filepath.Join("themes", theme, "views")
-	hnd := rt.Handler(views, debug)
+
+	hnd := rt.Handler("templates", debug)
 
 	port := viper.GetInt("server.port")
 	addr := fmt.Sprintf(":%d", port)
@@ -637,6 +634,9 @@ func (p *Plugin) runServer(c *cli.Context, _ *inject.Graph) error {
 		"application starting on http://localhost:%d",
 		port,
 	)
+
+	frontend := viper.GetStringSlice("server.frontend")
+	hnd = axe.CORS(debug, hnd, frontend...)
 
 	// ----------------
 	if web.IsProduction() {
@@ -669,7 +669,7 @@ func (p *Plugin) runServer(c *cli.Context, _ *inject.Graph) error {
 
 func (p *Plugin) writeSitemap(root string) error {
 	sm := stm.NewSitemap()
-	sm.SetDefaultHost(web.Home())
+	sm.SetDefaultHost("FIXME")
 	sm.SetPublicPath(root)
 	sm.SetCompress(true)
 	sm.SetSitemapsPath("/")
@@ -707,7 +707,7 @@ func (p *Plugin) writeRssAtom(root string, lang string) error {
 		},
 		Entry: make([]*atom.Entry, 0),
 	}
-	home := web.Home()
+	home := "FIXME"
 	if err := web.Walk(func(en web.Plugin) error {
 		items, err := en.Atom(lang)
 		if err != nil {
@@ -750,7 +750,7 @@ func (p *Plugin) writeRobotsTxt(root string) error {
 	}
 	return tpl.Execute(fd, struct {
 		Home string
-	}{Home: web.Home()})
+	}{Home: "FIXME"})
 }
 
 func (p *Plugin) writeGoogleVerify(root string) error {

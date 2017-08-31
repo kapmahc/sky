@@ -55,7 +55,7 @@ func (p *Plugin) showBook(c *axe.Context) {
 	// c.Writer.Header().Set("Content-Type", "text/html; charset=utf-8")
 	p.writePoints(
 		&buf,
-		fmt.Sprintf("%s/reading/pages/%d", web.Home(), it.ID),
+		fmt.Sprintf("%s/reading/pages/%d", c.Request.Host, it.ID),
 		bk.Ncx.Points,
 	)
 	data["homeage"] = buf.String()

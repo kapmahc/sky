@@ -1,8 +1,14 @@
-export default() => (
+import React from 'react'
+import PropTypes from 'prop-types'
+
+const Widget = ({info}) => (
   <div>
-    application header
-    <style jsx global>{`
-      @import 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css';
-    `}</style>
+    application header {info.title}
   </div>
 )
+
+Widget.propTypes = {
+  info: PropTypes.object.isRequired,
+}
+
+export default Widget

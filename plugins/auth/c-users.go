@@ -45,7 +45,7 @@ func (p *Plugin) postUsersSignUp(c *axe.Context) {
 	}
 
 	p.Dao.Log(user.ID, c.ClientIP(), p.I18n.T(l, "auth.logs.user.sign-up"))
-	p.sendEmail(l, user, actConfirm)
+	p.sendEmail(l, c.Request.Host, user, actConfirm)
 
 	c.JSON(http.StatusOK, axe.H{})
 }
@@ -125,7 +125,7 @@ func (p *Plugin) postUsersConfirm(c *axe.Context) {
 		return
 	}
 
-	p.sendEmail(l, user, actConfirm)
+	p.sendEmail(l, c.Request.Host, user, actConfirm)
 	c.JSON(http.StatusOK, axe.H{})
 }
 
@@ -167,7 +167,7 @@ func (p *Plugin) postUsersUnlock(c *axe.Context) {
 		c.Abort(http.StatusInternalServerError, p.I18n.E(l, "auth.errors.user.not-lock"))
 		return
 	}
-	p.sendEmail(l, user, actUnlock)
+	p.sendEmail(l, c.Request.Host, user, actUnlock)
 	c.JSON(http.StatusOK, axe.H{})
 }
 
@@ -184,7 +184,7 @@ func (p *Plugin) postUsersForgotPassword(c *axe.Context) {
 		c.Abort(http.StatusInternalServerError, err)
 		return
 	}
-	p.sendEmail(l, user, actResetPassword)
+	p.sendEmail(l, c.Request.Host, user, actResetPassword)
 
 	c.JSON(http.StatusOK, axe.H{})
 }

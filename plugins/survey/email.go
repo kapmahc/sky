@@ -5,11 +5,10 @@ import (
 
 	"github.com/kapmahc/axe/job"
 	"github.com/kapmahc/sky/plugins/auth"
-	"github.com/kapmahc/sky/web"
 	log "github.com/sirupsen/logrus"
 )
 
-func (p *Plugin) _sendEmail(lng string, form *Form, record *Record, act string) {
+func (p *Plugin) _sendEmail(lng, home string, form *Form, record *Record, act string) {
 
 	obj := struct {
 		Home   string
@@ -17,7 +16,7 @@ func (p *Plugin) _sendEmail(lng string, form *Form, record *Record, act string) 
 		Apply  string
 		Cancel string
 	}{
-		Home:   web.Home(),
+		Home:   home,
 		Title:  form.Title,
 		Apply:  fmt.Sprintf("/forms/apply/%d", form.ID),
 		Cancel: fmt.Sprintf("/forms/cancel/%d", form.ID),

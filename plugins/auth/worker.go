@@ -9,6 +9,7 @@ import (
 	"github.com/kapmahc/axe/job"
 	"github.com/kapmahc/sky/web"
 	log "github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 	gomail "gopkg.in/gomail.v2"
 )
 
@@ -34,7 +35,7 @@ func (p *Plugin) Workers() map[string]job.Handler {
 	}
 }
 
-func (p *Plugin) sendEmail(lng string, user *User, act string) {
+func (p *Plugin) sendEmail(lng, home string, user *User, act string) {
 	cm := jws.Claims{}
 	cm.Set("act", act)
 	cm.Set("uid", user.UID)
@@ -45,11 +46,13 @@ func (p *Plugin) sendEmail(lng string, user *User, act string) {
 	}
 
 	obj := struct {
-		Home  string
-		Token string
+		Backend  string
+		Frontend string
+		Token    string
 	}{
-		Home:  web.Home(),
-		Token: string(tkn),
+		Backend:  viper.GetString("server.backend"),
+		Frontend: home,
+		Token:    string(tkn),
 	}
 	subject, err := p.I18n.F(lng, fmt.Sprintf("auth.emails.%s.subject", act), obj)
 	if err != nil {

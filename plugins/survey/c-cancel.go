@@ -35,7 +35,7 @@ func (p *Plugin) postFormCancel(c *axe.Context) {
 		c.Abort(http.StatusInternalServerError, err)
 		return
 	}
-	p._sendEmail(lng, &item, &record, actCancel)
+	p._sendEmail(lng, c.Request.Host, &item, &record, actCancel)
 
 	c.JSON(http.StatusOK, axe.H{})
 }
