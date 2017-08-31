@@ -80,7 +80,6 @@ func init() {
 
 	viper.SetDefault("server", map[string]interface{}{
 		"port":     8080,
-		"ssl":      false,
 		"name":     "change-me.com",
 		"frontend": []string{"http://localhost:3000"},
 		"backend":  "http://localhost:8080",

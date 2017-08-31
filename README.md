@@ -42,7 +42,11 @@ will listen at <http://localhost:3000>
 ```bash
 cd $GOPATH/src/github.com/kapmahc/sky
 make
-ls dist.tar.bz2
+cd build
+./sky g c # gernerate file config.toml, PLEASE EDIT IT AT FIRST
+npm install && npm run build
+BACKEND=http://api.change-me.com npm run start # start frontend server
+./sky s # start backend server
 ```
 
 ## Create database

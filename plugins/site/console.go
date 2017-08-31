@@ -188,7 +188,26 @@ func (p *Plugin) Console() []cli.Command {
 					Name:    "nginx",
 					Aliases: []string{"ng"},
 					Usage:   "generate nginx.conf",
-					Action:  web.Config(p.generateNginxConf),
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "name, n",
+							Usage: "hostname",
+						},
+						cli.IntFlag{
+							Name:  "port, p",
+							Value: 8080,
+							Usage: "port",
+						},
+						cli.BoolFlag{
+							Name:  "ssl, s",
+							Usage: "use https?",
+						},
+						cli.StringFlag{
+							Name:  "template, t",
+							Usage: "template, can be: frontend, backend.",
+						},
+					},
+					Action: web.Config(p.generateNginxConf),
 				},
 				{
 					Name:    "openssl",
@@ -299,13 +318,18 @@ func (p *Plugin) generateConfig(c *cli.Context) error {
 
 }
 
-func (p *Plugin) generateNginxConf(*cli.Context) error {
+func (p *Plugin) generateNginxConf(c *cli.Context) error {
 	pwd, err := os.Getwd()
 	if err != nil {
 		return err
 	}
 
-	name := web.Name()
+	name := c.String("name")
+	if name == "" {
+		return cli.ShowSubcommandHelp(c)
+	}
+	port := c.Int("port")
+	ssl := c.Bool("ssl")
 	fn := path.Join("etc", "nginx", "sites-enabled", name+".conf")
 	if err = os.MkdirAll(path.Dir(fn), 0700); err != nil {
 		return err
@@ -317,23 +341,21 @@ func (p *Plugin) generateNginxConf(*cli.Context) error {
 	}
 	defer fd.Close()
 
-	tpl, err := template.ParseFiles(path.Join("templates", "nginx.conf"))
+	tpl, err := template.ParseFiles(path.Join("templates", c.String("template")+".nginx.conf"))
 	if err != nil {
 		return err
 	}
 
 	return tpl.Execute(fd, struct {
-		Port    int
-		Root    string
-		Name    string
-		Ssl     bool
-		Version string
+		Port int
+		Root string
+		Name string
+		Ssl  bool
 	}{
-		Name:    name,
-		Port:    viper.GetInt("server.port"),
-		Root:    pwd,
-		Ssl:     viper.GetBool("server.ssl"),
-		Version: "v1",
+		Name: name,
+		Port: port,
+		Root: pwd,
+		Ssl:  ssl,
 	})
 }
 
